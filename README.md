@@ -64,10 +64,10 @@ With elements
 ```
 
 ## Dependencies
- - (RequireJS)[http://requirejs.org/]
- - (jQuery 1.8.1)[http://jquery.com/]
- - (webgl-utils)[http://www.khronos.org/webgl/wiki/FAQ]
- - (gl-matrix)[https://github.com/toji/gl-matrix]
+ - [RequireJS](http://requirejs.org/)
+ - [jQuery 1.8.1](http://jquery.com/)
+ - [webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)
+ - [gl-matrix](https://github.com/toji/gl-matrix)
  
 ### Notes
-The (glMatrix)[https://github.com/toji/gl-matrix] package is a forked glMatrix package that extrapolates a 2d set of matrix operations.
+The [glMatrix](https://github.com/toji/gl-matrix) package is a forked glMatrix package that extrapolates a 2d set of matrix operations.
