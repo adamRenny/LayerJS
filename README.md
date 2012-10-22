@@ -1,7 +1,8 @@
 # LayerJS
 
 ## Canvas Rendering Library
-LayerJS is a graphics rendering library, much like [KineticJS](http://www.kineticjs.com/) and [EaselJS](http://www.createjs.com/#!/EaselJS). LayerJS focuses on using multiple &lt;canvas&gt; elements to optimize its render cycle.
+LayerJS is a graphics rendering library, much like [KineticJS](http://www.kineticjs.com/) and [EaselJS](http://www.createjs.com/#!/EaselJS).
+LayerJS focuses on using multiple ```<canvas>``` elements to optimize its render cycle.
 
 ## Features
 
@@ -35,7 +36,7 @@ Idea courtesy of [Ash Blue](http://blueashes.com/), this library includes a ```R
 This feature has not yet been expanded upon and is built to be used for backbuffering or pre-rendering.
 
 ### Event Bus
-As do many other constructs, LayerJS totes a small EventBus component following the publish-subscribe pattern to communicate internally.
+As do many other constructs, LayerJS totes a small ```EventBus``` component following the publish-subscribe pattern to communicate internally.
 
 ## Markup
 Markup requirements only require a single div or block. 
@@ -63,10 +64,10 @@ With elements
 ```
 
 ## Dependencies
- - RequireJS
- - jQuery 1.8.1
- - webgl-utils
- - gl-matrix
+ - (RequireJS)[http://requirejs.org/]
+ - (jQuery 1.8.1)[http://jquery.com/]
+ - (webgl-utils)[http://www.khronos.org/webgl/wiki/FAQ]
+ - (gl-matrix)[https://github.com/toji/gl-matrix]
  
 ### Notes
-The glMatrix package is a forked gl-matrix package that extrapolates a 2d set of matrix operations.
+The (glMatrix)[https://github.com/toji/gl-matrix] package is a forked glMatrix package that extrapolates a 2d set of matrix operations.
