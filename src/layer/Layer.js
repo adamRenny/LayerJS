@@ -27,7 +27,7 @@
  * @version 1.1
  */
 define([
-    'layer/renderable-group'
+    'layer/RenderableGroup'
 ], function(
     RenderableGroup
 ) {

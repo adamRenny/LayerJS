@@ -27,10 +27,10 @@
  * @version 1.1
  */
 define([
-    'layer/stage',
-    'layer/input',
-    'layer/hit-event',
-    'layer/event-bus'
+    'layer/Stage',
+    'layer/Input',
+    'layer/HitEvent',
+    'layer/EventBus'
 ], function(
     Stage,
     Input,

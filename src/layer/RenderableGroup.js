@@ -27,7 +27,7 @@
  * @version 1.0
  */
 define([
-    'layer/renderable'
+    'layer/Renderable'
 ], function(
     Renderable
 ) {

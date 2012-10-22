@@ -28,7 +28,7 @@
  */
 define([
     'lib/gl-matrix',
-    'layer/geometry'
+    'layer/Geometry'
 ], function(
     glMatrix,
     Geometry

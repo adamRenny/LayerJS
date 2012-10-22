@@ -28,7 +28,7 @@
  */
 define([
     'jquery',
-    'layer/layer'
+    'layer/Layer'
 ], function(
     $,
     Layer

@@ -1,8 +1,8 @@
 define([
-    'layer/looper',
-    'layer/scene',
-    'layer/renderable-group',
-    'app/rectangle'
+    'layer/Looper',
+    'layer/Scene',
+    'layer/RenderableGroup',
+    'app/Rectangle'
 ], function(
     Looper,
     Scene,

@@ -1,5 +1,5 @@
 define([
-    'layer/renderable'
+    'layer/Renderable'
 ], function(
     Renderable
 ) {

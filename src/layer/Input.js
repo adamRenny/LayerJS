@@ -28,7 +28,7 @@
  */
 define([
     'jquery',
-    'layer/event-bus'
+    'layer/EventBus'
 ], function(
     $,
     EventBus

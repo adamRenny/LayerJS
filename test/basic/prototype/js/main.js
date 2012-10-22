@@ -9,7 +9,7 @@ require.config({
 
 require([
     'jquery',
-    'app/game'
+    'app/Game'
 ], function(
     $,
     Game
