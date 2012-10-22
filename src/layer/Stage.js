@@ -28,10 +28,12 @@
  */
 define([
     'jquery',
-    'layer/Layer'
+    'layer/Layer',
+    'layer/RenderCache'
 ], function(
     $,
-    Layer
+    Layer,
+    RenderCache
 ) {
     "use strict";
     
@@ -84,26 +86,6 @@ define([
     };
     
     /**
-     * Generates a canvas with an id, width, and height specified
-     *
-     * @private
-     * @function
-     * @param {string} name Name and ID of the canvas
-     * @param {number} width Width of the canvas element
-     * @param {number} height Height of the canvas element
-     * @returns {HTMLCanvasElement}
-     * @since 1.0
-     */
-    var _makeCanvas = function(name, width, height) {
-        var canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        canvas.id = name;
-        
-        return canvas;
-    };
-    
-    /**
      * Applies a statically generated layer name/id
      *
      * @private
@@ -130,21 +112,6 @@ define([
      */
     var Stage = function(viewport, width, height) {
         this.init(viewport, width, height);
-    };
-    
-    /**
-     * Convenience function to creates a layer
-     * 
-     * @static
-     * 
-     * @param {HTMLElement} name Name and ID of the canvas element
-     * @param {number} width Base width of the canvas element
-     * @param {number} height Base height of the canvas element
-     * @returns {Layer}
-     * @since 1.0
-     */
-    Stage.createLayer = function(name, width, height) {
-        return new Layer(_makeCanvas(name, width, height));
     };
     
     /**
@@ -246,7 +213,7 @@ define([
             throw new Error('ArgumentsError: Layer name is undefined');
         }
         
-        return new Layer(_makeCanvas(name, this.width, this.height));
+        return new Layer(RenderCache.createCanvas(name, this.width, this.height));
     };
     
     /**
