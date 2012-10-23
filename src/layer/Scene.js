@@ -24,7 +24,7 @@
  *
  * Scene Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 define([
     'layer/Stage',
@@ -111,6 +111,15 @@ define([
          */
         this.activeTarget = null;
         
+        /**
+         * Last used mouse object
+         * Should be considered immutable and opaque
+         *
+         * @private
+         * @name Scene#activeMouse
+         * @type {Mouse}
+         * @since 1.1
+         */
         this.activeMouse = null;
         
         this.setupHandlers();
@@ -159,6 +168,36 @@ define([
      */
     Scene.prototype.removeChild = function(child) {
         var layer = this.stage.getLayerByIndex(0);
+        layer.root.removeChild(child);
+        
+        return this;
+    };
+    
+    /**
+     * Adds a child to the layer at the index specified
+     *
+     * @param {Renderable} child Child to add
+     * @param {number} layerIndex Index of the layer to add to
+     * @returns {Scene}
+     * @since 1.2
+     */
+    Scene.prototype.addChildToLayerByIndex = function(child, layerIndex) {
+        var layer = this.stage.getLayerByIndex(layerIndex);
+        layer.root.addChild(child);
+        
+        return this;
+    };
+    
+    /**
+     * Removes a child to the layer from the index specified
+     *
+     * @param {Renderable} child Child to remove
+     * @param {number} layerIndex Index of the layer to add to
+     * @returns {Scene}
+     * @since 1.2
+     */
+    Scene.prototype.removeChildFromLayerByIndex = function(child, layerIndex) {
+        var layer = this.stage.getLayerByIndex(layerIndex);
         layer.root.removeChild(child);
         
         return this;

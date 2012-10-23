@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.0
+ * @version 1.1
  */
 define([
     'layer/Renderable'
@@ -32,6 +32,10 @@ define([
     Renderable
 ) {
     "use strict";
+    
+    var Math = window.Math;
+    var MathMax = Math.max;
+    var MathMin = Math.min;
     
     /**
      * <p>Renderable Group Constructor</p>
@@ -79,6 +83,26 @@ define([
      */
     RenderableGroup.prototype.init = function(x, y, width, height) {
         this.Renderable_init(x, y, width, height);
+        
+        /**
+         * Width of the children in box dimensions
+         *
+         * @default 0
+         * @name RenderableGroup#contentWidth
+         * @type {number}
+         * @since 1.1
+         */
+        this.contentWidth = 0;
+        
+        /**
+         * Height of the children in box dimensions
+         *
+         * @default 0
+         * @name RenderableGroup#contentHeight
+         * @type {number}
+         * @since 1.1
+         */
+        this.contentHeight = 0;
         
         /**
          * SceneGraph children set
@@ -195,7 +219,7 @@ define([
     
     /**
      * Updates the transform normally and pushes the transform to the child
-     * Calculates the width and height of the object based on the max width and height of the children
+     * Calculates the width and height of the content based on the rectangular boundaries determined by the children
      *
      * @since 1.0
      */
@@ -206,20 +230,26 @@ define([
         var children = this.children;
         var length = children.length;
         var transform = this.transform;
-        var width = 0;
-        var height = 0;
+        var bottom = 0;
+        var top = this.unscaledHeight;
+        var left = this.unscaledWidth;
+        var right = 0;
+        var child;
         for (; i < length; i++) {
             children[i].setParentTransform(transform);
         }
         
         i = 0;
         for (; i < length; i++) {
-            width = Math.max(children[i].unscaledWidth + children[i].x, width);
-            height = Math.max(children[i].unscaledHeight + children[i].y, height);
+            child = children[i];
+            left = MathMin(child.x, left);
+            top = MathMin(child.y, top);
+            right = MathMax(child.unscaledWidth + child.x, right);
+            bottom = MathMax(child.unscaledHeight + child.y, bottom);
         }
         
-        this.unscaledWidth = width;
-        this.unscaledHeight = height;
+        this.contentWidth = right - left;
+        this.contentHeight = bottom - top;
     };
     
     /**

@@ -646,7 +646,6 @@ define([
         this.needsRender = false;
         
         this.applyTransform(context);
-        context.fillRect(0, 0, this.unscaledWidth, this.unscaledHeight);
     };
     
     return Renderable;
