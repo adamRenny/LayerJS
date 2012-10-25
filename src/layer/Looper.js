@@ -126,6 +126,7 @@ define(function() {
      * Update Cycle Interface
      * Cycle in the step where all physical properties are modified
      *
+     * @interface
      * @param {number} elapsed Elapsed time since last step in milliseconds
      * @since 1.0
      */
@@ -135,6 +136,7 @@ define(function() {
      * Render Cycle Interface
      * Cycle in the step where all physical properties are converted into display
      *
+     * @interface
      * @since 1.0
      */
     Looper.prototype.render = function() {};
