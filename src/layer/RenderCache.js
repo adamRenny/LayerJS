@@ -47,6 +47,15 @@ define(function() {
      * @since 1.0
      */
     var CACHE_PREFIX = 'cache-';
+
+    /**
+     * Type definition that all renderCommand must be
+     * Used to compare all renderCommand types against
+     *
+     * @type {string}
+     * @constant
+     */
+    var RENDER_COMMAND_TYPE = 'function';
     
     /**
      * Generates a canvas with an id, width, and height specified
@@ -180,6 +189,11 @@ define(function() {
         this.canvas = _makeCanvas(CACHE_PREFIX + this.id, width, height);
         this.context = this.canvas.getContext('2d');
         
+        if (typeof renderCommand !== RENDER_COMMAND_TYPE) {
+            throw 'RenderCache::init - Error: RenderCommand is of type '
+                + (typeof renderCommand) + ' not of type ' + RENDER_COMMAND_TYPE;
+        }
+
         this.renderCommand = renderCommand;
         
         this.render();
