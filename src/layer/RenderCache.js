@@ -175,6 +175,8 @@ define(function() {
     
     /**
      * Initializes the cache by creating the canvas and rendering out the command
+     *
+     * @throws {Error} When the renderCommand is not of type function
      * 
      * @param {number} width Cache Width
      * @param {number} height Cache Height
