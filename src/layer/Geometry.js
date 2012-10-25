@@ -54,6 +54,39 @@ define(function() {
         isPointInRect: function(x, y, rectX, rectY, rectWidth, rectHeight) {
             return !(x < rectX || x > rectX + rectWidth || y < rectY || y > rectY + rectHeight);
             // return x >= rectX && x <= rectX + rectWidth && y >= rectY && y <= rectY + rectHeight;
+        },
+
+        /**
+         * Get distance between two points
+         *
+         * @function
+         * @name Geometry.getDistanceBetweenPoints
+         * @param {number} x1 Point 1's X Position
+         * @param {number} y1 Point 1's Y Position
+         * @param {number} x2 Point 2's X Position
+         * @param {number} y2 Point 2's Y Position
+         * @returns {number}
+         */
+        getDistanceBetweenPoints: function(x1, y1, x2, y2) {
+            var dx = x1 - x2;
+            var dy = y2 - y2;
+            return Math.sqrt((dx * dx) + (dy * dy));
+        },
+
+        /**
+         * Check whether a point is within a circle
+         *
+         * @function
+         * @name Geometry.isPointInCirc
+         * @param {number} x X Position
+         * @param {number} y Y Position
+         * @param {number} circCenterX Circle's center X Position
+         * @param {number} circCenterY Circle's center Y Position
+         * @param {number} radius Circle's radius
+         * @returns {boolean}
+         */
+        isPointInCirc: function(x, y, circCenterX, circCenterY, radius) {
+            return this.getDistanceBetweenPoints(x, y, circCenterX, circCenterY) < radius;
         }
     };
     return Geometry;

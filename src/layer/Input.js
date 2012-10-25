@@ -190,7 +190,7 @@ define([
      */
     Input.prototype.enable = function() {
         if (this.enabled) {
-            return;
+            return this;
         }
         
         this.enabled = true;
@@ -214,7 +214,7 @@ define([
      */
     Input.prototype.disable = function() {
         if (!this.enabled) {
-            return;
+            return this;
         }
         
         this.enabled = false;
