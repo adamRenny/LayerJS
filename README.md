@@ -36,7 +36,7 @@ Idea courtesy of [Ash Blue](http://blueashes.com/), this library includes a ```R
 This feature has not yet been expanded upon and is built to be used for backbuffering or pre-rendering.
 
 ### Event Bus
-As do many other constructs, LayerJS totes a small ```EventBus``` component following the publish-subscribe pattern to communicate internally.
+As do many other constructs, LayerJS totes a small ```EventBus``` component following the publish-subscribe pattern to communicate internally. The EventBus can be found at [this repo](https://github.com/adamRenny/Events).
 
 ## Markup
 Markup requirements only require a single div or block. 

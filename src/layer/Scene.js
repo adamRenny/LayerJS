@@ -30,12 +30,12 @@ define([
     'layer/Stage',
     'layer/Input',
     'layer/HitEvent',
-    'layer/EventBus'
+    'layer/Events'
 ], function(
     Stage,
     Input,
     HitEvent,
-    EventBus
+    Events
 ) {
     "use strict";
     
@@ -124,10 +124,10 @@ define([
         
         this.setupHandlers();
         
-        EventBus.subscribe(Input.MOUSE_MOVE, this.onMoveHandler);
-        EventBus.subscribe(Input.MOUSE_UP, this.onUpHandler);
-        EventBus.subscribe(Input.MOUSE_DOWN, this.onDownHandler);
-        EventBus.subscribe(Input.CLICK, this.onClickHandler);
+        Events.on(Input.MOUSE_MOVE, this.onMoveHandler);
+        Events.on(Input.MOUSE_UP, this.onUpHandler);
+        Events.on(Input.MOUSE_DOWN, this.onDownHandler);
+        Events.on(Input.CLICK, this.onClickHandler);
     };
     
     /**
@@ -314,7 +314,7 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onMove = function(mouse) {
+    Scene.prototype.onMove = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         this.updateActiveTarget(hitStack, mouse.x, mouse.y);
         
@@ -330,7 +330,7 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onUp = function(mouse) {
+    Scene.prototype.onUp = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.MOUSE_UP, mouse.x, mouse.y, hitStack, true);
     };
@@ -342,7 +342,7 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onDown = function(mouse) {
+    Scene.prototype.onDown = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.MOUSE_DOWN, mouse.x, mouse.y, hitStack, true);
     };
@@ -354,7 +354,7 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onClick = function(mouse) {
+    Scene.prototype.onClick = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.CLICK, mouse.x, mouse.y, hitStack, true);
     };

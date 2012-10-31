@@ -6,7 +6,7 @@
  * obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction,
  * including without limitation the rights to use, copy, modify, merge,
- * publish, distribute, sublicense, and/or sell copies of the Software,
+ * trigger, distribute, sublicense, and/or sell copies of the Software,
  * and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
  *
@@ -28,10 +28,10 @@
  */
 define([
     'jquery',
-    'layer/EventBus'
+    'layer/Events'
 ], function(
     $,
-    EventBus
+    Events
 ) {
     "use strict";
     
@@ -240,7 +240,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        EventBus.publish(Input.MOUSE_MOVE, this.mouse);
+        Events.trigger(Input.MOUSE_MOVE, this.mouse);
     };
     
     /**
@@ -254,7 +254,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        EventBus.publish(Input.MOUSE_UP, this.mouse);
+        Events.trigger(Input.MOUSE_UP, this.mouse);
     };
     
     /**
@@ -268,7 +268,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        EventBus.publish(Input.MOUSE_DOWN, this.mouse);
+        Events.trigger(Input.MOUSE_DOWN, this.mouse);
     };
     
     /**
@@ -282,11 +282,11 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        EventBus.publish(Input.CLICK, this.mouse);
+        Events.trigger(Input.CLICK, this.mouse);
     };
     
     /**
-     * Input Mousemove EventBus event name
+     * Input Mousemove Events event name
      *
      * @type {string}
      * @constant
@@ -295,7 +295,7 @@ define([
     Input.MOUSE_MOVE = '/input/mousemove';
     
     /**
-     * Input Mouseup EventBus event name
+     * Input Mouseup Events event name
      *
      * @type {string}
      * @constant
@@ -304,7 +304,7 @@ define([
     Input.MOUSE_UP = '/input/mouseup';
     
     /**
-     * Input Mousedown EventBus event name
+     * Input Mousedown Events event name
      *
      * @type {string}
      * @constant
@@ -313,7 +313,7 @@ define([
     Input.MOUSE_DOWN = '/input/mousedown';
     
     /**
-     * Input Click EventBus event name
+     * Input Click Events event name
      *
      * @type {string}
      * @constant

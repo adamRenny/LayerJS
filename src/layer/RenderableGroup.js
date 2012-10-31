@@ -27,15 +27,19 @@
  * @version 1.1
  */
 define([
-    'layer/Renderable'
+    'layer/Renderable',
+    'layer/Geometry'
 ], function(
-    Renderable
+    Renderable,
+    Geometry
 ) {
     "use strict";
     
     var Math = window.Math;
     var MathMax = Math.max;
     var MathMin = Math.min;
+    
+    var vector = [0, 0];
     
     /**
      * <p>Renderable Group Constructor</p>
@@ -168,6 +172,15 @@ define([
         return this;
     };
     
+    RenderableGroup.prototype.hitTest = function(x, y) {
+        vector[0] = x;
+        vector[1] = y;
+        
+        vector = this.toLocalCoordinates(vector, true);
+        
+        return Geometry.isPointInRect(vector[0], vector[1], this.contentX, this.contextY, this.contentWidth, this.contentHeight);
+    };
+    
     /**
      * Finds the first child hit target if it exists
      * If it doesn't exist, returns null
@@ -248,6 +261,8 @@ define([
             bottom = MathMax(child.unscaledHeight + child.y, bottom);
         }
         
+        this.contentX = left;
+        this.contentY = top;
         this.contentWidth = right - left;
         this.contentHeight = bottom - top;
     };
