@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 define([
     'layer/Renderable',
@@ -87,6 +87,26 @@ define([
      */
     RenderableGroup.prototype.init = function(x, y, width, height) {
         this.Renderable_init(x, y, width, height);
+        
+        /**
+         * X Position of the content relative to the group
+         *
+         * @default 0
+         * @name RenderableGroup#contentX
+         * @type {number}
+         * @since 1.2
+         */
+        this.contentX = 0;
+        
+        /**
+         * Y Position of the content relative to the group
+         *
+         * @default 0
+         * @name RenderableGroup#contentY
+         * @type {number}
+         * @since 1.2
+         */
+        this.contentY = 0;
         
         /**
          * Width of the children in box dimensions
@@ -172,6 +192,15 @@ define([
         return this;
     };
     
+    /**
+     * Tests the hit to see if it exists within the bounding box of the renderable group content
+     * Uses a rectangle test method
+     *
+     * @param {number} x X Position in World Coordinates
+     * @param {number} y Y Position in Wolrd Coordinates
+     * @returns {boolean}
+     * @since 1.2
+     */
     RenderableGroup.prototype.hitTest = function(x, y) {
         vector[0] = x;
         vector[1] = y;
