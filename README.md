@@ -12,11 +12,11 @@ LayerJS includes functional polyfills for ```Array#indexOf``` and ```Function#bi
 The ```dependency.js``` is intended to be included separate from the EventBus to avoid infringing on any sort of licensing breaches that would occur with compilation of the EventBus and the project it is used in.
 
 The other dependencies:
- - ```[RequireJS](http://requirejs.org/)```
- - ```[webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)```
- - ```[webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)```
- - ```[gl-matrix](https://github.com/toji/gl-matrix)```
- - ```[jQuery](http://jquery.com/)```
+ - [RequireJS](http://requirejs.org/)
+ - [webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)
+ - [webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)
+ - [gl-matrix](https://github.com/toji/gl-matrix)
+ - [jQuery](http://jquery.com/)
  
 Are all licensed and owned by their respectful owners and contributors.
 
@@ -82,11 +82,11 @@ With elements
 ```
 
 ## Dependencies
- - ```[RequireJS](http://requirejs.org/)```
- - ```[webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)```
- - ```[webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)```
- - ```[gl-matrix](https://github.com/toji/gl-matrix)```
- - ```[jQuery](http://jquery.com/)```
+ - [RequireJS](http://requirejs.org/)
+ - [webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)
+ - [webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)
+ - [gl-matrix](https://github.com/toji/gl-matrix)
+ - [jQuery](http://jquery.com/)
  
 ### Notes
 The [glMatrix](https://github.com/toji/gl-matrix) package is a forked glMatrix package that extrapolates a 2d set of matrix operations.
