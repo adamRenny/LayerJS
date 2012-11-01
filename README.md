@@ -3,6 +3,24 @@
 ## Canvas Rendering Library
 LayerJS is a graphics rendering library, much like [KineticJS](http://www.kineticjs.com/) and [EaselJS](http://www.createjs.com/#!/EaselJS).
 LayerJS focuses on using multiple ```<canvas>``` elements to optimize its render cycle.
+    
+## Licensing
+LayerJS is licensed under the [MIT license](http://opensource.org/licenses/mit-license.html).
+
+LayerJS includes functional polyfills for ```Array#indexOf``` and ```Function#bind``` within ```dependency.js```. These are licensed under the [MPL license](http://www.mozilla.org/MPL/2.0/).
+
+The ```dependency.js``` is intended to be included separate from the EventBus to avoid infringing on any sort of licensing breaches that would occur with compilation of the EventBus and the project it is used in.
+
+The other dependencies:
+ - ```[RequireJS](http://requirejs.org/)```
+ - ```[webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)```
+ - ```[webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)```
+ - ```[gl-matrix](https://github.com/toji/gl-matrix)```
+ - ```[jQuery](http://jquery.com/)```
+ 
+Are all licensed and owned by their respectful owners and contributors.
+
+The [gl-matrix](https://github.com/toji/gl-matrix) used in this has a modified 2D matrix suite that is intended to be pushed to the repository at a later date.
 
 ## Features
 
@@ -64,10 +82,11 @@ With elements
 ```
 
 ## Dependencies
- - [RequireJS](http://requirejs.org/)
- - [jQuery 1.8.1](http://jquery.com/)
- - [webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)
- - [gl-matrix](https://github.com/toji/gl-matrix)
+ - ```[RequireJS](http://requirejs.org/)```
+ - ```[webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)```
+ - ```[webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)```
+ - ```[gl-matrix](https://github.com/toji/gl-matrix)```
+ - ```[jQuery](http://jquery.com/)```
  
 ### Notes
 The [glMatrix](https://github.com/toji/gl-matrix) package is a forked glMatrix package that extrapolates a 2d set of matrix operations.
