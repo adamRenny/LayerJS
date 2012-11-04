@@ -1,12 +1,3 @@
-require.config({
-    baseUrl: 'js/',
-    paths: {
-        layer: '../../../../src/layer',
-        lib: '../../../../src/lib'
-    },
-    urlArgs: 'cb=' + new Date().getTime()
-});
-
 require([
     'jquery',
     'System'
