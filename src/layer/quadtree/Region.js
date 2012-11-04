@@ -92,7 +92,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.centerX = x + (width * .5);
+        this.centerX = Math.floor(x + (width * .5));
         
         /**
          * Center Y position 
@@ -101,7 +101,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.centerY = y + (height * .5);
+        this.centerY = Math.floor(y + (height * .5));
     };
 
     /**
