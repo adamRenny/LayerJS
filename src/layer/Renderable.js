@@ -475,6 +475,12 @@ define([
         return this;
     };
     
+    /**
+     * Sets the renderable to be dirty and need to update its current spatial logic
+     *
+     * @returns {Renderable}
+     * @since 1.0
+     */
     Renderable.prototype.setNeedsUpdate = function() {
         this.needsUpdate = true;
         this.needsRender = true;
