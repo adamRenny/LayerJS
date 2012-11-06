@@ -58,9 +58,37 @@ define([
             subregion = new Region(150, 150, 500, 500);
             quadtree.insert(subregion);
             
-            console.log(quadtree);
-            
             expect(quadtree.isLeaf).to.be(false);
+        });
+        
+        it('should return all upper left quadrants if a that region is queried', function() {
+            var regions = [];
+            subregion = new Region(20, 20, 100, 100);
+            quadtree.insert(subregion);
+            regions.push(subregion);
+            
+            subregion = new Region(40, 40, 20, 20);
+            quadtree.insert(subregion);
+            regions.push(subregion);
+            
+            subregion = new Region(100, 100, 100, 100);
+            quadtree.insert(subregion);
+            regions.push(subregion);
+            
+            subregion = new Region(200, 200, 100, 100);
+            quadtree.insert(subregion);
+            regions.push(subregion);
+            
+            subregion = new Region(150, 150, 500, 500);
+            quadtree.insert(subregion);
+            regions.push(subregion);
+            
+            var testRegion = new Region(0, 0, 400, 300);
+            var results = quadtree.queryRegion(testRegion);
+            
+            for (var i = 0; i < regions.length; i++) {
+                expect(results.indexOf(regions[i])).to.not.be(-1);
+            }
         });
     });
 });

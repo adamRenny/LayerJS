@@ -79,21 +79,26 @@ define([
             return false;
         }
         var leafNodes = this.leafNodes;
-        var treeNodes = this.treeNodes;
+        
         var i = 0;
-        var length = treeNodes.length;
         
         if (leafNodes.length < MAX_LEAF_NODES) {
             leafNodes.push(region);
             return true;
         }
         
+        var treeNodes = this.treeNodes;
+        var length = treeNodes.length;
+        
         if (length === 0) {
             this.subdivide();
+            length = treeNodes.length;
         }
         
         var hasInserted = false;
         for (; i < length; i++) {
+            var tree = treeNodes[i];
+            
             if (treeNodes[i].insert(region)) {
                 hasInserted = true;
             }
@@ -104,7 +109,7 @@ define([
     
     Quadtree.prototype.queryRegion = function(region) {
         var regionList = [];
-        if (this.region.hitTestRegion(region)) {
+        if (!this.region.hitTestRegion(region)) {
             return regionList;
         }
         
@@ -124,7 +129,7 @@ define([
             length = nodes.length;
             
             for (; i < length; i++) {
-                regionList.concat(nodes[i].queryRegion(region));
+                regionList = regionList.concat(nodes[i].queryRegion(region));
             }
         }
         
