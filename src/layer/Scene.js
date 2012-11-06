@@ -278,7 +278,7 @@ define([
         
         var topHitTarget = null;
         if (hitStack.length) {
-            topHitTarget = hitStack[hitStack.length - 1];
+            topHitTarget = hitStack[hitStack.length - 1 || 0];
         }
         
         if (this.activeTarget !== topHitTarget) {

@@ -12,20 +12,20 @@ define(function() {
         this.id = id++;
         
         if (arguments.length > 0) {
-            elements = Array_slice.call(arguments, 0);
+            this.init.apply(this, arguments);
+        } else {
+            this.init();
         }
-        
-        this.init.apply(this, elements);
     };
     
-    Set.prototype.init = function(elements) {
+    Set.prototype.init = function() {
         this.elements = [];
         
-        if (!elements) {
-            return;
+        if (arguments.length === 0) {
+            return this;
         }
         
-        this.insertElements(elements);
+        return this.insertElements.apply(this, arguments);
     };
     
     Set.prototype.hasElement = function(element) {
@@ -34,14 +34,17 @@ define(function() {
     
     Set.prototype.insertElement = function(element) {
         if (this.hasElement(element)) {
-            return;
+            return this;
         }
         
         this.elements.push(element);
+        this.length = this.elements.length;
+        
+        return this;
     };
     
     Set.prototype.insertElements = function() {
-        if (arguments.length < 1) {
+        if (arguments.length === 0) {
             return;
         }
         
@@ -50,24 +53,133 @@ define(function() {
         var i = 0;
         var length = elements.length;
         
-        if (length === 1) {
-            this.insertElement(elements[0]);
-        } else {
-            for (; i < length; i++) {
-                this.insertElement(elements[i]);
-            }
+        for (; i < length; i++) {
+            this.insertElement(elements[i]);
         }
+        
+        return this;
     };
+    
+    Set.prototype.removeElement = function(element) {
+        var elements = this.elements;
+        var index = elements.indexOf(element);
+        if (index === NOT_FOUND_INDEX) {
+            return this;
+        }
+        
+        elements.splice(index, 1);
+        this.length = elements.length;
+        
+        return this;
+    };
+    
+    Set.prototype.forEach = function(operation) {
+        var i = 0;
+        var elements = this.elements.slice(0);
+        var length = elements.length;
+        var boundOperation = operation.bind(this);
+        var shouldComplete = false;
+        
+        for (; i < length; i++) {
+            boundOperation(elements[i]);
+        }
+        
+        return this;
+    }
     
     Set.prototype.clone = function() {
-        return new Set.apply(null, this.elements);
+        var set = new Set();
+        this.forEach(function(element) {
+            set.insertElement(element);
+        });
+        
+        return set;
     };
     
-    Set.prototype.intersects = function(set) {
+    Set.prototype.intersection = function(set) {
         if (!(set instanceof Set)) {
-            return 
+            return this;
         }
-    }
+        
+        this.forEach(function(element) {
+            if (!set.hasElement(element)) {
+                this.removeElement(element);
+            }
+        });
+        
+        return this;
+    };
+    
+    Set.prototype.getIntersection = function(set) {
+        return this.clone().intersection(set);
+    };
+    
+    Set.prototype.union = function(set) {
+        if (!(set instanceof Set)) {
+            return this;
+        }
+        
+        this.forEach(function(element) {
+            this.insertElement(element);
+        });
+        
+        return this;
+    };
+    
+    Set.prototype.getUnion = function(set) {
+        return this.clone().union(set);
+    };
+    
+    Set.prototype.complement = function(set) {
+        if (!(set instanceof Set)) {
+            return this;
+        }
+        
+        this.forEach(function(element) {
+            if (set.hasElement(element)) {
+                this.removeElement(element);
+            }
+        });
+        
+        return this;
+    };
+    
+    Set.prototype.getComplement = function(set) {
+        return this.clone().complement(set);
+    };
+    
+    Set.prototype.isSuperset = function(set) {
+        if (!(set instanceof Set)) {
+            return false;
+        }
+        
+        var hasAll = true;
+        var self = this;
+        
+        set.forEach(function(element) {
+            if (!self.hasElement(element)) {
+                hasAll = false;
+            }
+        });
+        
+        return this.length >= set.length && hasAll;
+    };
+    
+    Set.prototype.isSubset = function(set) {
+        if (!(set instanceof Set)) {
+            return false;
+        }
+        
+        var hasAll = true;
+        
+        this.forEach(function(element) {
+            if (!set.hasElement(element)) {
+                hasAll = false;
+            }
+        });
+        
+        return set.length <= this.length && !hasAll;
+    };
     
     return Set;
 });
