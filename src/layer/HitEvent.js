@@ -162,7 +162,7 @@ define(function() {
         var hitTarget = this.hitTarget;
         
         if (hitTarget instanceof Array) {
-            var i = hitTarget.length - 1;
+            var i = hitTarget.length - 1 || 0;
             var hitRenderable;
 
             do {

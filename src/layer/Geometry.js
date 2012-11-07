@@ -39,6 +39,7 @@ define(function() {
     var Geometry = {
         /**
          * Checks whether a point is within a rectangle
+         * Does consider edge collisions
          *
          * @function
          * @name Geometry.isPointInRect
@@ -54,6 +55,29 @@ define(function() {
         isPointInRect: function(x, y, rectX, rectY, rectWidth, rectHeight) {
             return !(x < rectX || x > rectX + rectWidth || y < rectY || y > rectY + rectHeight);
             // return x >= rectX && x <= rectX + rectWidth && y >= rectY && y <= rectY + rectHeight;
+        },
+        
+        /**
+         * Checks whether a rectangle is within a rectangle
+         *
+         * @function
+         * @name Geometry.isPointInRect
+         * @param {number} l1 Left 1
+         * @param {number} r1 Right 1
+         * @param {number} t1 Top 1
+         * @param {number} b1 Bottom 1
+         * @param {number} l2 Left 2
+         * @param {number} r2 Left 2
+         * @param {number} t2 Left 2
+         * @param {number} b2 Left 2
+         * @returns {boolean}
+         * @since 1.0
+         */
+        isRectInRect: function(l1, r1, t1, b1, l2, r2, t2, b2) {
+            return l2 <= r1
+                && r2 >= l1
+                && t2 <= b1
+                && b2 >= t1;
         },
 
         /**
