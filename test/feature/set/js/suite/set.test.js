@@ -23,14 +23,14 @@ define([
         
         it('can insert a new element', function() {
             set.insertElement(23);
-            expect(set.hasElement(23)).to.be(true)
+            expect(set.containsElement(23)).to.be(true)
         });
         
         it('can remove an element if added', function() {
             set.insertElement(23);
-            expect(set.hasElement(23)).to.be(true);
+            expect(set.containsElement(23)).to.be(true);
             set.removeElement(23);
-            expect(set.hasElement(23)).to.be(false);
+            expect(set.containsElement(23)).to.be(false);
         });
         
         it('can add several elements at once', function() {
@@ -44,19 +44,56 @@ define([
             set.intersection(otherSet);
             
             expect(set.length).to.be(4);
-            expect(set.hasElement(3)).to.be(true);
-            expect(set.hasElement(4)).to.be(true);
-            expect(set.hasElement(5)).to.be(true);
-            expect(set.hasElement('other')).to.be(true);
+            expect(set.containsElement(3)).to.be(true);
+            expect(set.containsElement(4)).to.be(true);
+            expect(set.containsElement(5)).to.be(true);
+            expect(set.containsElement('other')).to.be(true);
         });
         
-        it('as an intersection, its parents are its superset', function() {
+        it('can union with another set', function() {
             set = new Set(1, 2, 3, 4, 5, 'other');
             otherSet = new Set(3, 4, 5, 6, 7, 8, 'other');
-            var intersection = set.getIntersection(otherSet);
+            set.union(otherSet);
             
-            expect(set.isSuperset(intersection)).to.be(true);
-            expect(otherSet.isSuperset(intersection)).to.be(true);
-        })
+            expect(set.length).to.be(9);
+        });
+        
+        it('as a union, its parents are subsets of it', function() {
+            set = new Set(1, 2, 3, 4, 5, 'other');
+            otherSet = new Set(3, 4, 5, 6, 7, 8, 'other');
+            var union = set.getUnion(otherSet);
+            
+            expect(set.isSubset(union)).to.be(true);
+            expect(otherSet.isSubset(union)).to.be(true);
+        });
+        
+        it('as a union, it is not a subset of its parents', function() {
+            set = new Set(1, 2, 3, 4, 5, 'other');
+            otherSet = new Set(3, 4, 5, 6, 7, 8, 'other');
+            var union = set.getUnion(otherSet);
+            
+            expect(union.isSubset(set)).to.be(false);
+            expect(union.isSubset(otherSet)).to.be(false);
+        });
+        
+        it('can subtract another set', function() {
+            set = new Set(1, 2, 3, 4, 5, 'other');
+            otherSet = new Set(3, 4, 5, 6, 7, 8, 'other');
+            set.minus(otherSet);
+
+            expect(set.length).to.be(2);
+            expect(set.containsElement(1)).to.be(true);
+            expect(set.containsElement(2)).to.be(true);
+            expect(set.containsElement('other')).to.be(false);
+        });
+        
+        it('as a subtracted set, it should be a subset of the origin and not of the subtraction', function() {
+            set = new Set(1, 2, 3, 4, 5, 'other');
+            otherSet = new Set(3, 4, 5, 6, 7, 8, 'other');
+            var subtraction = set.getSubtraction(otherSet);
+
+            expect(subtraction.isSubset(set)).to.be(true);
+            expect(subtraction.isSubset(otherSet)).to.be(false);
+        });
     });
 });
