@@ -4,6 +4,8 @@
 LayerJS is a graphics rendering library, much like [KineticJS](http://www.kineticjs.com/) and [EaselJS](http://www.createjs.com/#!/EaselJS).
 LayerJS focuses on using multiple ```<canvas>``` elements to optimize its render cycle.
     
+[LayerJS TestBed](http://adamrenny.github.com/LayerJS)
+    
 ## Licensing
 LayerJS is licensed under the [MIT license](http://opensource.org/licenses/mit-license.html).
 
