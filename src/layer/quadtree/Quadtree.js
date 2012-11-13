@@ -1,9 +1,14 @@
 define([
-    'layer/quadtree/Region'
+    'layer/quadtree/RectRegion',
+    'layer/set'
 ], function(
-    Region
+    RectRegion,
+    Set
 ) {
     "use strict";
+    
+    var Math_floor = Math.floor;
+    var Math_ceil = Math.ceil;
     
     var MAX_LEAF_NODES = 4;
     
@@ -29,38 +34,38 @@ define([
         var i = 0;
         var length = leafNodes.length;
         
-        region = new Region(
+        region = new RectRegion(
             parentRegion.x, 
             parentRegion.y, 
-            Math.floor(parentRegion.width * .5), 
-            Math.floor(parentRegion.height * .5)
+            Math_floor(parentRegion.width * .5), 
+            Math_floor(parentRegion.height * .5)
         );
         this.northWestNode = new Quadtree(region);
         treeNodes.push(this.northWestNode);
         
-        region = new Region(
+        region = new RectRegion(
             parentRegion.centerX, 
             parentRegion.y, 
-            Math.ceil(parentRegion.width * .5), 
-            Math.floor(parentRegion.height * .5)
+            Math_ceil(parentRegion.width * .5), 
+            Math_floor(parentRegion.height * .5)
         );
         this.northEastNode = new Quadtree(region);
         treeNodes.push(this.northEastNode);
         
-        region = new Region(
+        region = new RectRegion(
             parentRegion.x, 
             parentRegion.centerY, 
-            Math.floor(parentRegion.width * .5), 
-            Math.ceil(parentRegion.height * .5)
+            Math_floor(parentRegion.width * .5), 
+            Math_ceil(parentRegion.height * .5)
         );
         this.southWestNode = new Quadtree(region);
         treeNodes.push(this.southWestNode);
         
-        region = new Region(
+        region = new RectRegion(
             parentRegion.centerX, 
             parentRegion.centerY, 
-            Math.ceil(parentRegion.width * .5), 
-            Math.ceil(parentRegion.height * .5)
+            Math_ceil(parentRegion.width * .5), 
+            Math_ceil(parentRegion.height * .5)
         );
         this.southEastNode = new Quadtree(region);
         treeNodes.push(this.southEastNode);
@@ -75,7 +80,7 @@ define([
     };
     
     Quadtree.prototype.insert = function(region) {
-        if (!this.region.hitTestRegion(region)) {
+        if (!this.region.hitTestRect(region)) {
             return false;
         }
         var leafNodes = this.leafNodes;
@@ -108,9 +113,9 @@ define([
     };
     
     Quadtree.prototype.queryRegion = function(region) {
-        var regionList = [];
-        if (!this.region.hitTestRegion(region)) {
-            return regionList;
+        var regions = new Set();
+        if (!this.region.hitTestRect(region)) {
+            return regions;
         }
         
         var i = 0;
@@ -122,18 +127,18 @@ define([
             length = nodes.length;
             
             for (; i < length; i++) {
-                regionList.push(nodes[i]);
+                regions.addElement(nodes[i]);
             }
         } else {
             nodes = this.treeNodes;
             length = nodes.length;
             
             for (; i < length; i++) {
-                regionList = regionList.concat(nodes[i].queryRegion(region));
+                regions.union(nodes[i].queryRegion(region));
             }
         }
         
-        return regionList;
+        return regions;
     };
     
     return Quadtree;
