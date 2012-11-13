@@ -22,66 +22,92 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Quadtree Region Interface Definition
+ * Quadtree Point Region Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
  * @version 1.0
  */
-define(function() {
+define([
+    'layer/quadtree/Region',
+    'layer/Geometry'
+], function(
+    Region,
+    Geometry
+) {
     "use strict";
+    
+    var Math_floor = Math.floor;
     
     /**
      * Region Constructor
      *
-     * Region contains a bounding box that can be tested against geometric regions
+     * Region contains a point that can be tested against geometric regions
      *
-     * @name QuadtreeRegion
-     * @class Quadtree helper region structure
+     * @name QuadtreePointRegion
+     * @class Quadtree point helper region structure
      * @constructor
-     *
      * @since 1.0
+     *
+     * @param {number} x X Position
+     * @param {number} y Y Position
+     * @param {number} width Region Width
+     * @param {number} height Region Height
      */
-    var Region = function() {
+    var PointRegion = function(x, y) {
         /**
          * X Position
          *
-         * @name QuadtreeRegion#x
+         * @name QuadtreePointRegion#x
          * @type {number}
          * @since 1.0
          */
-        this.x = 0;
+        this.x = x;
         
         /**
          * Y Position
          *
-         * @name QuadtreeRegion#y
+         * @name QuadtreePointRegion#y
          * @type {number}
          * @since 1.0
          */
-        this.y = 0;
+        this.y = y;
     };
+    
+    PointRegion.prototype = new Region;
+    PointRegion.prototype.constructor = PointRegion;
 
     /**
      * Tests a region to determine if the region is in inside of the region
      * If a region has no width or height it will fail
      *
-     * @param {QuadtreeRectRegion} rect Rectangle to test against
+     * @param {QuadtreePointRegion} region Quadtree region to test against
      * @returns {boolean}
      * @since 1.0
      */
-    Region.prototype.hitTestRect = function(rect) {
-        return false;
+    PointRegion.prototype.hitTestRect = function(rect) {
+        if (rect.width === 0 || rect.height === 0) {
+            return false;
+        }
+        
+        return Geometry.isPointInRect(
+            this.x,
+            this.y,
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height
+        );
     };
     
     /**
-     * Tests a point to determine if the point is in inside of the region
+     * Tests a point to determine if the point equivalent
      *
-     * @param {QuadtreePointRegion} point Point to test against
+     * @param {QuadtreePointRegion} point Point region
      * @returns {boolean}
      * @since 1.0
      */
-    Region.prototype.hitTestPoint = function(point) {
-        return false;
+    PointRegion.prototype.hitTestPoint = function(point) {
+        return this.x === point.x && this.y === point.y;
     };
     
-    return Region;
+    return PointRegion;
 });
