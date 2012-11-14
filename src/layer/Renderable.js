@@ -24,13 +24,15 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.0
+ * @version 1.1
  */
 define([
     'lib/gl-matrix',
+    'layer/quadtree/RectRegion',
     'layer/Geometry'
 ], function(
     glMatrix,
+    RectRegion,
     Geometry
 ) {
     "use strict";
@@ -626,6 +628,24 @@ define([
     };
     
     /**
+     * Creates a rectangular region to represent the position the Renderable is in
+     * Region is in world coordinates
+     * Used for calculating position within quadtree
+     *
+     * @returns {RectRegion}
+     * @since 1.1
+     */
+    Renderable.prototype.getRegion = function() {
+        var position = [
+            0,
+            0
+        ];
+        
+        position = this.toWorldCoordinates(position, true);
+        return new RectRegion(position[0], position[1], this.width, this.height);
+    };
+    
+    /**
      * Applies the transform to the context
      * Bypasses traditional save, restore methods and uses a setTransform instead
      *
@@ -653,6 +673,6 @@ define([
         
         this.applyTransform(context);
     };
-    
+
     return Renderable;
 });

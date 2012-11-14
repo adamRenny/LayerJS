@@ -22,19 +22,19 @@ define([
         });
         
         it('can insert a new element', function() {
-            set.insertElement(23);
+            set.addElement(23);
             expect(set.containsElement(23)).to.be(true)
         });
         
         it('can remove an element if added', function() {
-            set.insertElement(23);
+            set.addElement(23);
             expect(set.containsElement(23)).to.be(true);
             set.removeElement(23);
             expect(set.containsElement(23)).to.be(false);
         });
         
         it('can add several elements at once', function() {
-            set.insertElements(1, 2, 3, 4, 'happy', 'happy', 2, 'fifty-five', {});
+            set.addElements(1, 2, 3, 4, 'happy', 'happy', 2, 'fifty-five', {});
             expect(set.length).to.be(7);
         });
         

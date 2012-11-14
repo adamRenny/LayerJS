@@ -66,8 +66,8 @@ define([
         region = new RectRegion(
             parentRegion.x, 
             parentRegion.y, 
-            Math_floor(parentRegion.width * .5), 
-            Math_floor(parentRegion.height * .5)
+            Math_floor(parentRegion.halfWidth), 
+            Math_floor(parentRegion.halfHeight)
         );
         this.northWestNode = new Quadtree(region);
         treeNodes.push(this.northWestNode);
@@ -75,8 +75,8 @@ define([
         region = new RectRegion(
             parentRegion.centerX, 
             parentRegion.y, 
-            Math_ceil(parentRegion.width * .5), 
-            Math_floor(parentRegion.height * .5)
+            Math_ceil(parentRegion.halfWidth), 
+            Math_floor(parentRegion.halfHeight)
         );
         this.northEastNode = new Quadtree(region);
         treeNodes.push(this.northEastNode);
@@ -84,8 +84,8 @@ define([
         region = new RectRegion(
             parentRegion.x, 
             parentRegion.centerY, 
-            Math_floor(parentRegion.width * .5), 
-            Math_ceil(parentRegion.height * .5)
+            Math_floor(parentRegion.halfWidth), 
+            Math_ceil(parentRegion.halfHeight)
         );
         this.southWestNode = new Quadtree(region);
         treeNodes.push(this.southWestNode);
@@ -93,8 +93,8 @@ define([
         region = new RectRegion(
             parentRegion.centerX, 
             parentRegion.centerY, 
-            Math_ceil(parentRegion.width * .5), 
-            Math_ceil(parentRegion.height * .5)
+            Math_ceil(parentRegion.halfWidth), 
+            Math_ceil(parentRegion.halfHeight)
         );
         this.southEastNode = new Quadtree(region);
         treeNodes.push(this.southEastNode);
