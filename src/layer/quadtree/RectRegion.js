@@ -24,7 +24,7 @@
  *
  * Quadtree Rectangle Region Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 define([
     'layer/quadtree/Region',
@@ -90,13 +90,31 @@ define([
         this.height = height;
         
         /**
+         * Region Half Width
+         *
+         * @name QuadtreeRectRegion#halfWidth
+         * @type {number}
+         * @since 1.2
+         */
+        this.halfWidth = width * .5;
+        
+        /**
+         * Region Half Height
+         *
+         * @name QuadtreeRectRegion#halfHeight
+         * @type {number}
+         * @since 1.2
+         */
+        this.halfHeight = height * .5;
+        
+        /**
          * Center X position 
          *
          * @name QuadtreeRectRegion#centerX
          * @type {number}
          * @since 1.0
          */
-        this.centerX = Math_floor(x + (width * .5));
+        this.centerX = Math_floor(x + this.halfWidth);
         
         /**
          * Center Y position 
@@ -105,7 +123,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.centerY = Math_floor(y + (height * .5));
+        this.centerY = Math_floor(y + this.halfHeight);
     };
     
     RectRegion.prototype = new Region;
