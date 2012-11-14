@@ -49,13 +49,7 @@ define([
             if (firstRect === null) {
                 firstRect = rect;
             }
-        // rect = new Rectangle(0, 0, 200, 100);
-        //         rect.scaleX = 2;
-        //         rect.scaleY = 2;
-        //         rect.setCenterPoint(.25, .6);
-        //         rect.setNeedsUpdate();
-        
-        // rect.setRotation(Math.PI / 2);
+            
             group.addChild(rect);
         }
         
@@ -63,12 +57,14 @@ define([
         
         var position = [firstRect.x, firstRect.y];
         position = firstRect.toWorldCoordinates(position);
-        var newRect = new Rectangle(position[0], position[1], firstRect.width, firstRect.height);
+        var region = firstRect.getRegion();
+        
+        var newRect = new Rectangle(region.x, region.y, region.halfWidth, region.halfHeight);
         scene.addChild(newRect);
-        console.log(newRect);
+        
         window.newRect = newRect;
         window.firstRect = firstRect;
-        // scene.addChild(rect);
+        
         window.scene = this.scene;
     };
     

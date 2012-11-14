@@ -631,8 +631,8 @@ define([
      */
     Renderable.prototype.getRegion = function() {
         var position = [
-            this.x,
-            this.y
+            0,
+            0
         ];
         
         position = this.toWorldCoordinates(position, true);
@@ -667,6 +667,6 @@ define([
         
         this.applyTransform(context);
     };
-    
+
     return Renderable;
 });
