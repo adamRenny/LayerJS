@@ -141,6 +141,14 @@ define([
          * @since 1.0
          */
         this.viewport = viewport;
+
+        /**
+         * jQuery object of viewport
+         *
+         * @name Stage#$viewport
+         * @type {jQuery}
+         */
+        this.$viewport = $(this.viewport);
         
         /**
          * Width of the stage
@@ -181,7 +189,7 @@ define([
         this.layerCache = {};
         
         // Creates representative layers for existing canvases
-        $(this.viewport).children().each(function() {
+        this.$viewport.children().each(function() {
             this.width = width;
             this.height = height;
             layers.push(new Layer(this));
@@ -346,7 +354,7 @@ define([
      * @since 1.0
      */
     Stage.prototype.prependLayer = function(layer) {
-        $(this.viewport).prepend(layer.getCanvas());
+        this.$viewport.prepend(layer.getCanvas());
         this.layerCache[layer.name] = layer;
         this.layers.unshift(layer);
         this.layerCount = this.layers.length;
@@ -385,7 +393,7 @@ define([
         }
         
         var targetLayer = this.layers[index];
-        $(this.viewport).find('#' + targetLayer.name).after(layer.getCanvas());
+        this.$viewport.find('#' + targetLayer.name).after(layer.getCanvas());
         this.layerCache[layer.name] = layer;
         this.layers.splice(index, 0, layer);
         this.layerCount = this.layers.length;
