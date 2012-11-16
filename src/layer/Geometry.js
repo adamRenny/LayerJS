@@ -92,9 +92,26 @@ define(function() {
          * @returns {number}
          */
         getDistanceBetweenPoints: function(x1, y1, x2, y2) {
-            var dx = x1 - x2;
-            var dy = y2 - y2;
+            var dx = x2 - x1;
+            var dy = y2 - y1;
             return Math.sqrt((dx * dx) + (dy * dy));
+        },
+        
+        /**
+         * Get squared distance between two points
+         *
+         * @function
+         * @name Geometry.getDistanceBetweenPoints
+         * @param {number} x1 Point 1's X Position
+         * @param {number} y1 Point 1's Y Position
+         * @param {number} x2 Point 2's X Position
+         * @param {number} y2 Point 2's Y Position
+         * @returns {number}
+         */
+        getSquaredDistanceBetweenPoints: function(x1, y1, x2, y2) {
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+            return (dx * dx) + (dy * dy);
         },
 
         /**
@@ -109,8 +126,8 @@ define(function() {
          * @param {number} radius Circle's radius
          * @returns {boolean}
          */
-        isPointInCirc: function(x, y, circCenterX, circCenterY, radius) {
-            return this.getDistanceBetweenPoints(x, y, circCenterX, circCenterY) < radius;
+        isPointInCircle: function(x, y, circCenterX, circCenterY, radius) {
+            return this.getSquaredDistanceBetweenPoints(x, y, circCenterX, circCenterY) < (radius * radius);
         }
     };
     return Geometry;
