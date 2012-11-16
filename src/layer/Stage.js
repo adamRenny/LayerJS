@@ -53,7 +53,7 @@ define([
      * Settings for each hardware CSS styles to modify for acceleration
      *
      * @private
-     * @type {Array}
+     * @type {Object}
      * @constant
      * @since 1.0
      */
@@ -382,6 +382,7 @@ define([
      * Insert the layer to the viewport and stage
      *
      * @param {Layer} layer Layer to insert
+     * @param {number} index Index to insert layer after
      * @returns {Layer}
      * @since 1.0
      */
