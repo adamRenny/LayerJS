@@ -9,7 +9,7 @@ define([
     RectRegion,
     PointRegion
 ) {
-    "use strict";
+    'use strict';
     
     var queryRegion;
     

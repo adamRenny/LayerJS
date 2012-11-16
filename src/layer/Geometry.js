@@ -27,7 +27,7 @@
  * @version 1.0
  */
 define(function() {
-    "use strict";
+    'use strict';
     
     /**
      * Geometry Utility Structure

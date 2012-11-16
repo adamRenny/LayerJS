@@ -37,7 +37,7 @@ define([
     HitEvent,
     Events
 ) {
-    "use strict";
+    'use strict';
     
     /**
      * Render Layer
@@ -198,6 +198,36 @@ define([
      */
     Scene.prototype.removeChildFromLayerByIndex = function(child, layerIndex) {
         var layer = this.stage.getLayerByIndex(layerIndex);
+        layer.root.removeChild(child);
+        
+        return this;
+    };
+    
+    /**
+     * Adds a child to the layer at the name specified
+     *
+     * @param {Renderable} child Child to add
+     * @param {number} layerName Name of the layer to add to
+     * @returns {Scene}
+     * @since 1.3
+     */
+    Scene.prototype.addChildToLayerByName = function(child, layerName) {
+        var layer = this.stage.getLayerByName(layerName);
+        layer.root.addChild(child);
+        
+        return this;
+    };
+    
+    /**
+     * Removes a child to the layer from the name specified
+     *
+     * @param {Renderable} child Child to remove
+     * @param {string} layerName Name of the layer to add to
+     * @returns {Scene}
+     * @since 1.3
+     */
+    Scene.prototype.removeChildFromLayerByName = function(child, layerName) {
+        var layer = this.stage.getLayerByName(layerName);
         layer.root.removeChild(child);
         
         return this;

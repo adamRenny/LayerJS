@@ -28,7 +28,7 @@
  * @version 2.0
  */
 define(function() {
-    "use strict";
+    'use strict';
     
     /**
      * Local definition of the window for faster access

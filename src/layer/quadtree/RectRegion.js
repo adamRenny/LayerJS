@@ -33,7 +33,7 @@ define([
     Region,
     Geometry
 ) {
-    "use strict";
+    'use strict';
     
     var Math_floor = Math.floor;
     

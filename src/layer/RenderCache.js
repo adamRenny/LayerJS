@@ -24,10 +24,10 @@
  *
  * Render Cache Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.0
+ * @version 1.1
  */
 define(function() {
-    "use strict";
+    'use strict';
     
     /**
      * Static id used for debugging - makes each render cache a unique id
@@ -218,6 +218,16 @@ define(function() {
         this.canvas.height = height;
         
         return this;
+    };
+    
+    /**
+     * Gets the currently rendered content
+     *
+     * @returns {HTMLCanvasElement}
+     * @since 1.1
+     */
+    RenderCache.prototype.getContent = function() {
+        return this.canvas;
     };
     
     /**

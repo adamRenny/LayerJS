@@ -34,7 +34,7 @@ define([
     RectRegion,
     Set
 ) {
-    "use strict";
+    'use strict';
     
     var Math_floor = Math.floor;
     var Math_ceil = Math.ceil;

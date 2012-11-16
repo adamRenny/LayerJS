@@ -28,7 +28,7 @@
  */
 
 define(function() {
-    "use strict";
+    'use strict';
     
     /**
      * Cached version of the native array slice

@@ -3,7 +3,7 @@ require([
     'assets/expect'
 ], function(
 ) {
-    "use strict";
+    'use strict';
     mocha.setup('bdd');
     
     require([

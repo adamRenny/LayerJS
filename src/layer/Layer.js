@@ -31,7 +31,7 @@ define([
 ], function(
     RenderableGroup
 ) {
-    "use strict";
+    'use strict';
     
     /**
      * Layer ID Prefix

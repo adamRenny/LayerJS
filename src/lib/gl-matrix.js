@@ -46,7 +46,7 @@
         factory(root);
     }
 }(this, function (root) {
-    "use strict";
+    'use strict';
 
     // Tweak to your liking
     var FLOAT_EPSILON = 0.000001;

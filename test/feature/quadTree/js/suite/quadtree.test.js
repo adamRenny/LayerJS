@@ -5,7 +5,7 @@ define([
     Quadtree,
     RectRegion
 ) {
-    "use strict";
+    'use strict';
     
     describe('Quadtree', function() {
         var quadtree;

@@ -5,7 +5,7 @@ define([
     Renderable,
     RenderableGroup
 ) {
-    "use strict";
+    'use strict';
     
     describe('Renderable::Coordinate Mapping', function() {
         var renderable;

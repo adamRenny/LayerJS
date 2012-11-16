@@ -33,7 +33,7 @@ define([
     $,
     Events
 ) {
-    "use strict";
+    'use strict';
     
     /**
      * Mouse Event to represent the current mouse state

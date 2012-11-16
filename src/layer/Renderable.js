@@ -35,7 +35,7 @@ define([
     RectRegion,
     Geometry
 ) {
-    "use strict";
+    'use strict';
     
     /**
      * Locally cached Math.round function

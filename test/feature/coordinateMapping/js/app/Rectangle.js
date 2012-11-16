@@ -3,7 +3,7 @@ define([
 ], function(
     Renderable
 ) {
-    "use strict";
+    'use strict';
     
     var Rectangle = function(x, y, width, height) {
         this.init(x, y, width, height);
@@ -12,6 +12,7 @@ define([
     Rectangle.prototype = new Renderable();
     Rectangle.prototype.constructor = Rectangle;
     Rectangle.prototype.Renderable_init = Renderable.prototype.init;
+    Rectangle.prototype.Renderable_render = Renderable.prototype.render;
     
     Rectangle.prototype.init = function(x, y, width, height) {
         this.Renderable_init(x, y, width, height);
@@ -25,18 +26,10 @@ define([
     };
     
     Rectangle.prototype.render = function(context) {
-        if (this.needsUpdate) {
-            this.updateTransform();
-        }
-        
-        this.needsRender = false;
-        
-        this.applyTransform(context);
+        this.Renderable_render(context);
         context.fillStyle = this.fillStyle;
         context.fillRect(0, 0, this.unscaledWidth, this.unscaledHeight);
     };
-    
-    window.Rect = Rectangle;
     
     return Rectangle;
 });
