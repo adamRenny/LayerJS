@@ -22,7 +22,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Quadtree Module Definition
+ * Node Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
  * @version 1.0
  */
