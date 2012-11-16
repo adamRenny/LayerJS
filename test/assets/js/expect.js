@@ -934,7 +934,7 @@
   }
 
   var json = (function () {
-    "use strict";
+    'use strict';
 
     if ('object' == typeof JSON && JSON.parse && JSON.stringify) {
       return {

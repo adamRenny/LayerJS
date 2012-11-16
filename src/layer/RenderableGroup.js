@@ -33,7 +33,7 @@ define([
     Renderable,
     Geometry
 ) {
-    "use strict";
+    'use strict';
     
     var Math = window.Math;
     var MathMax = Math.max;

@@ -32,7 +32,7 @@ define([
 ], function(
     Renderable
 ) {
-    "use strict";
+    'use strict';
     
     var Node = function(renderable) {
         this.isLeaf = true;

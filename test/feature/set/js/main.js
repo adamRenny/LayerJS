@@ -7,7 +7,7 @@ require([
     Quadtree,
     Region
 ) {
-    "use strict";
+    'use strict';
     
     console.log(Quadtree, Region);
     

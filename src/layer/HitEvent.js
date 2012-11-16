@@ -27,7 +27,7 @@
  * @version 1.1
  */
 define(function() {
-    "use strict";
+    'use strict';
     
     /**
      * Hit Event Callback Method Names

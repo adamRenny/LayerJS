@@ -1,15 +1,15 @@
 define([
-    'layer/Looper',
+    'layer/RunLoop',
     'layer/Scene',
     'layer/RenderableGroup',
     'app/Rectangle'
 ], function(
-    Looper,
+    RunLoop,
     Scene,
     RenderableGroup,
     Rectangle
 ) {
-    "use strict";
+    'use strict';
     
     var rect;
     var rotation = 0;
@@ -19,27 +19,16 @@ define([
         this.init();
     };
     
-    Game.prototype = new Looper;
-    Game.prototype.constructor = Game;
-    Game.prototype.Looper_init = Looper.prototype.init;
-    
     Game.prototype.init = function() {
-        this.Looper_init();
+        this.loop = new RunLoop();
         
-        var layerNames = [
-            'background',
-            'player',
-            'ui'
-        ];
+        var layerName = 'main';
         
         var viewport = document.getElementById('js-viewport');
         var scene = this.scene = new Scene(viewport, 800, 600);
         var stage = scene.getStage();
         
-        for (var i = 0; i < layerNames.length; i++) {
-            stage.createAndAppendLayer(layerNames[i]);
-        }
-        
+        stage.createAndAppendLayer(layerName);
         stage.enableCSSAcceleration();
         
         var group = window.group = new RenderableGroup(20, 100);
@@ -55,9 +44,27 @@ define([
             group.addChild(rect);
         }
         
-        scene.addChild(group);
+        scene.addChildToLayerByName(group, layerName);
         // scene.addChild(rect);
-        window.scene = this.scene;
+        
+        window.scene = scene;
+        this.setupHandlers();
+        
+        this.loop.addCall(this.updateCycle, RunLoop.UPDATE_CYCLE);
+        this.loop.addCall(this.renderCycle, RunLoop.RENDER_CYCLE);
+    };
+    
+    Game.prototype.setupHandlers = function() {
+        this.updateCycle = this.update.bind(this);
+        this.renderCycle = this.render.bind(this);
+    };
+    
+    Game.prototype.start = function() {
+        this.loop.start();
+    };
+    
+    Game.prototype.stop = function() {
+        this.loop.stop();
     };
     
     Game.prototype.update = function(elapsed) {

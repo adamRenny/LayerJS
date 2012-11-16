@@ -48,8 +48,8 @@ Note that a scene that has some layers with CSS acceleration and others without 
 ### Loop Controller
 To manage the run loop, LayerJS includes a Loop Controller to manage it. 
 The loop controller's sole responsibility is to run the application under the run loop. 
-While most applications have their root at the ```Scene```, LayerJS uses a ```Looper``` as the core engine component. 
-This looping structure is meant to be extended and have its render and update loops overwritten after extension.
+While most applications have their root at the ```Scene```, LayerJS uses a ```RunLoop``` as the core engine component. 
+This looping structure is meant to have calls added to it but can have its render and update loops overwritten after extension if desired.
 
 ### Render Cache
 Idea courtesy of [Ash Blue](http://blueashes.com/), this library includes a ```RenderCache``` object used to cache renderings for re-use. 

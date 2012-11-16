@@ -3,7 +3,7 @@ define([
 ], function(
     Set
 ) {
-    "use strict";
+    'use strict';
     
     describe('Set', function() {
         var set;

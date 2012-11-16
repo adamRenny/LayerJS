@@ -7,7 +7,7 @@ define([
     Emitter,
     Scene
 ) {
-    "use strict";
+    'use strict';
     
     var WIDTH = 800;
     var HEIGHT = 600;

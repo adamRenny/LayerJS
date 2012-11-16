@@ -5,7 +5,7 @@ define([
     RectRegion,
     PointRegion
 ) {
-    "use strict";
+    'use strict';
     console.log(PointRegion);
     
     describe('Quadtree::Region', function() {

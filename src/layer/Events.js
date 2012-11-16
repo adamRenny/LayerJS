@@ -31,7 +31,7 @@ define([
 ], function(
     EventBus
 ) {
-    "use strict";
+    'use strict';
     
     return new EventBus();
 });

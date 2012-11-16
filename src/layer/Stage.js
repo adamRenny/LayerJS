@@ -35,7 +35,7 @@ define([
     Layer,
     RenderCache
 ) {
-    "use strict";
+    'use strict';
     
     /**
      * Hardware CSS Styles to modify for acceleration

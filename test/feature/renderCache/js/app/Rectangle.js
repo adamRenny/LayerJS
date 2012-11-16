@@ -5,7 +5,7 @@ define([
     Renderable,
     RenderCache
 ) {
-    "use strict";
+    'use strict';
     
     var _renderRectangle = function(context) {
         context.fillStyle = this.fillStyle;
@@ -19,6 +19,7 @@ define([
     Rectangle.prototype = new Renderable();
     Rectangle.prototype.constructor = Rectangle;
     Rectangle.prototype.Renderable_init = Renderable.prototype.init;
+    Rectangle.prototype.Renderable_render = Renderable.prototype.render;
     
     Rectangle.prototype.init = function(x, y, width, height) {
         this.Renderable_init(x, y, width, height);
@@ -26,7 +27,7 @@ define([
         this.fillStyle = 'hsl(' + Math.round(Math.random() * 255) + ', 100%, 50%)';
         
         this.renderCache = new RenderCache(width, height, _renderRectangle.bind(this));
-        this.cache = this.renderCache.canvas;
+        this.cache = this.renderCache.getContent();
     };
     
     Rectangle.prototype.onMouseMove = function(event) {
@@ -36,13 +37,7 @@ define([
     };
     
     Rectangle.prototype.render = function(context) {
-        if (this.needsUpdate) {
-            this.updateTransform();
-        }
-        
-        this.needsRender = false;
-        
-        this.applyTransform(context);
+        this.Renderable_render(context);
         context.drawImage(this.cache, 0, 0);
     };
     
