@@ -1,14 +1,14 @@
 require([
     'jquery',
-    'System'
+    'Visualization'
 ], function(
     $,
-    System
+    Visualization
 ) {
     $(document).ready(function() {
         var wrapper = document.getElementById('js-viewport');
         
-        var system = new System(wrapper);
-        system.start();
+        var visualization = new Visualization(wrapper);
+        visualization.start();
     });
 });
