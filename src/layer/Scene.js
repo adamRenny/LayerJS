@@ -83,14 +83,8 @@ define([
      * @since 1.0
      */
     Scene.prototype.init = function(container, width, height) {
-        /**
-         * Stage for the scene to be contained within
-         *
-         * @name Scene#stage
-         * @type {Stage}
-         * @since 1.0
-         */
-        this.stage = new Stage(container, width, height);
+
+        this.setupStage(container, width, height);
         
         /**
          * Scene Input controller to listen from the container
@@ -128,6 +122,27 @@ define([
         Events.on(Input.MOUSE_UP, this.onUpHandler);
         Events.on(Input.MOUSE_DOWN, this.onDownHandler);
         Events.on(Input.CLICK, this.onClickHandler);
+    };
+
+    /**
+     * Create new stage for the scene to be contained within
+     *
+     * @param {HTMLElement} container Container object where the canvases are contained
+     * @param {number} width Base unscaled width
+     * @param {number} height Base unscaled height
+     * @returns {Scene}
+     */
+    Scene.prototype.setupStage = function(container, width, height) {
+        /**
+         * Stage for the scene to be contained within
+         *
+         * @name Scene#stage
+         * @type {Stage}
+         * @since 1.0
+         */
+        this.stage = new Stage(container, width, height);
+
+        return this;
     };
     
     /**
