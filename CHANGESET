@@ -4,3 +4,4 @@
  - Added Polar Renderable group and leaf renderable
  - Resolved issues with circle tests in Geometry and added some PI-based constants
  - Added a polar graph testbed
+ - Included setupStage API fork request for stage extensibility
