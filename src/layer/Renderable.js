@@ -374,6 +374,24 @@ define([
     };
     
     /**
+     * Adds to the x and y positions
+     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
+     * 
+     * @param {Number} deltaX delta change (unscaled)
+     * @param {Number} deltaY delta change (unscaled)
+     * @returns {Renderable} fluent interface
+     * @since  1.1
+     */
+    Renderable.prototype.addDeltaXY = function(deltaX, deltaY) {
+        this.x += deltaX;
+        this.y += deltaY;
+        this.needsUpdate = true;
+        this.needsRender = true;
+
+        return this;
+    }
+
+    /**
      * Sets the x scale and updates the width
      * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
      *
