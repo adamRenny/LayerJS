@@ -42,7 +42,6 @@ define([
     };
     
     Visualization.prototype.setupHandlers = function() {
-        this.updateCycle = this.update.bind(this);
         this.renderCycle = this.render.bind(this);
         
         return this;
