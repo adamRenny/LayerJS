@@ -1,0 +1,6 @@
+# RELEASE NOTE/CHANGESET
+
+## v0.7
+ - Added Polar Renderable group and leaf renderable
+ - Resolved issues with circle tests in Geometry and added some PI-based constants
+ - Added a polar graph testbed
