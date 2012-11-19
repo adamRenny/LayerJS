@@ -24,7 +24,7 @@ define([
         
         this.scene = new Scene(wrapper, WIDTH, HEIGHT);
         
-        this.polarGraphComponent = new PolarGraphComponent(0, 0, HEIGHT * .5);
+        this.polarGraphComponent = new PolarGraphComponent(WIDTH * .5, HEIGHT * .5, HEIGHT * .5);
         this.scene.addChild(this.polarGraphComponent);
         
         this.setupHandlers();

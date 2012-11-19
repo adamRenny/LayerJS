@@ -1,70 +1,56 @@
 define([
-    'layer/Renderable',
-    'layer/Geometry'
+    'layer/polar/PolarRenderableGroup',
+    'layer/Geometry',
+    'app/SliceView'
 ], function(
-    Renderable,
-    Geometry
+    PolarRenderableGroup,
+    Geometry,
+    SliceView
 ) {
     'use strict';
     
-    var PolarGraphComponent = function(x, y, radius, content) {
+    var NUMBER_OF_SLICES = 18;
+    var PI = Math.PI;
+    var TWO_PI = PI * 2;
+    var HALF_PI = PI * .5;
+    
+    var PolarAreaGraph = function(x, y, radius) {
         if (x !== undefined && y !== undefined && radius !== undefined) {
-            this.init(x, y, radius, content);
+            this.init(x, y, radius);
         }
     };
     
-    PolarGraphComponent.prototype = new Renderable();
-    PolarGraphComponent.prototype.constructor = PolarGraphComponent;
+    PolarAreaGraph.prototype = new PolarRenderableGroup();
+    PolarAreaGraph.prototype.constructor = PolarAreaGraph;
     
-    PolarGraphComponent.prototype.init = function(x, y, radius, content) {
-        this.x = 0;
-        this.y = 0;
-        this.radius = radius;
-        this.centerX = x + radius;
-        this.centerY = y + radius;
+    PolarAreaGraph.prototype.PolarRenderableGroup_init = PolarAreaGraph.prototype.init;
+    PolarAreaGraph.prototype.PolarRenderableGroup_render = PolarAreaGraph.prototype.render;
+    
+    PolarAreaGraph.prototype.init = function(x, y, radius) {
+        this.PolarRenderableGroup_init(x, y, radius);
+        
+        this.createChildren();
     };
     
-    PolarGraphComponent.prototype.hitTest = function(x, y) {
-        return Geometry.isPointInCircle(x, y, this.centerX, this.centerY, this.radius);
-    };
-    
-    PolarGraphComponent.prototype.getPolarRadius = function(x, y) {
-        return Math.abs(Geometry.getDistanceBetweenPoints(this.centerX, this.centerY, x, y));
-    };
-    
-    PolarGraphComponent.prototype.getPolarAngle = function(x, y) {
+    PolarAreaGraph.prototype.createChildren = function() {
+        var i = 0;
+        var length = NUMBER_OF_SLICES;
+        var slice;
         
-        var angle = Math.atan2(y, x);
+        var radialWidth = TWO_PI / length;
+        var theta = 0;
         
-        console.log(x, y, angle);
-        
-        if (angle < 0) {
-            angle = angle + (Math.PI * 2);
+        //x, y, theta, radialWidth, maxRadius, numberOfSections
+        for (; i < length; i++) {
+            slice = new SliceView(0, 0, theta, radialWidth, this.radius);
+            this.addChild(slice);
+            theta = theta + radialWidth;
         }
-        
-        return angle;
     };
     
-    PolarGraphComponent.prototype.onMouseMove = function(mouse) {
-        var position = [
-            mouse.x - this.centerX, 
-            mouse.y - this.centerY
-        ];
-        // position = this.toLocalCoordinates(position);
-        
-        console.log('C: (' + position[0] + ', ' + position[1] + ')');
-        var r = this.getPolarRadius(position[0], position[1]);
-        var angle = this.getPolarAngle(position[0], position[1]);
-        console.log('P: (' + r + ', ' + angle + ')');
-    }
-    
-    PolarGraphComponent.prototype.render = function(context) {
-        context.fillStyle = '#22cc99';
-        context.beginPath();
-        context.arc(this.centerX, this.centerY, this.radius, 0, Math.PI * 2);
-        context.closePath();
-        context.fill();
+    PolarAreaGraph.prototype.layout = function() {
+        return this;
     };
     
-    return PolarGraphComponent;
-})
+    return PolarAreaGraph;
+});

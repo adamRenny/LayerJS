@@ -24,7 +24,7 @@
  *
  * Geometry Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.0
+ * @version 1.1
  */
 define(function() {
     'use strict';
@@ -37,6 +37,36 @@ define(function() {
      * @since 1.0
      */
     var Geometry = {
+        /**
+         * Cached PI constant
+         *
+         * @private
+         * @type {number}
+         * @constant
+         * @since 1.1
+         */
+        PI: Math.PI,
+        
+        /**
+         * Cached 2 * PI constant
+         *
+         * @private
+         * @type {number}
+         * @constant
+         * @since 1.1
+         */
+        TWO_PI: Math.PI * 2,
+        
+        /**
+         * Cached half PI constant
+         *
+         * @private
+         * @type {number}
+         * @constant
+         * @since 1.1
+         */
+        HALF_PI: Math.PI * .5,
+        
         /**
          * Checks whether a point is within a rectangle
          * Does consider edge collisions
@@ -128,7 +158,25 @@ define(function() {
          */
         isPointInCircle: function(x, y, circCenterX, circCenterY, radius) {
             return this.getSquaredDistanceBetweenPoints(x, y, circCenterX, circCenterY) < (radius * radius);
+        },
+        
+        /**
+         * Checks whether a point in polar coordinates is within a defined radial width
+         *
+         * @function
+         * @name Geometry.isPolarPointInPolarArea
+         * @param {number} r1 Radius of the point to test
+         * @param {number} t1 Theta of the point to test
+         * @param {number} r2 Radius of the polar area
+         * @param {number} st2 Starting theta of the polar area
+         * @param {number} et2 Ending theta of the polar area
+         * @returns {boolean}
+         * @since 1.1
+         */
+        isPolarPointInPolarArea: function(r1, t1, r2, st2, et2) {
+            return r1 <= r2 && t1 >= st2 && t1 <= et2;
         }
     };
+    
     return Geometry;
 })
