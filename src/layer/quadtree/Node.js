@@ -46,3 +46,4 @@ define([
     };
     
     return Node;
+});

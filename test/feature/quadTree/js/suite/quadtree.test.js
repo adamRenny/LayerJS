@@ -1,9 +1,13 @@
 define([
     'layer/quadtree/Quadtree',
-    'layer/quadtree/RectRegion'
+    'layer/quadtree/RectRegion',
+    'layer/quadtree/Node',
+    'layer/Renderable'
 ], function(
     Quadtree,
-    RectRegion
+    RectRegion,
+    Node,
+    Renderable
 ) {
     'use strict';
     
@@ -11,6 +15,7 @@ define([
         var quadtree;
         var region;
         var subregion;
+        var item;
         var x = 0;
         var y = 0;
         var width = 800;
@@ -27,67 +32,67 @@ define([
         });
         
         it('should be a leaf with less than or equal to 4 regions', function() {
-            subregion = new RectRegion(20, 20, 100, 100);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(20, 20, 100, 100));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(40, 40, 20, 20);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(40, 40, 20, 20));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(100, 100, 100, 100);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(100, 100, 100, 100));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(200, 200, 100, 100);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(200, 200, 100, 100));
+            quadtree.insert(item);
             
             expect(quadtree.isLeaf).to.be(true);
         });
         
         it('should not be a leaf with greater than 4 regions', function() {
-            subregion = new RectRegion(20, 20, 100, 100);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(20, 20, 100, 100));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(40, 40, 20, 20);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(40, 40, 20, 20));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(100, 100, 100, 100);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(100, 100, 100, 100));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(200, 200, 100, 100);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(200, 200, 100, 100));
+            quadtree.insert(item);
             
-            subregion = new RectRegion(150, 150, 500, 500);
-            quadtree.insert(subregion);
+            item = new Node(new Renderable(150, 150, 500, 500));
+            quadtree.insert(item);
             
             expect(quadtree.isLeaf).to.be(false);
         });
         
         it('should return all upper left quadrants if a that region is queried', function() {
-            var regions = [];
-            subregion = new RectRegion(20, 20, 100, 100);
-            quadtree.insert(subregion);
-            regions.push(subregion);
+            var items = [];
+            item = new Node(new Renderable(20, 20, 100, 100));
+            quadtree.insert(item);
+            items.push(item);
             
-            subregion = new RectRegion(40, 40, 20, 20);
-            quadtree.insert(subregion);
-            regions.push(subregion);
+            item = new Node(new Renderable(40, 40, 20, 20));
+            quadtree.insert(item);
+            items.push(item);
             
-            subregion = new RectRegion(100, 100, 100, 100);
-            quadtree.insert(subregion);
-            regions.push(subregion);
+            item = new Node(new Renderable(100, 100, 100, 100));
+            quadtree.insert(item);
+            items.push(item);
             
-            subregion = new RectRegion(200, 200, 100, 100);
-            quadtree.insert(subregion);
-            regions.push(subregion);
+            item = new Node(new Renderable(200, 200, 100, 100));
+            quadtree.insert(item);
+            items.push(item);
             
-            subregion = new RectRegion(150, 150, 500, 500);
-            quadtree.insert(subregion);
-            regions.push(subregion);
+            item = new Node(new Renderable(150, 150, 500, 500));
+            quadtree.insert(item);
+            items.push(item);
             
             var testRegion = new RectRegion(0, 0, 400, 300);
             var results = quadtree.queryRegion(testRegion);
             
-            for (var i = 0; i < regions.length; i++) {
-                expect(results.containsElement(regions[i])).to.be(true);
+            for (var i = 0; i < items.length; i++) {
+                expect(results.containsElement(items[i])).to.be(true);
             }
         });
     });
