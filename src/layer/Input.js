@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.1
+ * @version 1.1.1
  */
 define([
     'jquery',
@@ -88,6 +88,7 @@ define([
     
     /**
      * Initializes the input by attaching to the container
+     * Only propagates content from the input if the input is active
      *
      * @throws {ArgumentsError} If container is undefined or null
      *
@@ -128,7 +129,18 @@ define([
          */
         this.enabled = false;
         
-        return this.setupHandlers().enable();
+        /**
+         * Active state flag for the input
+         * Active state listens for when the mouse enters to begin listening for input
+         *
+         * @default false
+         * @name Input#enabled
+         * @type {boolean}
+         * @since 1.1.1
+         */
+        this.isActive = false;
+        
+        return this.setupHandlers().activate().enable();
     };
     
     /**
@@ -177,6 +189,69 @@ define([
          * @since 1.0
          */
         this.onClickHandler = this.onClick.bind(this);
+        
+        /**
+         * Bound onEnter Handler
+         *
+         * @private
+         * @name Input#onEnterHandler
+         * @type {function}
+         * @since 1.1.1
+         */
+        this.onEnterHandler = this.onEnter.bind(this);
+        
+        /**
+         * Bound onExit Handler
+         *
+         * @private
+         * @name Input#onEnterHandler
+         * @type {function}
+         * @since 1.1.1
+         */
+        this.onExitHandler = this.onExit.bind(this);
+        
+        return this;
+    };
+    
+    /**
+     * Attaches the input to the container to listen for entry and exiting
+     * Enables the container only if entered
+     *
+     * @returns {Input}
+     * @since 1.1.1
+     */
+    Input.prototype.activate = function() {
+        if (this.isActive) {
+            return this;
+        }
+        
+        this.isActive = true;
+        
+        var $container = $(this.container);
+        
+        $container.on('mouseover', this.onEnterHandler);
+        $container.on('mouseout', this.onExitHandler);
+        
+        return this;
+    };
+    
+    /**
+     * Detaches the input to the container to stop listening for entry and exiting
+     *
+     * @returns {Input}
+     * @since 1.1.1
+     */
+    Input.prototype.deactivate = function() {
+        if (!this.isActive) {
+            return this;
+        }
+        
+        this.isActive = false;
+        
+        var $container = $(this.container);
+        
+        $container.off('mouseover', this.onEnterHandler);
+        $container.off('mouseout', this.onExitHandler);
         
         return this;
     };
@@ -240,7 +315,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_MOVE, this.mouse);
+        Events.trigger(Input.MOUSE_MOVE, this.container, this.mouse);
     };
     
     /**
@@ -254,7 +329,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_UP, this.mouse);
+        Events.trigger(Input.MOUSE_UP, this.container, this.mouse);
     };
     
     /**
@@ -268,7 +343,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_DOWN, this.mouse);
+        Events.trigger(Input.MOUSE_DOWN, this.container, this.mouse);
     };
     
     /**
@@ -282,44 +357,74 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.CLICK, this.mouse);
+        Events.trigger(Input.CLICK, this.container, this.mouse);
+    };
+    
+    /**
+     * onEnter Handler
+     * Enables the input on enter
+     *
+     * @param {jQueryEvent} event Mouse Click Event
+     * @since 1.1.1
+     */
+    Input.prototype.onEnter = function(event) {
+        this.enable();
+    };
+    
+    /**
+     * onExit Handler
+     * Disables the input on exit
+     *
+     * @param {jQueryEvent} event Mouse Click Event
+     * @since 1.1.1
+     */
+    Input.prototype.onExit = function() {
+        this.disable();
     };
     
     /**
      * Input Mousemove Events event name
+     * Includes a layer-js namespace
+     * Supplies the mouse object and the containing element
      *
      * @type {string}
      * @constant
      * @since 1.0
      */
-    Input.MOUSE_MOVE = '/input/mousemove';
+    Input.MOUSE_MOVE = 'input-mousemove.layer-js';
     
     /**
      * Input Mouseup Events event name
+     * Includes a layer-js namespace
+     * Supplies the mouse object and the containing element
      *
      * @type {string}
      * @constant
      * @since 1.0
      */
-    Input.MOUSE_UP = '/input/mouseup';
+    Input.MOUSE_UP = 'input-mouseup.layer-js';
     
     /**
      * Input Mousedown Events event name
+     * Includes a layer-js namespace
+     * Supplies the mouse object and the containing element
      *
      * @type {string}
      * @constant
      * @since 1.0
      */
-    Input.MOUSE_DOWN = '/input/mousedown';
+    Input.MOUSE_DOWN = 'input-mousedown.layer-js';
     
     /**
      * Input Click Events event name
+     * Includes a layer-js namespace
+     * Supplies the mouse object and the containing element
      *
      * @type {string}
      * @constant
      * @since 1.0
      */
-    Input.CLICK = '/input/mouseclick';
+    Input.CLICK = 'input-mouseclick.layer-js';
     
     return Input;
 });

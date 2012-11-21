@@ -373,7 +373,11 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onMove = function(type, mouse) {
+    Scene.prototype.onMove = function(type, target, mouse) {
+        if (target !== this.container) {
+            return;
+        }
+        
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         this.updateActiveTarget(hitStack, mouse.x, mouse.y);
         
@@ -389,7 +393,11 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onUp = function(type, mouse) {
+    Scene.prototype.onUp = function(type, target, mouse) {
+        if (target !== this.container) {
+            return;
+        }
+        
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.MOUSE_UP, mouse.x, mouse.y, hitStack, true);
     };
@@ -401,7 +409,11 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onDown = function(type, mouse) {
+    Scene.prototype.onDown = function(type, target, mouse) {
+        if (target !== this.container) {
+            return;
+        }
+        
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.MOUSE_DOWN, mouse.x, mouse.y, hitStack, true);
     };
@@ -413,7 +425,11 @@ define([
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onClick = function(type, mouse) {
+    Scene.prototype.onClick = function(type, target, mouse) {
+        if (target !== this.container) {
+            return;
+        }
+        
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.CLICK, mouse.x, mouse.y, hitStack, true);
     };
