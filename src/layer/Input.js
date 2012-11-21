@@ -52,6 +52,27 @@ define([
      * @since 1.2
      */
     var NAMESPACE = '.input';
+
+    /**
+     * Calculate position offset of container
+     *
+     * @private
+     * @param {HTMLElement} container
+     * @param {object} containerOffset Object to set top and left offset values to
+     * @return {object}
+     */
+    var getOffset = function(container, containerOffset) {
+        var offset = container.getBoundingClientRect();
+        var clientTop  = document.clientTop || document.body.clientTop || 0;
+       	var clientLeft = document.clientLeft || document.body.clientLeft || 0;
+       	var scrollTop  = window.pageYOffset || document.scrollTop || 0;
+       	var scrollLeft = window.pageXOffset || document.scrollLeft || 0;
+        var top  = offset.top  + scrollTop  - clientTop;
+        var left = offset.left + scrollLeft - clientLeft;
+
+        containerOffset.top = top;
+        containerOffset.left = left;
+    };
     
     /**
      * Mouse Event to represent the current mouse state
@@ -166,6 +187,14 @@ define([
          * @since 1.1.1
          */
         this.isActive = false;
+
+        /**
+         * Container position offset on page
+         *
+         * @name Input#containerOffset
+         * @type {object}
+         */
+        this.containerOffset = { top: 0, left: 0 };
         
         return this.setupHandlers().activate().enable();
     };
@@ -256,8 +285,8 @@ define([
         
         var $container = $(this.container);
         
-        $container.on('mouseover', this.onEnterHandler);
-        $container.on('mouseout', this.onExitHandler);
+        $container.on('mouseover touchstart', this.onEnterHandler);
+        $container.on('mouseout touchend', this.onExitHandler);
         
         return this;
     };
@@ -277,8 +306,8 @@ define([
         
         var $container = $(this.container);
         
-        $container.off('mouseover', this.onEnterHandler);
-        $container.off('mouseout', this.onExitHandler);
+        $container.off('mouseover touchstart', this.onEnterHandler);
+        $container.off('mouseout touchend', this.onExitHandler);
         
         return this;
     };
@@ -299,9 +328,9 @@ define([
         
         var $container = $(this.container);
         
-        $container.on('mousemove', this.onMoveHandler);
-        $container.on('mouseup', this.onUpHandler);
-        $container.on('mousedown', this.onDownHandler);
+        $container.on('mousemove touchmove', this.onMoveHandler);
+        $container.on('mouseup touchend', this.onUpHandler);
+        $container.on('mousedown touchstart', this.onDownHandler);
         $container.on('click', this.onClickHandler);
         
         return this;
@@ -323,9 +352,9 @@ define([
         
         var $container = $(this.container);
         
-        $container.off('mousemove', this.onMoveHandler);
-        $container.off('mouseup', this.onUpHandler);
-        $container.off('mousedown', this.onDownHandler);
+        $container.off('mousemove touchmove', this.onMoveHandler);
+        $container.off('mouseup touchend', this.onUpHandler);
+        $container.off('mousedown touchstart', this.onDownHandler);
         $container.off('click', this.onClickHandler);
         
         return this;
@@ -349,8 +378,16 @@ define([
      * @since 1.0
      */
     Input.prototype.onMove = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        if (event.originalEvent.touches) {
+            this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
+            this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+            // Prevent body from scrolling
+            event.preventDefault();
+        } else {
+            this.mouse.x = event.offsetX;
+            this.mouse.y = event.offsetY;
+        }
+        console.log('move', this.mouse.x, this.mouse.y);
         
         Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
@@ -363,8 +400,14 @@ define([
      * @since 1.0
      */
     Input.prototype.onUp = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        if (event.originalEvent.touches) {
+            this.mouse.x = 0;
+            this.mouse.y = 0;
+        } else {
+            this.mouse.x = event.offsetX;
+            this.mouse.y = event.offsetY;
+        }
+        console.log('up', this.mouse.x, this.mouse.y);
         
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -377,8 +420,15 @@ define([
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        if (event.originalEvent.touches) {
+            getOffset(this.container, this.containerOffset);
+            this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
+            this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+        } else {
+            this.mouse.x = event.offsetX;
+            this.mouse.y = event.offsetY;
+        }
+        console.log('down', this.mouse.x, this.mouse.y);
         
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
