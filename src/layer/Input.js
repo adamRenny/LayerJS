@@ -34,6 +34,22 @@ define([
     Events
 ) {
     'use strict';
+
+    /**
+     * Namespace ID increment
+     *
+     * @private
+     * @type {Number}
+     */
+    var _namespace_id = 0;
+
+    /**
+     * Namespace string ID
+     *
+     * @static
+     * @type {String}
+     */
+    var NAMESPACE = '.input';
     
     /**
      * Mouse Event to represent the current mouse state
@@ -108,6 +124,22 @@ define([
          * @since 1.0
          */
         this.container = container;
+
+        /**
+         * jQuery object of container
+         *
+         * @name Input#$container
+         * @type {jQuery}
+         */
+        this.$container = $(container);
+
+        /**
+         * Unique input namespace
+         *
+         * @name Input#namespace
+         * @type {String}
+         */
+        this.namespace = NAMESPACE + (_namespace_id++);
         
         /**
          * Mouse state of the input
@@ -194,10 +226,8 @@ define([
         }
         
         this.enabled = true;
-        
-        var $container = $(this.container);
-        
-        $container
+
+        this.$container
             .on('mousemove', this.onMoveHandler)
             .on('mouseup', this.onUpHandler)
             .on('mousedown', this.onDownHandler)
@@ -219,10 +249,8 @@ define([
         }
         
         this.enabled = false;
-        
-        var $container = $(this.container);
-        
-        $container
+
+        this.$container
             .off('mousemove', this.onMoveHandler)
             .off('mouseup', this.onUpHandler)
             .off('mousedown', this.onDownHandler)
@@ -242,7 +270,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_MOVE, this.mouse);
+        Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
     
     /**
@@ -256,7 +284,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_UP, this.mouse);
+        Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
     
     /**
@@ -270,7 +298,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_DOWN, this.mouse);
+        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
     
     /**
@@ -284,7 +312,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.CLICK, this.mouse);
+        Events.trigger(Input.CLICK + this.namespace, this.mouse);
     };
     
     /**
