@@ -34,6 +34,22 @@ define([
     Events
 ) {
     'use strict';
+
+    /**
+     * Namespace ID
+     *
+     * @private
+     * @type {number}
+     */
+    var namespaceId = 0;
+
+    /**
+     * Namespace string
+     *
+     * @constant
+     * @type {string}
+     */
+    var NAMESPACE = '.input';
     
     /**
      * Mouse Event to represent the current mouse state
@@ -100,6 +116,13 @@ define([
         if (container === undefined || container === null) {
             throw new Error('ArgumentsError: container not defined for Input');
         }
+
+        /**
+         * Unique namespace
+         * @name Input#namespace
+         * @type {string}
+         */
+        this.namespace = NAMESPACE + (namespaceId++);
         
         /**
          * HTML Container for the input
@@ -204,7 +227,7 @@ define([
          * Bound onExit Handler
          *
          * @private
-         * @name Input#onEnterHandler
+         * @name Input#onExitHandler
          * @type {function}
          * @since 1.1.1
          */
@@ -303,68 +326,77 @@ define([
         
         return this;
     };
+
+    /**
+     * Get unique namespace
+     *
+     * @return {string}
+     */
+    Input.prototype.getNamespace = function() {
+        return this.namespace;
+    };
     
     /**
      * onMove Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Move Event
+     * @param {jQuery.Event} event Mouse Move Event
      * @since 1.0
      */
     Input.prototype.onMove = function(event) {
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_MOVE, this.container, this.mouse);
+        Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
     
     /**
      * onUp Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Up Event
+     * @param {jQuery.Event} event Mouse Up Event
      * @since 1.0
      */
     Input.prototype.onUp = function(event) {
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_UP, this.container, this.mouse);
+        Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
     
     /**
      * onDown Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Down Event
+     * @param {jQuery.Event} event Mouse Down Event
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.MOUSE_DOWN, this.container, this.mouse);
+        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
     
     /**
      * onClick Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Click Event
+     * @param {jQuery.Event} event Mouse Click Event
      * @since 1.0
      */
     Input.prototype.onClick = function(event) {
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
         
-        Events.trigger(Input.CLICK, this.container, this.mouse);
+        Events.trigger(Input.CLICK + this.namespace, this.mouse);
     };
     
     /**
      * onEnter Handler
      * Enables the input on enter
      *
-     * @param {jQueryEvent} event Mouse Click Event
+     * @param {jQuery.Event} event Mouse Click Event
      * @since 1.1.1
      */
     Input.prototype.onEnter = function(event) {
@@ -375,10 +407,10 @@ define([
      * onExit Handler
      * Disables the input on exit
      *
-     * @param {jQueryEvent} event Mouse Click Event
+     * @param {jQuery.Event} event Mouse Click Event
      * @since 1.1.1
      */
-    Input.prototype.onExit = function() {
+    Input.prototype.onExit = function(event) {
         this.disable();
     };
     
@@ -391,7 +423,7 @@ define([
      * @constant
      * @since 1.0
      */
-    Input.MOUSE_MOVE = 'input-mousemove.layer-js';
+    Input.MOUSE_MOVE = 'input/mousemove';
     
     /**
      * Input Mouseup Events event name
@@ -402,7 +434,7 @@ define([
      * @constant
      * @since 1.0
      */
-    Input.MOUSE_UP = 'input-mouseup.layer-js';
+    Input.MOUSE_UP = 'input/mouseup';
     
     /**
      * Input Mousedown Events event name
@@ -413,7 +445,7 @@ define([
      * @constant
      * @since 1.0
      */
-    Input.MOUSE_DOWN = 'input-mousedown.layer-js';
+    Input.MOUSE_DOWN = 'input/mousedown';
     
     /**
      * Input Click Events event name
@@ -424,7 +456,7 @@ define([
      * @constant
      * @since 1.0
      */
-    Input.CLICK = 'input-mouseclick.layer-js';
+    Input.CLICK = 'input/mouseclick';
     
     return Input;
 });

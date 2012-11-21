@@ -137,11 +137,13 @@ define([
         this.activeMouse = null;
         
         this.setupHandlers();
+
+        var namespace = this.input.getNamespace();
         
-        Events.on(Input.MOUSE_MOVE, this.onMoveHandler);
-        Events.on(Input.MOUSE_UP, this.onUpHandler);
-        Events.on(Input.MOUSE_DOWN, this.onDownHandler);
-        Events.on(Input.CLICK, this.onClickHandler);
+        Events.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
+        Events.on(Input.MOUSE_UP + namespace, this.onUpHandler);
+        Events.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
+        Events.on(Input.CLICK + namespace, this.onClickHandler);
     };
 
     /**
@@ -370,14 +372,11 @@ define([
      * onMove Handler
      * Creates a HitEvent when a mousemove event is triggered
      *
+     * @param {string} type Event type
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onMove = function(type, target, mouse) {
-        if (target !== this.container) {
-            return;
-        }
-        
+    Scene.prototype.onMove = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         this.updateActiveTarget(hitStack, mouse.x, mouse.y);
         
@@ -390,14 +389,11 @@ define([
      * onUp Handler
      * Creates a HitEvent when a mouseup event is triggered
      *
+     * @param {string} type Event type
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onUp = function(type, target, mouse) {
-        if (target !== this.container) {
-            return;
-        }
-        
+    Scene.prototype.onUp = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.MOUSE_UP, mouse.x, mouse.y, hitStack, true);
     };
@@ -406,14 +402,11 @@ define([
      * onDown Handler
      * Creates a HitEvent when a mousedown event is triggered
      *
+     * @param {string} type Event type
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onDown = function(type, target, mouse) {
-        if (target !== this.container) {
-            return;
-        }
-        
+    Scene.prototype.onDown = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.MOUSE_DOWN, mouse.x, mouse.y, hitStack, true);
     };
@@ -422,14 +415,11 @@ define([
      * onClick Handler
      * Creates a HitEvent when a click event is triggered
      *
+     * @param {string} type Event type
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
-    Scene.prototype.onClick = function(type, target, mouse) {
-        if (target !== this.container) {
-            return;
-        }
-        
+    Scene.prototype.onClick = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         var event = new HitEvent(HitEvent.CLICK, mouse.x, mouse.y, hitStack, true);
     };
@@ -438,7 +428,9 @@ define([
      * onOver Handler
      * Creates a HitEvent when a mouseover event is triggered
      *
-     * @param {Mouse} mouse Mouse state
+     * @param {Renderable} target Mouse state
+     * @param {number} x X mouse position
+     * @param {number} y Y mouse position
      * @since 1.1
      */
     Scene.prototype.onOver = function(target, x, y) {
@@ -449,7 +441,9 @@ define([
      * onOut Handler
      * Creates a HitEvent when a mouseout event is triggered
      *
-     * @param {Mouse} mouse Mouse state
+     * @param {Renderable} target Mouse state
+     * @param {number} x X mouse position
+     * @param {number} y Y mouse position
      * @since 1.1
      */
     Scene.prototype.onOut = function(target, x, y) {
