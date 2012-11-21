@@ -419,7 +419,6 @@ define([
      * @since 1.1
      */
     Scene.prototype.onOver = function(target, x, y) {
-        console.log(target);
         var event = new HitEvent(HitEvent.MOUSE_OVER, x, y, target, false);
     };
     
