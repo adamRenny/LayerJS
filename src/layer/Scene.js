@@ -118,10 +118,11 @@ define([
         
         this.setupHandlers();
         
-        Events.on(Input.MOUSE_MOVE, this.onMoveHandler);
-        Events.on(Input.MOUSE_UP, this.onUpHandler);
-        Events.on(Input.MOUSE_DOWN, this.onDownHandler);
-        Events.on(Input.CLICK, this.onClickHandler);
+        Events
+            .on(Input.MOUSE_MOVE, this.onMoveHandler)
+            .on(Input.MOUSE_UP, this.onUpHandler)
+            .on(Input.MOUSE_DOWN, this.onDownHandler)
+            .on(Input.CLICK, this.onClickHandler);
     };
 
     /**

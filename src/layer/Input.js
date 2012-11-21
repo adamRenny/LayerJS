@@ -197,10 +197,11 @@ define([
         
         var $container = $(this.container);
         
-        $container.on('mousemove', this.onMoveHandler);
-        $container.on('mouseup', this.onUpHandler);
-        $container.on('mousedown', this.onDownHandler);
-        $container.on('click', this.onClickHandler);
+        $container
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('mousedown', this.onDownHandler)
+            .on('click', this.onClickHandler);
         
         return this;
     };
@@ -221,10 +222,11 @@ define([
         
         var $container = $(this.container);
         
-        $container.off('mousemove', this.onMoveHandler);
-        $container.off('mouseup', this.onUpHandler);
-        $container.off('mousedown', this.onDownHandler);
-        $container.off('click', this.onClickHandler);
+        $container
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('mousedown', this.onDownHandler)
+            .off('click', this.onClickHandler);
         
         return this;
     };
