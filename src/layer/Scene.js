@@ -138,10 +138,11 @@ define([
         
         this.setupHandlers();
         
-        Events.on(Input.MOUSE_MOVE, this.onMoveHandler);
-        Events.on(Input.MOUSE_UP, this.onUpHandler);
-        Events.on(Input.MOUSE_DOWN, this.onDownHandler);
-        Events.on(Input.CLICK, this.onClickHandler);
+        Events
+            .on(Input.MOUSE_MOVE, this.onMoveHandler)
+            .on(Input.MOUSE_UP, this.onUpHandler)
+            .on(Input.MOUSE_DOWN, this.onDownHandler)
+            .on(Input.CLICK, this.onClickHandler);
     };
 
     /**
@@ -370,6 +371,7 @@ define([
      * onMove Handler
      * Creates a HitEvent when a mousemove event is triggered
      *
+     * @param {string} type Event name
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
@@ -390,6 +392,7 @@ define([
      * onUp Handler
      * Creates a HitEvent when a mouseup event is triggered
      *
+     * @param {string} type Event name
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
@@ -406,6 +409,7 @@ define([
      * onDown Handler
      * Creates a HitEvent when a mousedown event is triggered
      *
+     * @param {string} type Event name
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
@@ -422,6 +426,7 @@ define([
      * onClick Handler
      * Creates a HitEvent when a click event is triggered
      *
+     * @param {string} type Event name
      * @param {Mouse} mouse Mouse state
      * @since 1.0
      */
@@ -438,7 +443,9 @@ define([
      * onOver Handler
      * Creates a HitEvent when a mouseover event is triggered
      *
-     * @param {Mouse} mouse Mouse state
+     * @param {*} target Target object currently over
+     * @param {number} x X position of mouse
+     * @param {number} y Y position of mouse
      * @since 1.1
      */
     Scene.prototype.onOver = function(target, x, y) {
@@ -449,7 +456,9 @@ define([
      * onOut Handler
      * Creates a HitEvent when a mouseout event is triggered
      *
-     * @param {Mouse} mouse Mouse state
+     * @param {*} target Target object no longer over
+     * @param {number} x X position of mouse
+     * @param {number} y Y position of mouse
      * @since 1.1
      */
     Scene.prototype.onOut = function(target, x, y) {

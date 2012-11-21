@@ -364,6 +364,7 @@ define(function() {
      *
      * @param {string} topic Topic storing an event, a namespace, or a namespaced event
      * @param {function} callback Function to call upon successful trigger
+     * @returns {EventBus}
      * @since 2.0
      */
     EventBus.prototype.on = function(topic, callback) {
@@ -393,6 +394,8 @@ define(function() {
         
         var targetNamespace = this.getNamespace(namespace);
         targetNamespace.add(callback, event);
+
+        return this;
     };
     
     /**
@@ -405,6 +408,7 @@ define(function() {
      *
      * @param {string} topic Topic storing an event, a namespace, or a namespaced event
      * @param {function} callback Function to remove from observation
+     * @returns {EventBus}
      * @since 2.0
      */
     EventBus.prototype.off = function(topic, callback) {
@@ -434,6 +438,8 @@ define(function() {
         
         var targetNamespace = _getNamespace.call(this, namespace);
         targetNamespace.remove(callback, event);
+
+        return this;
     };
     
     /**
@@ -443,6 +449,7 @@ define(function() {
      * @throws {Error} When the topic is only a namespace
      *
      * @param {string} topic Topic storing an event, a namespace, or a namespaced event
+     * @returns {EventBus}
      * @since 2.0
      */
     EventBus.prototype.trigger = function(topic) {
@@ -465,6 +472,8 @@ define(function() {
         }
         
         this.events.trigger(event, arguments);
+
+        return this;
     };
     
     return EventBus;

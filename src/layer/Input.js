@@ -272,10 +272,11 @@ define([
         
         var $container = $(this.container);
         
-        $container.on('mousemove', this.onMoveHandler);
-        $container.on('mouseup', this.onUpHandler);
-        $container.on('mousedown', this.onDownHandler);
-        $container.on('click', this.onClickHandler);
+        $container
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('mousedown', this.onDownHandler)
+            .on('click', this.onClickHandler);
         
         return this;
     };
@@ -296,10 +297,11 @@ define([
         
         var $container = $(this.container);
         
-        $container.off('mousemove', this.onMoveHandler);
-        $container.off('mouseup', this.onUpHandler);
-        $container.off('mousedown', this.onDownHandler);
-        $container.off('click', this.onClickHandler);
+        $container
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('mousedown', this.onDownHandler)
+            .off('click', this.onClickHandler);
         
         return this;
     };
@@ -308,7 +310,7 @@ define([
      * onMove Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Move Event
+     * @param {jQuery.Event} event Mouse Move Event
      * @since 1.0
      */
     Input.prototype.onMove = function(event) {
@@ -322,7 +324,7 @@ define([
      * onUp Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Up Event
+     * @param {jQuery.Event} event Mouse Up Event
      * @since 1.0
      */
     Input.prototype.onUp = function(event) {
@@ -336,7 +338,7 @@ define([
      * onDown Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Down Event
+     * @param {jQuery.Event} event Mouse Down Event
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
@@ -350,7 +352,7 @@ define([
      * onClick Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Click Event
+     * @param {jQuery.Event} event Mouse Click Event
      * @since 1.0
      */
     Input.prototype.onClick = function(event) {
