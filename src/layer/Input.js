@@ -62,8 +62,8 @@ define([
     var getOffset = function(container, containerOffset) {
         var offset = container.getBoundingClientRect();
         var clientTop  = document.clientTop || document.body.clientTop || 0;
-       	var clientLeft = document.clientLeft || document.body.clientLeft || 0;
-       	var scrollTop  = window.pageYOffset || document.scrollTop || 0;
+        var clientLeft = document.clientLeft || document.body.clientLeft || 0;
+        var scrollTop  = window.pageYOffset || document.scrollTop || 0;
        	var scrollLeft = window.pageXOffset || document.scrollLeft || 0;
         var top  = offset.top  + scrollTop  - clientTop;
         var left = offset.left + scrollLeft - clientLeft;
@@ -382,7 +382,6 @@ define([
             this.mouse.x = event.offsetX;
             this.mouse.y = event.offsetY;
         }
-        console.log('move', this.mouse.x, this.mouse.y);
         
         Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
@@ -402,7 +401,6 @@ define([
             this.mouse.x = event.offsetX;
             this.mouse.y = event.offsetY;
         }
-        console.log('up', this.mouse.x, this.mouse.y);
         
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -423,7 +421,6 @@ define([
             this.mouse.x = event.offsetX;
             this.mouse.y = event.offsetY;
         }
-        console.log('down', this.mouse.x, this.mouse.y);
         
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
