@@ -235,7 +235,7 @@ define([
      * onMove Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Move Event
+     * @param {jQuery.Event} event Mouse Move Event
      * @since 1.0
      */
     Input.prototype.onMove = function(event) {
@@ -249,7 +249,7 @@ define([
      * onUp Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Up Event
+     * @param {jQuery.Event} event Mouse Up Event
      * @since 1.0
      */
     Input.prototype.onUp = function(event) {
@@ -263,7 +263,7 @@ define([
      * onDown Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Down Event
+     * @param {jQuery.Event} event Mouse Down Event
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
@@ -277,7 +277,7 @@ define([
      * onClick Handler
      * Sets up the mouse state
      *
-     * @param {jQueryEvent} event Mouse Click Event
+     * @param {jQuery.Event} event Mouse Click Event
      * @since 1.0
      */
     Input.prototype.onClick = function(event) {
