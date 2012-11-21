@@ -41,7 +41,7 @@ define([
      * @private
      * @type {Number}
      */
-    var _namespace_id = 0;
+    var _namespaceId = 0;
 
     /**
      * Namespace string ID
@@ -139,7 +139,7 @@ define([
          * @name Input#namespace
          * @type {String}
          */
-        this.namespace = NAMESPACE + (_namespace_id++);
+        this.namespace = NAMESPACE + (_namespaceId++);
         
         /**
          * Mouse state of the input
@@ -257,6 +257,15 @@ define([
             .off('click', this.onClickHandler);
         
         return this;
+    };
+
+    /**
+     * Get namespace
+     *
+     * @return {String}
+     */
+    Input.prototype.getNamespace = function() {
+        return this.namespace;
     };
     
     /**
