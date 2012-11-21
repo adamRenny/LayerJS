@@ -24,7 +24,7 @@
  *
  * Scene Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.2
+ * @version 1.3.1
  */
 define([
     'layer/Stage',
@@ -83,6 +83,26 @@ define([
      * @since 1.0
      */
     Scene.prototype.init = function(container, width, height) {
+        /**
+         * Stage for the scene to be contained within
+         *
+         * @default null
+         * @name Scene#stage
+         * @type {Stage}
+         * @since 1.0
+         */
+        this.stage = null;
+        
+        /**
+         * Container object for the scene to be contained within
+         * Container may have canvas elements within it
+         * Container will be used as the viewport for the stage
+         *
+         * @name Scene#container
+         * @type {HTMLElement}
+         * @since 1.3.1
+         */
+        this.container = container;
 
         this.setupStage(container, width, height);
         
@@ -131,15 +151,9 @@ define([
      * @param {number} width Base unscaled width
      * @param {number} height Base unscaled height
      * @returns {Scene}
+     * @since 1.3
      */
     Scene.prototype.setupStage = function(container, width, height) {
-        /**
-         * Stage for the scene to be contained within
-         *
-         * @name Scene#stage
-         * @type {Stage}
-         * @since 1.0
-         */
         this.stage = new Stage(container, width, height);
 
         return this;
@@ -261,7 +275,7 @@ define([
      *
      * @param {number} x X Position
      * @param {number} y Y Position
-     * @returns {Array}
+     * @returns {Renderable[]}
      * @since 1.1
      */
     Scene.prototype.getHitStack = function(x, y) {
@@ -289,7 +303,7 @@ define([
      *
      * @param {number} x X Position
      * @param {number} y Y Position
-     * @returns {Array|null}
+     * @returns {Renderable[]|null}
      * @since 1.1
      */
     Scene.prototype.getHitTarget = function(x, y) {
@@ -312,7 +326,7 @@ define([
      * Updates the active target based on the passed positioning
      * Active target updates include out/over logic to update which element is currently hovered
      *
-     * @param {Array} hitStack Stack of hit targets
+     * @param {Renderable[]} hitStack Stack of hit targets
      * @param {number} x X Hit position
      * @param {number} y Y Hit position
      * @returns {Scene}

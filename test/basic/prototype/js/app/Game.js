@@ -68,7 +68,8 @@ define([
     };
     
     Game.prototype.update = function(elapsed) {
-        rect.setRotation(rotation);
+        rect.rotation = rotation;
+        rect.setNeedsUpdate();
         rotation += stepSize * elapsed;
         
         this.scene.update();

@@ -125,7 +125,7 @@ define(function() {
          * Uses a single renderable when there is only one target
          *
          * @name HitEvent#hitTarget
-         * @type {Array|Renderable}
+         * @type {Renderable[]|Renderable}
          * @since 1.0
          */
         this.hitTarget = hitTarget;

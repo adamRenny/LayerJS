@@ -55,7 +55,7 @@ define(function() {
      * Inserts a call into a cycle object at the given index
      * If the index is out of bounds, the index will be clamped to the size
      *
-     * @param {Array} cycle Call cycle collection
+     * @param {function[]} cycle Call cycle collection
      * @param {function} call Function to call
      * @param {number} index Index to insert the call into, if undefined will push to the end
      * @since 1.1
@@ -75,7 +75,7 @@ define(function() {
      *
      * @throws {UndefinedError} If the call does not exist
      *
-     * @param {Array} cycle Call cycle collection
+     * @param {function[]} cycle Call cycle collection
      * @param {function} call Function to call
      * @since 1.1
      */

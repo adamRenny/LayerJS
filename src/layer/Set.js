@@ -66,7 +66,7 @@ define(function() {
          * Order is not guaranteed
          *
          * @name Set#elements
-         * @type {Array}
+         * @type {Object[]}
          * @since 1.0
          */
         this.elements = null;

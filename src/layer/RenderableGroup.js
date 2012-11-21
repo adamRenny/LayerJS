@@ -133,7 +133,7 @@ define([
          *
          * @default []
          * @name RenderableGroup#children
-         * @type {Array}
+         * @type {Renderable[]}
          * @since 1.0
          */
         this.children = [];

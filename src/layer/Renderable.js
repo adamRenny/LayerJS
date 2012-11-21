@@ -76,7 +76,7 @@ define([
      * Should not be used within a loop that could call children of the same type or supertype
      *
      * @private
-     * @type {Array}
+     * @type {number[]}
      * @since 1.0
      */
     var vector = [0, 0];
@@ -89,7 +89,7 @@ define([
      * Should not be used within a loop that could call children of the same type or supertype
      *
      * @private
-     * @type {Array}
+     * @type {number[]}
      * @since 1.0
      */
     var matrix = mat3.identity();
@@ -102,7 +102,7 @@ define([
      * Should not be used within a loop that could call children of the same type or supertype
      *
      * @private
-     * @type {Array}
+     * @type {number[]}
      * @since 1.0
      */
     var matrixBuffer = mat3.identity();
@@ -241,7 +241,7 @@ define([
          *
          * @default [1, 0, 0, 0, 1, 0, 0, 0, 1]
          * @name Renderable#transform
-         * @type {Array}
+         * @type {number[]}
          * @since 1.0
          */
         this.transform = mat3.identity();
@@ -297,7 +297,7 @@ define([
          *
          * @default null
          * @name Renderable#parentTransform
-         * @type {Array}
+         * @type {number[]}
          * @since 1.0
          */
         this.parentTransform = null;
@@ -329,128 +329,12 @@ define([
      * Sets the parent transform reference
      * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
      *
-     * @param {Array} transform Parent transform
+     * @param {number[]} transform Parent transform
      * @returns {Renderable}
      * @since 1.0
      */
     Renderable.prototype.setParentTransform = function(transform) {
         this.parentTransform = transform;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the x position
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} x X position
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setX = function(x) {
-        this.x = x;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the y position
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} y Y position
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setY = function(y) {
-        this.y = y;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the x scale and updates the width
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} scaleX X Scale
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setScaleX = function(scaleX) {
-        this.scaleX = scaleX;
-        this.width = scaleX * this.unscaledWidth;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the y scale and updates the height
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} scaleY Y Scale
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setScaleY = function(scaleY) {
-        this.scaleY = scaleY;
-        this.height = scaleY * this.unscaledHeight;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the scaled width and updates the scaleX
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} width Width
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setWidth = function(width) {
-        this.width = width;
-        this.scaleX = width / this.unscaledWidth;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the scaled height and updates the scaleY
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} height Height
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setHeight = function(height) {
-        this.height = height;
-        this.scaleY = height / this.unscaledHeight;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the rotation in radians
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} rotation Rotation in radians from the center point
-     * @returns {Renderable}
-     * @since 1.0
-     */
-    Renderable.prototype.setRotation = function(rotation) {
-        this.rotation = rotation;
         this.needsUpdate = true;
         this.needsRender = true;
         
@@ -540,9 +424,9 @@ define([
     /**
      * Converts the passed in vector to local coordinates
      *
-     * @param {Array} vec 2D Vector in world coordinates
+     * @param {number[]} vec 2D Vector in world coordinates
      * @param {boolean} shouldRound If true, rounds the converted coordinates, optional
-     * @returns {Array}
+     * @returns {number[]}
      * @since 1.0
      */
     Renderable.prototype.toLocalCoordinates = function(vec, shouldRound) {
@@ -564,9 +448,9 @@ define([
     /**
      * Converts the passed in vector to world coordinates
      *
-     * @param {Array} vec 2D Vector in local coordinates
+     * @param {number[]} vec 2D Vector in local coordinates
      * @param {boolean} shouldRound If true, rounds the converted coordinates, optional
-     * @returns {Array}
+     * @returns {number[]}
      * @since 1.0
      */
     Renderable.prototype.toWorldCoordinates = function(vec, shouldRound) {

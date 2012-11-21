@@ -24,7 +24,7 @@ define([
     Particle.prototype.init = function(x, y, width, height) {
         this.Renderable_init(x, y, width, height);
         
-        this.color = 'rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
+        this.color = 'rgba(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + (Math.random()) + ')';
         this.vx = ((Math.random() * MAX_SPEED) - (MAX_SPEED * .5)) * .001;
         this.vy = ((Math.random() * MAX_SPEED) - (MAX_SPEED * .5)) * .001;
     };

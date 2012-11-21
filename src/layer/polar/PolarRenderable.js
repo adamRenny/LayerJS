@@ -76,7 +76,7 @@ define([
      * Should not be used within a loop that could call children of the same type or supertype
      *
      * @private
-     * @type {Array}
+     * @type {number[]}
      * @since 1.0
      */
     var vector = [0, 0];
@@ -90,7 +90,7 @@ define([
      * Should not be used within a loop that could call children of the same type or supertype
      *
      * @private
-     * @type {Array}
+     * @type {number[]}
      * @since 1.0
      */
     var polarVector = [0, 0];
@@ -164,38 +164,6 @@ define([
     };
     
     /**
-     * Sets the radius of the polar position
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} radius Radius in polar coordinates
-     * @returns {PolarRenderable}
-     * @since 1.0
-     */
-    PolarRenderable.prototype.setRadius = function(radius) {
-        this.radius = radius;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
-     * Sets the theta of the polar position
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
-     *
-     * @param {number} theta Theta of the renderable
-     * @returns {PolarRenderable}
-     * @since 1.0
-     */
-    PolarRenderable.prototype.setTheta = function(theta) {
-        this.theta = theta;
-        this.needsUpdate = true;
-        this.needsRender = true;
-        
-        return this;
-    };
-    
-    /**
      * Tests the hit to see if it exists within the bounding box of this renderable
      * Uses a rectangle test method
      *
@@ -212,8 +180,8 @@ define([
     /**
      * Converts a local coordinate space into a polar coordinate space
      *
-     * @param {Array} vec 2 dimensional local coordinates
-     * @returns {Array}
+     * @param {number[]} vec 2 dimensional local coordinates
+     * @returns {number[]}
      * @since 1.0
      */
     PolarRenderable.prototype.toPolarCoords = function(vec) {
@@ -232,7 +200,7 @@ define([
      *
      * @param {number} x X Position
      * @param {number} y Y Position
-     * @returns {Array}
+     * @returns {number[]}
      * @since 1.0
      */
     PolarRenderable.prototype.convertWorldToPolar = function(x, y) {

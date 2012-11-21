@@ -41,7 +41,7 @@ define([
      * Hardware CSS Styles to modify for acceleration
      *
      * @private
-     * @type {Array}
+     * @type {string[]}
      * @constant
      * @since 1.0
      */
@@ -68,7 +68,7 @@ define([
      * @private
      * @function
      * @param {HTMLElement} element Element to prepare hardware acceleration for
-     * @returns {Array}
+     * @returns {string[]}
      * @since 1.0
      */
     var _prepareHardwareSettings = function(element) {
@@ -173,7 +173,7 @@ define([
          *
          * @default []
          * @name Stage#layers
-         * @type {Array}
+         * @type {Layer[]}
          * @since 1.0
          */
         var layers = this.layers = [];
@@ -183,7 +183,7 @@ define([
          *
          * @default {}
          * @name Stage#layerCache
-         * @type {Array}
+         * @type {Object}
          * @since 1.0
          */
         this.layerCache = {};
