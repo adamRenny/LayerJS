@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.4
+ * @version 1.5
  */
 define([
     'jquery',
@@ -71,6 +71,12 @@ define([
      */
     var WINDOW = window;
 
+    /**
+     * jQuery object of window object
+     * @type {jQuery}
+     * @constant
+     * @since 1.5
+     */
     var $WINDOW = $(WINDOW);
 
     /**
@@ -213,6 +219,16 @@ define([
          * @since 1.1.1
          */
         this.isActive = false;
+
+        /**
+         * Active state flag for drage mode
+         *
+         * @default false
+         * @name Input#inDragMode
+         * @type {boolean}
+         * @since 1.5
+         */
+        this.inDragMode = false;
 
         /**
          * Container position offset on page
@@ -425,7 +441,20 @@ define([
         return this;
     };
 
+    /**
+     * Unbind move and up event handlers from container and bind them to the window
+     *
+     * @return {Input}
+     * @private
+     * @since 1.5
+     */
     Input.prototype.startDragMode = function() {
+        if (this.inDragMode) {
+            return this;
+        }
+
+        this.inDragMode = true;
+
         var $container = $(this.container);
 
         $container
@@ -443,7 +472,20 @@ define([
         return this;
     };
 
+    /**
+     * Unbind move and up event handlers from window and bind them back to the container
+     *
+     * @return {Input}
+     * @private
+     * @since 1.5
+     */
     Input.prototype.stopDragMode = function() {
+        if (!this.inDragMode) {
+            return this;
+        }
+
+        this.inDragMode = false;
+
         var $container = $(this.container);
 
         $WINDOW
