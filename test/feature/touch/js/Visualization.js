@@ -35,7 +35,7 @@ define([
 
         this.box.setSceneSize(WIDTH, HEIGHT);
 
-        this.scene.addChildToLayerByIndex(this.box, 0);
+        this.scene.addChild(this.box, 0);
         
         return this.setupHandlers().enable();
     };
