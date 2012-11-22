@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.2
+ * @version 1.3
  */
 define([
     'jquery',
@@ -54,24 +54,52 @@ define([
     var NAMESPACE = '.input';
 
     /**
+     * Page document object
+     *
+     * @type {HTMLDocument}
+     * @constant
+     * @since 1.3
+     */
+    var DOCUMENT = document;
+
+    /**
+     * Page window object
+     *
+     * @type {window}
+     * @constant
+     * @since 1.3
+     */
+    var WINDOW = window;
+
+    /**
+     * Page body element
+     *
+     * @type {HTMLElement}
+     * @constant
+     * @since 1.3
+     */
+    var BODY = DOCUMENT.body;
+
+    /**
      * Calculate position offset of container
      *
-     * @private
      * @param {HTMLElement} container
      * @param {object} containerOffset Object to set top and left offset values to
      * @return {object}
+     * @private
+     * @since 1.3
      */
     var getOffset = function(container, containerOffset) {
         var offset = container.getBoundingClientRect();
-        var clientTop  = document.clientTop || document.body.clientTop || 0;
-        var clientLeft = document.clientLeft || document.body.clientLeft || 0;
-        var scrollTop  = window.pageYOffset || document.scrollTop || 0;
-       	var scrollLeft = window.pageXOffset || document.scrollLeft || 0;
-        var top  = offset.top  + scrollTop  - clientTop;
-        var left = offset.left + scrollLeft - clientLeft;
 
-        containerOffset.top = top;
-        containerOffset.left = left;
+        var clientTop  = DOCUMENT.clientTop || BODY.clientTop || 0;
+        var clientLeft = DOCUMENT.clientLeft || BODY.clientLeft || 0;
+
+        var scrollTop  = WINDOW.pageYOffset || DOCUMENT.scrollTop || 0;
+       	var scrollLeft = WINDOW.pageXOffset || DOCUMENT.scrollLeft || 0;
+
+        containerOffset.top = offset.top + scrollTop - clientTop;
+        containerOffset.left = offset.left + scrollLeft - clientLeft;
     };
     
     /**
@@ -110,9 +138,7 @@ define([
      * Controller to manage all UI inputs from a specific container
      * All hit positions are normalized to the container's origin
      * Enabled after initialization
-     * TODO: Handle touch events
      * TODO: Handle mouseleave
-     * TODO: Handle mouseover/mouseout
      *
      * @name Input
      * @class Input controller to listen to UI Events
@@ -193,6 +219,7 @@ define([
          *
          * @name Input#containerOffset
          * @type {object}
+         * @since 1.3
          */
         this.containerOffset = { top: 0, left: 0 };
         
