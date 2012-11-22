@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.1.1
+ * @version 1.2
  */
 define([
     'jquery',
@@ -38,16 +38,18 @@ define([
     /**
      * Namespace ID
      *
-     * @private
      * @type {number}
+     * @private
+     * @since 1.2
      */
     var namespaceId = 0;
 
     /**
      * Namespace string
      *
-     * @constant
      * @type {string}
+     * @constant
+     * @since 1.2
      */
     var NAMESPACE = '.input';
     
@@ -119,8 +121,10 @@ define([
 
         /**
          * Unique namespace
+         *
          * @name Input#namespace
          * @type {string}
+         * @since 1.2
          */
         this.namespace = NAMESPACE + (namespaceId++);
         
@@ -331,6 +335,7 @@ define([
      * Get unique namespace
      *
      * @return {string}
+     * @since 1.2
      */
     Input.prototype.getNamespace = function() {
         return this.namespace;
