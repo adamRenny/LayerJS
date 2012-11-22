@@ -20,7 +20,7 @@ define([
     var WIDTH = 800;
     var HEIGHT = 600;
     
-    var NUMBER_OF_BLOCKS = 800;
+    var NUMBER_OF_BLOCKS = 5;
     var BLOCK_SIZE = 20;
     
     var Visualization = function(container) {
@@ -58,17 +58,21 @@ define([
         var i = 0;
         var x;
         var y;
+        
+        this.scene.addChild(quadtreeRenderable);
+        
         for (; i < NUMBER_OF_BLOCKS; i++) {
             x = Math.random() * (WIDTH - BLOCK_SIZE);
             y = Math.random() * (HEIGHT - BLOCK_SIZE);
+            
+            x = 0;
+            y = 0;
             
             block = new Block(x, y, BLOCK_SIZE, BLOCK_SIZE);
             node = new Node(block);
             quadtree.insert(node);
             this.scene.addChild(block);
         }
-        
-        this.scene.addChild(quadtreeRenderable);
         
         return this;
     };

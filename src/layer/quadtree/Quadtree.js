@@ -28,9 +28,13 @@
  */
 
 define([
+    'layer/quadtree/ITree',
+    'layer/quadtree/PixelQuadtree',
     'layer/quadtree/RectRegion',
     'layer/set'
 ], function(
+    ITree,
+    PixelQuadtree,
     RectRegion,
     Set
 ) {
@@ -55,6 +59,9 @@ define([
         this.region = region;
     };
     
+    Quadtree.prototype = new ITree();
+    Quadtree.prototype.constructor = Quadtree;
+    
     Quadtree.prototype.subdivide = function() {
         var region;
         var parentRegion = this.region;
@@ -62,6 +69,13 @@ define([
         var treeNodes = this.treeNodes;
         var i = 0;
         var length = leafNodes.length;
+        var QuadtreeClass = Quadtree;
+        
+        if ((parentRegion.width <= 1 && parentRegion.height <= 1) 
+            || (parentRegion.halfWidth <= 1 && parentRegion.halfHeight <= 1)
+        ) {
+            QuadtreeClass = PixelQuadtree;
+        }
         
         region = new RectRegion(
             parentRegion.x, 
@@ -69,7 +83,7 @@ define([
             Math_floor(parentRegion.halfWidth), 
             Math_floor(parentRegion.halfHeight)
         );
-        this.northWestNode = new Quadtree(region);
+        this.northWestNode = new QuadtreeClass(region);
         treeNodes.push(this.northWestNode);
         
         region = new RectRegion(
@@ -78,7 +92,7 @@ define([
             Math_ceil(parentRegion.halfWidth), 
             Math_floor(parentRegion.halfHeight)
         );
-        this.northEastNode = new Quadtree(region);
+        this.northEastNode = new QuadtreeClass(region);
         treeNodes.push(this.northEastNode);
         
         region = new RectRegion(
@@ -87,7 +101,7 @@ define([
             Math_floor(parentRegion.halfWidth), 
             Math_ceil(parentRegion.halfHeight)
         );
-        this.southWestNode = new Quadtree(region);
+        this.southWestNode = new QuadtreeClass(region);
         treeNodes.push(this.southWestNode);
         
         region = new RectRegion(
@@ -96,7 +110,7 @@ define([
             Math_ceil(parentRegion.halfWidth), 
             Math_ceil(parentRegion.halfHeight)
         );
-        this.southEastNode = new Quadtree(region);
+        this.southEastNode = new QuadtreeClass(region);
         treeNodes.push(this.southEastNode);
         
         this.isLeaf = false;

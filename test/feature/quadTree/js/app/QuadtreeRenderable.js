@@ -1,7 +1,9 @@
 define([
-    'layer/Renderable'
+    'layer/Renderable',
+    'layer/quadtree/PixelQuadtree'
 ], function(
-    Renderable
+    Renderable,
+    PixelQuadtree
 ) {
     'use strict';
     
@@ -23,7 +25,7 @@ define([
         
         context.strokeRect(region.x, region.y, region.width, region.height);
         
-        if (quadtree.isLeaf) {
+        if (quadtree.isLeaf || quadtree instanceof PixelQuadtree) {
             return;
         }
         
