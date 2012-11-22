@@ -168,10 +168,8 @@ define([
 
         /**
          * Unique namespace
-         *
          * @name Input#namespace
          * @type {string}
-         * @since 1.2
          */
         this.namespace = NAMESPACE + (namespaceId++);
         
@@ -355,6 +353,9 @@ define([
         
         var $container = $(this.container);
         
+        $container.on('mousemove touchmove', this.onMoveHandler);
+        $container.on('mouseup touchend', this.onUpHandler);
+        $container.on('mousedown touchstart', this.onDownHandler);
         $container.on('mousemove touchmove', this.onMoveHandler);
         $container.on('mouseup touchend', this.onUpHandler);
         $container.on('mousedown touchstart', this.onDownHandler);
