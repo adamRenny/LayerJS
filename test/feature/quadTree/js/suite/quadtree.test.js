@@ -95,5 +95,20 @@ define([
                 expect(results.containsElement(items[i])).to.be(true);
             }
         });
+        
+        it('can support having more than 4 renderables in the same position', function() {
+            var stackExceptionHasOccurred = false;
+            
+            try {
+                for (var i = 0; i < 5; i++) {
+                    item = new Node(new Renderable(0, 0, 10, 10));
+                    quadtree.insert(item);
+                }
+            } catch (exception) {
+                stackExceptionHasOccurred = true;
+            }
+            
+            expect(stackExceptionHasOccurred).to.be(false);
+        });
     });
 });

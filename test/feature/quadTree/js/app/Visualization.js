@@ -3,18 +3,25 @@ define([
     'layer/RunLoop',
     'layer/quadtree/Quadtree',
     'layer/quadtree/RectRegion',
-    'app/QuadtreeRenderable'
+    'layer/quadtree/Node',
+    'app/QuadtreeRenderable',
+    'app/Block'
 ], function(
     Scene,
     RunLoop,
     Quadtree,
     RectRegion,
-    QuadtreeRenderable
+    Node,
+    QuadtreeRenderable,
+    Block
 ) {
     'use strict';
     
     var WIDTH = 800;
     var HEIGHT = 600;
+    
+    var NUMBER_OF_BLOCKS = 800;
+    var BLOCK_SIZE = 20;
     
     var Visualization = function(container) {
         if (container !== undefined) {
@@ -45,6 +52,22 @@ define([
     Visualization.prototype.createChildren = function() {
         var quadtree = new Quadtree(new RectRegion(0, 0, WIDTH, HEIGHT));
         var quadtreeRenderable = new QuadtreeRenderable(quadtree);
+        
+        var block;
+        var node;
+        var i = 0;
+        var x;
+        var y;
+        for (; i < NUMBER_OF_BLOCKS; i++) {
+            x = Math.random() * (WIDTH - BLOCK_SIZE);
+            y = Math.random() * (HEIGHT - BLOCK_SIZE);
+            
+            block = new Block(x, y, BLOCK_SIZE, BLOCK_SIZE);
+            node = new Node(block);
+            quadtree.insert(node);
+            this.scene.addChild(block);
+        }
+        
         this.scene.addChild(quadtreeRenderable);
         
         return this;

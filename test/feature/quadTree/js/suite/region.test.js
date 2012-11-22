@@ -6,7 +6,6 @@ define([
     PointRegion
 ) {
     'use strict';
-    console.log(PointRegion);
     
     describe('Quadtree::Region', function() {
         var region;
