@@ -7,8 +7,6 @@ define([
     ) {
     'use strict';
 
-    var vector = [0, 0];
-
     var Box = function(x, y, width, height) {
         this.init(x, y, width, height);
     };
@@ -57,18 +55,14 @@ define([
     };
 
     Box.prototype.hitTest = function(x, y) {
-        vector[0] = x;
-        vector[1] = y;
-
-        vector = this.toLocalCoordinates(vector, true);
-
-        var hit = true;
-
         // If mouse is moving too fast during dragging, ths mouse could be
         // registered outside the bounds of the box from one frame to the
         // next, so always return true when dragging.
+
+        var hit = true;
+
         if (!this.dragging) {
-            hit = Geometry.isPointInRect(vector[0], vector[1], 0, 0, this.unscaledWidth, this.unscaledHeight);
+            hit = Renderable.prototype.hitTest.call(this, x, y);
         }
 
         return hit;
