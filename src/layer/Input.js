@@ -356,9 +356,6 @@ define([
         $container.on('mousemove touchmove', this.onMoveHandler);
         $container.on('mouseup touchend', this.onUpHandler);
         $container.on('mousedown touchstart', this.onDownHandler);
-        $container.on('mousemove touchmove', this.onMoveHandler);
-        $container.on('mouseup touchend', this.onUpHandler);
-        $container.on('mousedown touchstart', this.onDownHandler);
         $container.on('click', this.onClickHandler);
         
         return this;
