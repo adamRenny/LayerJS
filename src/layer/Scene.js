@@ -177,29 +177,43 @@ define([
     };
     
     /**
-     * Adds a child to the top layer
+     * Adds a child to the layer at index 0 if no target is defined
+     * Otherwise the target will be parsed by number or string to pipe to the proper method
      *
      * @param {Renderable} child Child to add
+     * @param {string|number|null} target Optional target element key to add the child to
      * @returns {Scene}
      * @since 1.1
      */
-    Scene.prototype.addChild = function(child) {
-        var layer = this.stage.getLayerByIndex(0);
-        layer.root.addChild(child);
+    Scene.prototype.addChild = function(child, target) {
+        if (target === undefined) {
+            return this.addChildToLayerByIndex(child, 0);
+        } else if (typeof target === 'number') {
+            return this.addChildToLayerByIndex(child, target);
+        } else if (typeof target === 'string') {
+            return this.addChildToLayerByName(child, name);
+        }
         
         return this;
     };
     
     /**
-     * Removes a child from the top layer
+     * Removes a child from the layer at index 0 if no target is defined
+     * Otherwise, the target will be parsed by number or string to pipe to the proper method
      *
      * @param {Renderable} child Child to remove
+     * @param {string|number|null} target Optional target element key to add the child to
      * @returns {Scene}
      * @since 1.1
      */
-    Scene.prototype.removeChild = function(child) {
-        var layer = this.stage.getLayerByIndex(0);
-        layer.root.removeChild(child);
+    Scene.prototype.removeChild = function(child, target) {
+        if (target === undefined) {
+            return this.removeChildFromLayerByIndex(child, 0);
+        } else if (typeof target === 'number') {
+            return this.removeChildFromLayerByIndex(child, target);
+        } else if (typeof target === 'string') {
+            return this.removeChildFromLayerByName(child, name);
+        }
         
         return this;
     };
