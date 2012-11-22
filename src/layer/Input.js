@@ -312,8 +312,8 @@ define([
         
         var $container = $(this.container);
         
-        $container.on('mouseover touchstart', this.onEnterHandler);
-        $container.on('mouseout touchend', this.onExitHandler);
+        $container.on('mouseover', this.onEnterHandler);
+        $container.on('mouseout', this.onExitHandler);
         
         return this;
     };
@@ -333,8 +333,8 @@ define([
         
         var $container = $(this.container);
         
-        $container.off('mouseover touchstart', this.onEnterHandler);
-        $container.off('mouseout touchend', this.onExitHandler);
+        $container.off('mouseover', this.onEnterHandler);
+        $container.off('mouseout', this.onExitHandler);
         
         return this;
     };
@@ -427,8 +427,8 @@ define([
      */
     Input.prototype.onUp = function(event) {
         if (event.originalEvent.touches) {
-            this.mouse.x = 0;
-            this.mouse.y = 0;
+            // touchend does not return any x/y coordinates, so leave the
+            // mouse object as the last coordinates of onMove or onDown
         } else {
             this.mouse.x = event.offsetX;
             this.mouse.y = event.offsetY;
