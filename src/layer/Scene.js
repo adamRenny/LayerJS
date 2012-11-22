@@ -184,10 +184,7 @@ define([
      * @since 1.1
      */
     Scene.prototype.addChild = function(child) {
-        var layer = this.stage.getLayerByIndex(0);
-        layer.root.addChild(child);
-        
-        return this;
+        return this.addChildToLayerByIndex(child, 0);
     };
     
     /**
@@ -198,10 +195,7 @@ define([
      * @since 1.1
      */
     Scene.prototype.removeChild = function(child) {
-        var layer = this.stage.getLayerByIndex(0);
-        layer.root.removeChild(child);
-        
-        return this;
+        return this.removeChildFromLayerByIndex(child, 0);
     };
     
     /**
