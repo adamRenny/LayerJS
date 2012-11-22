@@ -71,6 +71,8 @@ define([
      */
     var WINDOW = window;
 
+    var $WINDOW = $(WINDOW);
+
     /**
      * Page body element
      *
@@ -423,6 +425,42 @@ define([
         return this;
     };
 
+    Input.prototype.startDragMode = function() {
+        var $container = $(this.container);
+
+        $container
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('touchmove', this.onTouchMoveHandler)
+            .off('touchend', this.onTouchEndHandler);
+
+        $WINDOW
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('touchmove', this.onTouchMoveHandler)
+            .on('touchend', this.onTouchEndHandler);
+
+        return this;
+    };
+
+    Input.prototype.stopDragMode = function() {
+        var $container = $(this.container);
+
+        $WINDOW
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('touchmove', this.onTouchMoveHandler)
+            .off('touchend', this.onTouchEndHandler);
+
+        $container
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('touchmove', this.onTouchMoveHandler)
+            .on('touchend', this.onTouchEndHandler);
+
+        return this;
+    };
+
     /**
      * Get unique namespace
      *
@@ -441,8 +479,8 @@ define([
      * @since 1.0
      */
     Input.prototype.onMove = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
 
         Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
@@ -455,8 +493,10 @@ define([
      * @since 1.0
      */
     Input.prototype.onUp = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
+
+        this.stopDragMode();
 
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -469,8 +509,12 @@ define([
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        getOffset(this.container, this.containerOffset);
+
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
+
+        this.startDragMode();
 
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
