@@ -1,0 +1,9 @@
+body {
+    background: #EEE;
+}
+#js-viewport {
+    margin: 0 auto;
+    width: 250px;
+    height: 250px;
+    background: #FFF;
+}
