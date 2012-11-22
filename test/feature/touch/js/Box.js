@@ -1,9 +1,13 @@
 define([
-    'layer/Renderable'
+    'layer/Renderable',
+    'layer/Geometry'
 ], function(
-    Renderable
+    Renderable,
+    Geometry
     ) {
     'use strict';
+
+    var vector = [0, 0];
 
     var Box = function(x, y, width, height) {
         this.init(x, y, width, height);
@@ -52,6 +56,24 @@ define([
         }
     };
 
+    Box.prototype.hitTest = function(x, y) {
+        vector[0] = x;
+        vector[1] = y;
+
+        vector = this.toLocalCoordinates(vector, true);
+
+        var hit = true;
+
+        // If mouse is moving too fast during dragging, ths mouse could be
+        // registered outside the bounds of the box from one frame to the
+        // next, so always return true when dragging.
+        if (!this.dragging) {
+            hit = Geometry.isPointInRect(vector[0], vector[1], 0, 0, this.unscaledWidth, this.unscaledHeight);
+        }
+
+        return hit;
+    };
+
     Box.prototype.onMouseDown = function(event) {
         this.dragging = true;
         this.startX = event.x - this.x;
@@ -60,6 +82,7 @@ define([
 
     Box.prototype.onMouseUp = function(event) {
         this.dragging = false;
+
         if (this.x > this.sceneWidth - this.width * 0.2) {
             this.x = this.sceneWidth - this.width;
         } else if (this.x < -this.width * 0.8) {
@@ -71,6 +94,7 @@ define([
         } else if (this.y < -this.height * 0.8) {
             this.y = 0;
         }
+
         this.setNeedsUpdate();
     };
 
