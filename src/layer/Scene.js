@@ -349,8 +349,6 @@ define([
      * @since 1.1
      */
     Scene.prototype.updateActiveTarget = function(hitStack, x, y) {
-        var hitStack = this.getHitStack(x, y);
-        
         var topHitTarget = null;
         if (hitStack.length) {
             topHitTarget = hitStack[hitStack.length - 1 || 0];
@@ -393,10 +391,12 @@ define([
     Scene.prototype.onMove = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         this.updateActiveTarget(hitStack, mouse.x, mouse.y);
-        
+
         this.activeMouse = mouse;
-        
-        var event = new HitEvent(HitEvent.MOUSE_MOVE, mouse.x, mouse.y, hitStack, true);
+
+        if (hitStack.length > 0) {
+            var event = new HitEvent(HitEvent.MOUSE_MOVE, mouse.x, mouse.y, hitStack, true);
+        }
     };
     
     /**
@@ -409,7 +409,9 @@ define([
      */
     Scene.prototype.onUp = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
-        var event = new HitEvent(HitEvent.MOUSE_UP, mouse.x, mouse.y, hitStack, true);
+        if (hitStack.length > 0) {
+            var event = new HitEvent(HitEvent.MOUSE_UP, mouse.x, mouse.y, hitStack, true);
+        }
     };
     
     /**
@@ -422,7 +424,9 @@ define([
      */
     Scene.prototype.onDown = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
-        var event = new HitEvent(HitEvent.MOUSE_DOWN, mouse.x, mouse.y, hitStack, true);
+        if (hitStack.length > 0) {
+            var event = new HitEvent(HitEvent.MOUSE_DOWN, mouse.x, mouse.y, hitStack, true);
+        }
     };
     
     /**
@@ -435,7 +439,9 @@ define([
      */
     Scene.prototype.onClick = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
-        var event = new HitEvent(HitEvent.CLICK, mouse.x, mouse.y, hitStack, true);
+        if (hitStack.length > 0) {
+            var event = new HitEvent(HitEvent.CLICK, mouse.x, mouse.y, hitStack, true);
+        }
     };
     
     /**
