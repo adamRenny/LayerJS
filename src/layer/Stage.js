@@ -233,10 +233,8 @@ define([
     Stage.prototype.enableCSSAcceleration = function() {
         var i = 0;
         var length = this.layers.length;
-        var canvas;
         for (; i < length; i++) {
-            canvas = this.layers[i].getCanvas();
-            $(canvas).css(_prepareHardwareSettings(canvas));
+            this.enableCSSAccelerationByIndex(i);
         }
         
         return this;
