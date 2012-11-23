@@ -1,16 +1,14 @@
 require([
     'jquery',
-    'layer/quadtree/Quadtree',
-    'layer/quadtree/Region'
+    'app/Visualization'
 ], function(
     $,
-    Quadtree,
-    Region
+    Visualization
 ) {
     'use strict';
     
-    console.log(Quadtree, Region);
-    
-    var region = new Region();
+    $(document).ready(function() {
+        new Visualization(document.getElementById('js-viewport'));
+    });
     
 });
