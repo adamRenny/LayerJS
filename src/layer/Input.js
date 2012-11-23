@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.3
+ * @version 1.5
  */
 define([
     'jquery',
@@ -72,6 +72,14 @@ define([
     var WINDOW = window;
 
     /**
+     * jQuery object of window object
+     * @type {jQuery}
+     * @constant
+     * @since 1.5
+     */
+    var $WINDOW = $(WINDOW);
+
+    /**
      * Page body element
      *
      * @type {HTMLElement}
@@ -101,7 +109,7 @@ define([
         containerOffset.top = offset.top + scrollTop - clientTop;
         containerOffset.left = offset.left + scrollLeft - clientLeft;
     };
-    
+
     /**
      * Mouse Event to represent the current mouse state
      *
@@ -120,7 +128,7 @@ define([
          * @since 1.0
          */
         this.x = 0;
-        
+
         /**
          * Y Position of the Mouse
          *
@@ -131,7 +139,7 @@ define([
          */
         this.y = 0;
     };
-    
+
     /**
      * Input Controller Constructor
      *
@@ -150,7 +158,7 @@ define([
     var Input = function(container) {
         this.init(container);
     };
-    
+
     /**
      * Initializes the input by attaching to the container
      * Only propagates content from the input if the input is active
@@ -172,7 +180,7 @@ define([
          * @type {string}
          */
         this.namespace = NAMESPACE + (namespaceId++);
-        
+
         /**
          * HTML Container for the input
          *
@@ -181,7 +189,7 @@ define([
          * @since 1.0
          */
         this.container = container;
-        
+
         /**
          * Mouse state of the input
          *
@@ -190,7 +198,7 @@ define([
          * @since 1.0
          */
         this.mouse = new Mouse();
-        
+
         /**
          * Enabled state flag for the input
          *
@@ -200,7 +208,7 @@ define([
          * @since 1.0
          */
         this.enabled = false;
-        
+
         /**
          * Active state flag for the input
          * Active state listens for when the mouse enters to begin listening for input
@@ -213,6 +221,16 @@ define([
         this.isActive = false;
 
         /**
+         * Active state flag for drage mode
+         *
+         * @default false
+         * @name Input#inDragMode
+         * @type {boolean}
+         * @since 1.5
+         */
+        this.inDragMode = false;
+
+        /**
          * Container position offset on page
          *
          * @name Input#containerOffset
@@ -220,10 +238,10 @@ define([
          * @since 1.3
          */
         this.containerOffset = { top: 0, left: 0 };
-        
+
         return this.setupHandlers().activate().enable();
     };
-    
+
     /**
      * Binds all the handlers for all the events that are handled
      *
@@ -240,7 +258,7 @@ define([
          * @since 1.0
          */
         this.onMoveHandler = this.onMove.bind(this);
-        
+
         /**
          * Bound onDown Handler
          *
@@ -250,7 +268,7 @@ define([
          * @since 1.0
          */
         this.onDownHandler = this.onDown.bind(this);
-        
+
         /**
          * Bound onUp Handler
          *
@@ -260,7 +278,37 @@ define([
          * @since 1.0
          */
         this.onUpHandler = this.onUp.bind(this);
-        
+
+        /**
+         * Bound onTouchMove Handler
+         *
+         * @private
+         * @name Input#onTouchMoveHandler
+         * @type {function}
+         * @since 1.4
+         */
+        this.onTouchMoveHandler = this.onTouchMove.bind(this);
+
+        /**
+         * Bound onTouchStart Handler
+         *
+         * @private
+         * @name Input#onTouchStartHandler
+         * @type {function}
+         * @since 1.4
+         */
+        this.onTouchStartHandler = this.onTouchStart.bind(this);
+
+        /**
+         * Bound onTouchEnd Handler
+         *
+         * @private
+         * @name Input#onTouchEndHandler
+         * @type {function}
+         * @since 1.4
+         */
+        this.onTouchEndHandler = this.onTouchEnd.bind(this);
+
         /**
          * Bound onClick Handler
          *
@@ -270,7 +318,7 @@ define([
          * @since 1.0
          */
         this.onClickHandler = this.onClick.bind(this);
-        
+
         /**
          * Bound onEnter Handler
          *
@@ -280,7 +328,7 @@ define([
          * @since 1.1.1
          */
         this.onEnterHandler = this.onEnter.bind(this);
-        
+
         /**
          * Bound onExit Handler
          *
@@ -290,10 +338,10 @@ define([
          * @since 1.1.1
          */
         this.onExitHandler = this.onExit.bind(this);
-        
+
         return this;
     };
-    
+
     /**
      * Attaches the input to the container to listen for entry and exiting
      * Enables the container only if entered
@@ -305,17 +353,17 @@ define([
         if (this.isActive) {
             return this;
         }
-        
+
         this.isActive = true;
-        
+
         var $container = $(this.container);
-        
+
         $container.on('mouseover', this.onEnterHandler);
         $container.on('mouseout', this.onExitHandler);
-        
+
         return this;
     };
-    
+
     /**
      * Detaches the input to the container to stop listening for entry and exiting
      *
@@ -326,17 +374,17 @@ define([
         if (!this.isActive) {
             return this;
         }
-        
+
         this.isActive = false;
-        
+
         var $container = $(this.container);
-        
+
         $container.off('mouseover', this.onEnterHandler);
         $container.off('mouseout', this.onExitHandler);
-        
+
         return this;
     };
-    
+
     /**
      * Enables the Input controller by attaching to the container
      * Enables only if necessary
@@ -348,19 +396,23 @@ define([
         if (this.enabled) {
             return this;
         }
-        
+
         this.enabled = true;
-        
+
         var $container = $(this.container);
-        
-        $container.on('mousemove touchmove', this.onMoveHandler);
-        $container.on('mouseup touchend', this.onUpHandler);
-        $container.on('mousedown touchstart', this.onDownHandler);
-        $container.on('click', this.onClickHandler);
-        
+
+        $container
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('mousedown', this.onDownHandler)
+            .on('touchmove', this.onTouchMoveHandler)
+            .on('touchend', this.onTouchEndHandler)
+            .on('touchstart', this.onTouchStartHandler)
+            .on('click', this.onClickHandler);
+
         return this;
     };
-    
+
     /**
      * Disables the Input controller by attaching to the container
      * Disables only if necessary
@@ -372,16 +424,82 @@ define([
         if (!this.enabled) {
             return this;
         }
-        
+
         this.enabled = false;
-        
+
         var $container = $(this.container);
-        
-        $container.off('mousemove touchmove', this.onMoveHandler);
-        $container.off('mouseup touchend', this.onUpHandler);
-        $container.off('mousedown touchstart', this.onDownHandler);
-        $container.off('click', this.onClickHandler);
-        
+
+        $container
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('mousedown', this.onDownHandler)
+            .off('touchmove', this.onTouchMoveHandler)
+            .off('touchend', this.onTouchEndHandler)
+            .off('touchstart', this.onTouchStartHandler)
+            .off('click', this.onClickHandler);
+
+        return this;
+    };
+
+    /**
+     * Unbind move and up event handlers from container and bind them to the window
+     *
+     * @return {Input}
+     * @private
+     * @since 1.5
+     */
+    Input.prototype.startDragMode = function() {
+        if (this.inDragMode) {
+            return this;
+        }
+
+        this.inDragMode = true;
+
+        var $container = $(this.container);
+
+        $container
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('touchmove', this.onTouchMoveHandler)
+            .off('touchend', this.onTouchEndHandler);
+
+        $WINDOW
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('touchmove', this.onTouchMoveHandler)
+            .on('touchend', this.onTouchEndHandler);
+
+        return this;
+    };
+
+    /**
+     * Unbind move and up event handlers from window and bind them back to the container
+     *
+     * @return {Input}
+     * @private
+     * @since 1.5
+     */
+    Input.prototype.stopDragMode = function() {
+        if (!this.inDragMode) {
+            return this;
+        }
+
+        this.inDragMode = false;
+
+        var $container = $(this.container);
+
+        $WINDOW
+            .off('mousemove', this.onMoveHandler)
+            .off('mouseup', this.onUpHandler)
+            .off('touchmove', this.onTouchMoveHandler)
+            .off('touchend', this.onTouchEndHandler);
+
+        $container
+            .on('mousemove', this.onMoveHandler)
+            .on('mouseup', this.onUpHandler)
+            .on('touchmove', this.onTouchMoveHandler)
+            .on('touchend', this.onTouchEndHandler);
+
         return this;
     };
 
@@ -394,7 +512,7 @@ define([
     Input.prototype.getNamespace = function() {
         return this.namespace;
     };
-    
+
     /**
      * onMove Handler
      * Sets up the mouse state
@@ -403,19 +521,12 @@ define([
      * @since 1.0
      */
     Input.prototype.onMove = function(event) {
-        if (event.originalEvent.touches) {
-            this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
-            this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
-            // Prevent body from scrolling
-            event.preventDefault();
-        } else {
-            this.mouse.x = event.offsetX;
-            this.mouse.y = event.offsetY;
-        }
-        
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
+
         Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
-    
+
     /**
      * onUp Handler
      * Sets up the mouse state
@@ -424,17 +535,14 @@ define([
      * @since 1.0
      */
     Input.prototype.onUp = function(event) {
-        if (event.originalEvent.touches) {
-            // touchend does not return any x/y coordinates, so leave the
-            // mouse object as the last coordinates of onMove or onDown
-        } else {
-            this.mouse.x = event.offsetX;
-            this.mouse.y = event.offsetY;
-        }
-        
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
+
+        this.stopDragMode();
+
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
-    
+
     /**
      * onDown Handler
      * Sets up the mouse state
@@ -443,18 +551,63 @@ define([
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
-        if (event.originalEvent.touches) {
-            getOffset(this.container, this.containerOffset);
-            this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
-            this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
-        } else {
-            this.mouse.x = event.offsetX;
-            this.mouse.y = event.offsetY;
-        }
-        
+        getOffset(this.container, this.containerOffset);
+
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
+
+        this.startDragMode();
+
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
-    
+
+    /**
+     * onTouchMove Handler
+     * Sets up the mouse state
+     *
+     * @param {jQuery.Event} event Touch Move Event
+     * @since 1.4
+     */
+    Input.prototype.onTouchMove = function(event) {
+        this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
+        this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+
+        // Prevent body from scrolling
+        event.preventDefault();
+
+        Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
+    };
+
+    /**
+     * onTouchEnd Handler
+     * Sets up the mouse state
+     *
+     * @param {jQuery.Event} event Touch Start Event
+     * @since 1.4
+     */
+    Input.prototype.onTouchEnd = function(event) {
+        // touchend does not return any x/y coordinates, so leave the
+        // mouse object as the last coordinates from onTouchMove or onTouchStart
+
+        Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+    };
+
+    /**
+     * onTouchStart Handler
+     * Sets up the mouse state
+     *
+     * @param {jQuery.Event} event Touch Start Event
+     * @since 1.4
+     */
+    Input.prototype.onTouchStart = function(event) {
+        getOffset(this.container, this.containerOffset);
+
+        this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
+        this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+
+        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+    };
+
     /**
      * onClick Handler
      * Sets up the mouse state
@@ -465,10 +618,10 @@ define([
     Input.prototype.onClick = function(event) {
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
-        
+
         Events.trigger(Input.CLICK + this.namespace, this.mouse);
     };
-    
+
     /**
      * onEnter Handler
      * Enables the input on enter
@@ -479,7 +632,7 @@ define([
     Input.prototype.onEnter = function(event) {
         this.enable();
     };
-    
+
     /**
      * onExit Handler
      * Disables the input on exit
@@ -490,7 +643,7 @@ define([
     Input.prototype.onExit = function(event) {
         this.disable();
     };
-    
+
     /**
      * Input Mousemove Events event name
      * Includes a layer-js namespace
@@ -501,7 +654,7 @@ define([
      * @since 1.0
      */
     Input.MOUSE_MOVE = 'input/mousemove';
-    
+
     /**
      * Input Mouseup Events event name
      * Includes a layer-js namespace
@@ -512,7 +665,7 @@ define([
      * @since 1.0
      */
     Input.MOUSE_UP = 'input/mouseup';
-    
+
     /**
      * Input Mousedown Events event name
      * Includes a layer-js namespace
@@ -523,7 +676,7 @@ define([
      * @since 1.0
      */
     Input.MOUSE_DOWN = 'input/mousedown';
-    
+
     /**
      * Input Click Events event name
      * Includes a layer-js namespace
@@ -534,6 +687,6 @@ define([
      * @since 1.0
      */
     Input.CLICK = 'input/mouseclick';
-    
+
     return Input;
 });

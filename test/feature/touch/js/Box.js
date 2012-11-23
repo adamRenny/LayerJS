@@ -1,20 +1,22 @@
 define([
-    'layer/Renderable'
+    'layer/Renderable',
+    'layer/Geometry'
 ], function(
-    Renderable
-) {
+    Renderable,
+    Geometry
+    ) {
     'use strict';
 
     var Box = function(x, y, width, height) {
         this.init(x, y, width, height);
     };
-    
+
     Box.prototype = new Renderable;
     Box.prototype.constructor = Box;
-    
+
     Box.prototype.Renderable_init = Renderable.prototype.init;
     Box.prototype.Renderable_render = Renderable.prototype.render;
-    
+
     Box.prototype.init = function(x, y, width, height) {
 
         this.Renderable_init(x, y, width, height);
@@ -36,7 +38,7 @@ define([
 
         return this;
     };
-    
+
     Box.prototype.render = function(context) {
         this.Renderable_render(context);
 
@@ -46,10 +48,24 @@ define([
 
     Box.prototype.onMouseMove = function(event) {
         if (this.dragging) {
-            this.x = Math.max(0, Math.min(this.sceneWidth - this.width, event.x - this.startX));
-            this.y = Math.max(0, Math.min(this.sceneHeight - this.height, event.y - this.startY));
+            this.x = event.x - this.startX;
+            this.y = event.y - this.startY;
             this.setNeedsUpdate();
         }
+    };
+
+    Box.prototype.hitTest = function(x, y) {
+        // If mouse is moving too fast during dragging, ths mouse could be
+        // registered outside the bounds of the box from one frame to the
+        // next, so always return true when dragging.
+
+        var hit = true;
+
+        if (!this.dragging) {
+            hit = Renderable.prototype.hitTest.call(this, x, y);
+        }
+
+        return hit;
     };
 
     Box.prototype.onMouseDown = function(event) {
@@ -60,7 +76,21 @@ define([
 
     Box.prototype.onMouseUp = function(event) {
         this.dragging = false;
+
+        if (this.x > this.sceneWidth - this.width * 0.2) {
+            this.x = this.sceneWidth - this.width;
+        } else if (this.x < -this.width * 0.8) {
+            this.x = 0;
+        }
+
+        if (this.y > this.sceneHeight - this.height * 0.2) {
+            this.y = this.sceneHeight - this.height;
+        } else if (this.y < -this.height * 0.8) {
+            this.y = 0;
+        }
+
+        this.setNeedsUpdate();
     };
-    
+
     return Box;
 });
