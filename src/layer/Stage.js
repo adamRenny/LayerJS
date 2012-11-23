@@ -390,13 +390,13 @@ define([
         } else if (index >= this.layerCount) {
             return this.appendLayer(layer);
         }
-        
+
         var targetLayer = this.layers[index];
-        this.$viewport.find('#' + targetLayer.name).after(layer.getCanvas());
+        this.$viewport.find('#' + targetLayer.name).before(layer.getCanvas());
         this.layerCache[layer.name] = layer;
         this.layers.splice(index, 0, layer);
         this.layerCount = this.layers.length;
-        
+
         return this;
     };
     
