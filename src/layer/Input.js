@@ -356,6 +356,8 @@ define([
 
         this.isActive = true;
 
+        getOffset(this.container, this.containerOffset);
+
         var $container = $(this.container);
 
         $container.on('mouseover', this.onEnterHandler);
