@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.2
+ * @version 1.3
  */
 define([
     'layer/Renderable',
@@ -137,6 +137,17 @@ define([
          * @since 1.0
          */
         this.children = [];
+        
+        /**
+         * Flag for whether the renderable is a leaf node
+         * When it is a leaf node, hit stacks will not perform a DFS
+         *
+         * @default false
+         * @name RenderableGroup#isLeafNode
+         * @type {boolean}
+         * @since 1.3
+         */
+        this.isLeafNode = false;
     };
     
     /**
@@ -224,6 +235,31 @@ define([
         var children = this.children;
         var length = children.length;
         var i = length - 1;
+        for (; i >= 0; i--) {
+            if (children[i].isInteractive && children[i].hitTest(x, y)) {
+                target = children[i];
+                break;
+            }
+        }
+        
+        return target;
+    };
+    
+    /**
+     * Finds the next child hit target if it exists
+     * If it doesn't exist, returns null
+     *
+     * @param {number} x X Position
+     * @param {number} y Y Position
+     * @param {Renderable} sibling Previously found sibling
+     * @returns {Renderable|null}
+     * @since 1.3
+     */
+    RenderableGroup.prototype.getNextChildHitTarget = function(x, y, sibling) {
+        var target = null;
+        var children = this.children;
+        var length = children.length;
+        var i = children.indexOf(sibling) - 1;
         for (; i >= 0; i--) {
             if (children[i].isInteractive && children[i].hitTest(x, y)) {
                 target = children[i];

@@ -24,7 +24,7 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.2
+ * @version 1.4
  */
 define([
     'lib/gl-matrix',
@@ -332,6 +332,17 @@ define([
          * @since 1.2
          */
         this.isInteractive = true;
+        
+        /**
+         * Flag for whether the renderable is a leaf node
+         * When it is a leaf node, hit stacks will not perform a DFS
+         *
+         * @default true
+         * @name Renderable#isLeafNode
+         * @type {boolean}
+         * @since 1.3
+         */
+        this.isLeafNode = true;
     };
     
     /**
@@ -504,6 +515,20 @@ define([
      * @since 1.0
      */
     Renderable.prototype.getChildHitTarget = function(x, y) {
+        return null;
+    };
+    
+    /**
+     * Finds the next child hit target if it exists
+     * If it doesn't exist, returns null
+     *
+     * @param {number} x X Position
+     * @param {number} y Y Position
+     * @param {Renderable} sibling Previously found sibling
+     * @returns {Renderable|null}
+     * @since 1.4
+     */
+    Renderable.prototype.getNextChildHitTarget = function(x, y, sibling) {
         return null;
     };
     

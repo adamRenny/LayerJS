@@ -24,7 +24,7 @@
  *
  * Scene Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.3.1
+ * @version 1.4
  */
 define([
     'layer/Stage',
@@ -281,13 +281,12 @@ define([
     /**
      * Generates a stack of renderables
      * If it no target exists, returns an empty stack
+     * Performs a depth first search to find the scene graph elements in order
      *
      * Generates a hit stack array object from a renderable source and point
      * The stack is in ordered by the origin at 0 to the front-most hit area at the end
      * TODO: Resolve issues with stack order - currently adding items to the stack in a reverse order
      * TODO: Update hit stack to only gather methods that have the proper hit callback methods implemented
-     * TODO: Support touch events
-     * TODO: Support custom hit event callbacks
      *
      * @param {number} x X Position
      * @param {number} y Y Position
@@ -297,18 +296,42 @@ define([
     Scene.prototype.getHitStack = function(x, y) {
         var hitStack = [];
         var target = null;
+        var self = this;
         
         this.stage.forEachLayer(function(layer) {
-            target = layer.root.getChildHitTarget(x, y);
+            target = layer.getRoot();
             
-            // Collect the targets in the order they are encountered
-            while (target !== null) {
-                hitStack.push(target);
-                target = target.getChildHitTarget(x, y);
-            }
+            self.getDepthFirstHitStack(x, y, hitStack, target);
         });
         
+        console.log('Hit Stack Length: ' + hitStack.length);
+        
         return hitStack;
+    };
+    
+    /**
+     * Generates a stack of renderables through a depth first search
+     * If it no target exists, returns an empty stack
+     *
+     * Generates a hit stack array object from a renderable source and point
+     * The stack is in ordered by the origin at 0 to the front-most hit area at the end
+     *
+     * @param {number} x X Position
+     * @param {number} y Y Position
+     * @param {Renderable[]} stack Hit stack
+     * @param {Renderable} parent Parent renderable to perform search from
+     * @returns {Renderable[]}
+     * @since 1.4
+     */
+    Scene.prototype.getDepthFirstHitStack = function(x, y, stack, parent) {
+        var child = parent.getChildHitTarget(x, y);
+        while (child !== null) {
+            stack.push(child);
+            if (!child.isLeafNode) {
+                this.getDepthFirstHitStack(x, y, stack, child);
+            }
+            child = parent.getNextChildHitTarget(x, y, child);
+        }
     };
     
     /**
@@ -327,7 +350,7 @@ define([
         var target = null;
         
         this.stage.forEachLayer(function(layer) {
-            target = layer.root.getHitTarget(x, y);
+            target = layer.getRoot().getHitTarget(x, y);
             
             if (target) {
                 targetList.push(target);
