@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.5
+ * @version 1.6
  */
 define([
     'jquery',
@@ -87,6 +87,15 @@ define([
      * @since 1.3
      */
     var BODY = DOCUMENT.body;
+
+    /**
+     * jQuery page body element
+     *
+     * @type {jQuery}
+     * @constant
+     * @since 1.6
+     */
+    var $BODY = $(BODY);
 
     /**
      * Calculate position offset of container
@@ -214,7 +223,7 @@ define([
          * Active state listens for when the mouse enters to begin listening for input
          *
          * @default false
-         * @name Input#enabled
+         * @name Input#isActive
          * @type {boolean}
          * @since 1.1.1
          */
@@ -239,7 +248,7 @@ define([
          */
         this.containerOffset = { top: 0, left: 0 };
 
-        return this.setupHandlers().activate().enable();
+        return this.setupHandlers().activate();
     };
 
     /**
@@ -339,6 +348,16 @@ define([
          */
         this.onExitHandler = this.onExit.bind(this);
 
+        /**
+         * Boudn updateOffset Handler
+         *
+         * @private
+         * @name Input#onResizeHandler
+         * @type {function}
+         * @since 1.6
+         */
+        this.onResizeHandler = this.updateOffset.bind(this);
+
         return this;
     };
 
@@ -356,12 +375,15 @@ define([
 
         this.isActive = true;
 
-        getOffset(this.container, this.containerOffset);
+        this.updateOffset();
 
-        var $container = $(this.container);
+        $(this.container)
+            .on('mouseenter', this.onEnterHandler)
+            .on('touchstart', this.onEnterHandler)
+            .on('touchstart', this.onTouchStartHandler)
+            .on('mouseleave', this.onExitHandler);
 
-        $container.on('mouseover', this.onEnterHandler);
-        $container.on('mouseout', this.onExitHandler);
+        $WINDOW.on('resize', this.onResizeHandler);
 
         return this;
     };
@@ -379,10 +401,13 @@ define([
 
         this.isActive = false;
 
-        var $container = $(this.container);
+        $(this.container)
+            .off('mouseeter', this.onEnterHandler)
+            .off('touchstart', this.onEnterHandler)
+            .off('touchstart', this.onTouchStartHandler)
+            .off('mouseleave', this.onExitHandler);
 
-        $container.off('mouseover', this.onEnterHandler);
-        $container.off('mouseout', this.onExitHandler);
+        $WINDOW.off('resize', this.onResizeHandler);
 
         return this;
     };
@@ -401,15 +426,9 @@ define([
 
         this.enabled = true;
 
-        var $container = $(this.container);
-
-        $container
+        $(this.container)
             .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler)
             .on('mousedown', this.onDownHandler)
-            .on('touchmove', this.onTouchMoveHandler)
-            .on('touchend', this.onTouchEndHandler)
-            .on('touchstart', this.onTouchStartHandler)
             .on('click', this.onClickHandler);
 
         return this;
@@ -423,21 +442,15 @@ define([
      * @since 1.0
      */
     Input.prototype.disable = function() {
-        if (!this.enabled) {
+        if (!this.enabled || this.inDragMode) {
             return this;
         }
 
         this.enabled = false;
 
-        var $container = $(this.container);
-
-        $container
+        $(this.container)
             .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler)
             .off('mousedown', this.onDownHandler)
-            .off('touchmove', this.onTouchMoveHandler)
-            .off('touchend', this.onTouchEndHandler)
-            .off('touchstart', this.onTouchStartHandler)
             .off('click', this.onClickHandler);
 
         return this;
@@ -454,20 +467,17 @@ define([
         if (this.inDragMode) {
             return this;
         }
+        Input.CURRENTLY_DRAGGING = this.inDragMode = true;
 
-        this.inDragMode = true;
-
-        var $container = $(this.container);
-
-        $container
+        $(this.container)
             .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler)
-            .off('touchmove', this.onTouchMoveHandler)
-            .off('touchend', this.onTouchEndHandler);
+            .off('mouseup', this.onUpHandler);
 
         $WINDOW
             .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler)
+            .on('mouseup', this.onUpHandler);
+
+        $BODY
             .on('touchmove', this.onTouchMoveHandler)
             .on('touchend', this.onTouchEndHandler);
 
@@ -485,22 +495,23 @@ define([
         if (!this.inDragMode) {
             return this;
         }
-
-        this.inDragMode = false;
-
-        var $container = $(this.container);
+        Input.CURRENTLY_DRAGGING = this.inDragMode = false;
 
         $WINDOW
             .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler)
+            .off('mouseup', this.onUpHandler);
+
+        $BODY
             .off('touchmove', this.onTouchMoveHandler)
             .off('touchend', this.onTouchEndHandler);
 
-        $container
-            .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler)
-            .on('touchmove', this.onTouchMoveHandler)
-            .on('touchend', this.onTouchEndHandler);
+        if (this.isOver) {
+            $(this.container)
+                .on('mousemove', this.onMoveHandler)
+                .on('mouseup', this.onUpHandler);
+        } else {
+            this.onExit();
+        }
 
         return this;
     };
@@ -553,7 +564,7 @@ define([
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
-        getOffset(this.container, this.containerOffset);
+        this.updateOffset();
 
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
@@ -590,9 +601,9 @@ define([
     Input.prototype.onTouchEnd = function(event) {
         // touchend does not return any x/y coordinates, so leave the
         // mouse object as the last coordinates from onTouchMove or onTouchStart
+        this.stopDragMode();
 
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
-        this.onExitHandler();
     };
 
     /**
@@ -603,11 +614,12 @@ define([
      * @since 1.4
      */
     Input.prototype.onTouchStart = function(event) {
-        getOffset(this.container, this.containerOffset);
-        this.onEnterHandler();
+        this.updateOffset();
 
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+
+        this.startDragMode();
 
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
@@ -634,7 +646,10 @@ define([
      * @since 1.1.1
      */
     Input.prototype.onEnter = function(event) {
-        this.enable();
+        if (!Input.CURRENTLY_DRAGGING) {
+            this.isOver = true;
+            this.enable();
+        }
     };
 
     /**
@@ -645,7 +660,18 @@ define([
      * @since 1.1.1
      */
     Input.prototype.onExit = function(event) {
+        this.isOver = false;
         this.disable();
+    };
+
+    /**
+     * Update container offset
+     *
+     * @name Input#updateOffset
+     * @since 1.6
+     */
+    Input.prototype.updateOffset = function() {
+        getOffset(this.container, this.containerOffset);
     };
 
     /**
@@ -691,6 +717,15 @@ define([
      * @since 1.0
      */
     Input.CLICK = 'input/mouseclick';
+
+    /**
+     * Flag to determine if any instance of Input is currently dragging
+     *
+     * @static
+     * @type {boolean}
+     * @since 1.6
+     */
+    Input.CURRENTLY_DRAGGING = false;
 
     return Input;
 });
