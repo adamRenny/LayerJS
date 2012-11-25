@@ -232,11 +232,11 @@ define([
          * Active state flag for drag mode
          *
          * @default false
-         * @name Input#inDragMode
+         * @name Input#isDragging
          * @type {boolean}
          * @since 1.5
          */
-        this.inDragMode = false;
+        this.isDragging = false;
 
         /**
          * Active state flag for mouse currently being over container
@@ -451,7 +451,7 @@ define([
      * @since 1.0
      */
     Input.prototype.disable = function() {
-        if (!this.enabled || this.inDragMode) {
+        if (!this.enabled || this.isDragging) {
             return this;
         }
 
@@ -472,12 +472,12 @@ define([
      * @private
      * @since 1.5
      */
-    Input.prototype.startDragMode = function() {
-        if (this.inDragMode) {
+    Input.prototype.startDragging = function() {
+        if (this.isDragging) {
             return this;
         }
 
-        Input.CURRENTLY_DRAGGING = this.inDragMode = true;
+        Input.CURRENTLY_DRAGGING = this.isDragging = true;
 
         $(this.container).off('mousemove', this.onMoveHandler);
 
@@ -503,12 +503,12 @@ define([
      * @private
      * @since 1.5
      */
-    Input.prototype.stopDragMode = function() {
-        if (!this.inDragMode) {
+    Input.prototype.stopDragging = function() {
+        if (!this.isDragging) {
             return this;
         }
 
-        Input.CURRENTLY_DRAGGING = this.inDragMode = false;
+        Input.CURRENTLY_DRAGGING = this.isDragging = false;
 
         $WINDOW
             .off('mousemove', this.onMoveHandler)
@@ -564,7 +564,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        this.stopDragMode();
+        this.stopDragging();
 
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -582,7 +582,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        this.startDragMode();
+        this.startDragging();
 
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
@@ -614,7 +614,7 @@ define([
     Input.prototype.onTouchEnd = function(event) {
         // touchend does not return any x/y coordinates, so leave the
         // mouse object as the last coordinates from onTouchMove or onTouchStart
-        this.stopDragMode();
+        this.stopDragging();
 
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -632,7 +632,7 @@ define([
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
 
-        this.startDragMode();
+        this.startDragging();
 
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
@@ -680,7 +680,6 @@ define([
     /**
      * Update container offset
      *
-     * @name Input#updateOffset
      * @since 1.6
      */
     Input.prototype.updateOffset = function() {
