@@ -402,7 +402,7 @@ define([
         this.isActive = false;
 
         $(this.container)
-            .off('mouseeter', this.onEnterHandler)
+            .off('mouseenter', this.onEnterHandler)
             .off('touchstart', this.onEnterHandler)
             .off('touchstart', this.onTouchStartHandler)
             .off('mouseleave', this.onExitHandler);
