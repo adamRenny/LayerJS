@@ -1,5 +1,5 @@
 define([
-    'layer/Set'
+    'layer/collection/Set'
 ], function(
     Set
 ) {
