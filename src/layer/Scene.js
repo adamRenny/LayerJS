@@ -297,7 +297,7 @@ define([
     Scene.prototype.getHitStack = function(x, y) {
         var hitStack = [];
         var target = null;
-        // var stackCache = [];
+        
         this.stage.forEachLayer(function(layer) {
             target = layer.root.getChildHitTarget(x, y);
             

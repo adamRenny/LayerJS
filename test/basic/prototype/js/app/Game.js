@@ -34,6 +34,7 @@ define([
         var group = window.group = new RenderableGroup(20, 100);
         for (var i = 0; i < 3; i++) {
             rect = new Rectangle(Math.random() * 400, Math.random() * 400, Math.random() * 200, Math.random() * 200);
+            rect.isInteractive = false;
         // rect = new Rectangle(0, 0, 200, 100);
         //         rect.scaleX = 2;
         //         rect.scaleY = 2;
@@ -44,6 +45,7 @@ define([
             group.addChild(rect);
         }
         
+        rect.isInteractive = true;
         scene.addChildToLayerByName(group, layerName);
         // scene.addChild(rect);
         

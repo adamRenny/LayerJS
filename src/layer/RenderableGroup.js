@@ -225,7 +225,7 @@ define([
         var length = children.length;
         var i = length - 1;
         for (; i >= 0; i--) {
-            if (children[i].hitTest(x, y)) {
+            if (children[i].isInteractive && children[i].hitTest(x, y)) {
                 target = children[i];
                 break;
             }
@@ -250,7 +250,7 @@ define([
         var length = children.length;
         var i = length - 1;
         for (; i >= 0; i--) {
-            if (children[i].hitTest(x, y)) {
+            if (children[i].isInteractive && children[i].hitTest(x, y)) {
                 target = children[i].getHitTarget();
                 break;
             }

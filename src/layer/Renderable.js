@@ -24,7 +24,7 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 define([
     'lib/gl-matrix',
@@ -315,12 +315,23 @@ define([
          * Needs Update validation flag
          * Dirty flag for whether the renderable requires an update to the transform
          *
-         * @default false
+         * @default true
          * @name Renderable#needsUpdate
          * @type {boolean}
          * @since 1.0
          */
         this.needsUpdate = true;
+        
+        /**
+         * Is interactive flag
+         * When it is inactive, the hit detection will disregard the renderable
+         *
+         * @default true
+         * @name Renderable#isInteractive
+         * @type {boolean}
+         * @since 1.2
+         */
+        this.isInteractive = true;
     };
     
     /**
