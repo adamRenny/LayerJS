@@ -592,6 +592,7 @@ define([
         // mouse object as the last coordinates from onTouchMove or onTouchStart
 
         Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+        this.onExitHandler();
     };
 
     /**
@@ -603,6 +604,7 @@ define([
      */
     Input.prototype.onTouchStart = function(event) {
         getOffset(this.container, this.containerOffset);
+        this.onEnterHandler();
 
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
