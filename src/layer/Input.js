@@ -155,7 +155,6 @@ define([
      * Controller to manage all UI inputs from a specific container
      * All hit positions are normalized to the container's origin
      * Enabled after initialization
-     * TODO: Handle mouseleave
      *
      * @name Input
      * @class Input controller to listen to UI Events
@@ -230,7 +229,7 @@ define([
         this.isActive = false;
 
         /**
-         * Active state flag for drage mode
+         * Active state flag for drag mode
          *
          * @default false
          * @name Input#inDragMode
@@ -238,6 +237,16 @@ define([
          * @since 1.5
          */
         this.inDragMode = false;
+
+        /**
+         * Active state flag for mouse currently being over container
+         * 
+         * @default false
+         * @name Input#isMouseOver
+         * @type {boolean}
+         * @since 1.6
+         */
+        this.isMouseOver = false;
 
         /**
          * Container position offset on page
@@ -467,16 +476,19 @@ define([
         if (this.inDragMode) {
             return this;
         }
+
         Input.CURRENTLY_DRAGGING = this.inDragMode = true;
 
-        $(this.container)
-            .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler);
+        $(this.container).off('mousemove', this.onMoveHandler);
 
+        // Mouse events must be bound to window because
+        // body may not be the full window height
         $WINDOW
             .on('mousemove', this.onMoveHandler)
             .on('mouseup', this.onUpHandler);
 
+        // Touch events must be bound to body
+        // to prevent scrolling on touchmove events
         $BODY
             .on('touchmove', this.onTouchMoveHandler)
             .on('touchend', this.onTouchEndHandler);
@@ -495,6 +507,7 @@ define([
         if (!this.inDragMode) {
             return this;
         }
+
         Input.CURRENTLY_DRAGGING = this.inDragMode = false;
 
         $WINDOW
@@ -505,10 +518,10 @@ define([
             .off('touchmove', this.onTouchMoveHandler)
             .off('touchend', this.onTouchEndHandler);
 
-        if (this.isOver) {
-            $(this.container)
-                .on('mousemove', this.onMoveHandler)
-                .on('mouseup', this.onUpHandler);
+        // If we are still over the container, rebind the mousemove event.
+        // Otherwise, call the onExit handler
+        if (this.isMouseOver) {
+            $(this.container).on('mousemove', this.onMoveHandler);
         } else {
             this.onExit();
         }
@@ -647,7 +660,7 @@ define([
      */
     Input.prototype.onEnter = function(event) {
         if (!Input.CURRENTLY_DRAGGING) {
-            this.isOver = true;
+            this.isMouseOver = true;
             this.enable();
         }
     };
@@ -660,7 +673,7 @@ define([
      * @since 1.1.1
      */
     Input.prototype.onExit = function(event) {
-        this.isOver = false;
+        this.isMouseOver = false;
         this.disable();
     };
 
@@ -721,8 +734,8 @@ define([
     /**
      * Flag to determine if any instance of Input is currently dragging
      *
-     * @static
      * @type {boolean}
+     * @static
      * @since 1.6
      */
     Input.CURRENTLY_DRAGGING = false;
