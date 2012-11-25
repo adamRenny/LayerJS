@@ -28,11 +28,9 @@
  */
 define([
     'lib/gl-matrix',
-    'layer/quadtree/RectRegion',
     'layer/Geometry'
 ], function(
     glMatrix,
-    RectRegion,
     Geometry
 ) {
     'use strict';
@@ -509,24 +507,6 @@ define([
      */
     Renderable.prototype.getHitTarget = function(x, y) {
         return this;
-    };
-    
-    /**
-     * Creates a rectangular region to represent the position the Renderable is in
-     * Region is in world coordinates
-     * Used for calculating position within quadtree
-     *
-     * @returns {RectRegion}
-     * @since 1.1
-     */
-    Renderable.prototype.getRegion = function() {
-        var position = [
-            0,
-            0
-        ];
-        
-        position = this.toWorldCoordinates(position, true);
-        return new RectRegion(position[0], position[1], this.width, this.height);
     };
     
     /**

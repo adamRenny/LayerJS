@@ -7,8 +7,7 @@ require([
     mocha.setup('bdd');
     
     require([
-        'suite/region.test',
-        'suite/quadtree.test'
+        'suite/region.test'
     ], function() {
         mocha.run();
     });

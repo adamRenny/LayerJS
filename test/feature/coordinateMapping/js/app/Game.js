@@ -44,11 +44,10 @@ define([
         
         scene.addChild(group);
         
-        var position = [firstRect.x, firstRect.y];
+        var position = [0, 0];
         position = firstRect.toWorldCoordinates(position);
-        var region = firstRect.getRegion();
         
-        var newRect = new Rectangle(region.x, region.y, region.halfWidth, region.halfHeight);
+        var newRect = new Rectangle(position[0], position[1], firstRect.width * .5, firstRect.height * .5);
         scene.addChild(newRect);
         
         window.newRect = newRect;
@@ -75,7 +74,8 @@ define([
     };
     
     Game.prototype.update = function(elapsed) {
-        rect.setRotation(rotation);
+        rect.rotation = rotation;
+        rect.setNeedsUpdate();
         rotation += stepSize * elapsed;
         
         this.scene.update();

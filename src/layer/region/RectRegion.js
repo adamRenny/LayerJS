@@ -27,7 +27,7 @@
  * @version 1.2
  */
 define([
-    'layer/quadtree/Region',
+    'layer/region/Region',
     'layer/Geometry'
 ], function(
     Region,

@@ -1,13 +1,13 @@
 define([
-    'layer/quadtree/RectRegion',
-    'layer/quadtree/PointRegion'
+    'layer/region/RectRegion',
+    'layer/region/PointRegion'
 ], function(
     RectRegion,
     PointRegion
 ) {
     'use strict';
     
-    describe('Quadtree::Region', function() {
+    describe('Region', function() {
         var region;
         var x = 0;
         var y = 0;

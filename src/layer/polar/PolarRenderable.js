@@ -211,29 +211,6 @@ define([
         
         return polarVector;
     };
-    
-    /**
-     * Creates a rectangular region to represent the position the PolarRenderable is in
-     * Region is in world coordinates
-     * Used for calculating position within quadtree
-     *
-     * @returns {RectRegion}
-     * @since 1.0
-     */
-    PolarRenderable.prototype.getRegion = function() {
-        var position = [
-            0,
-            0
-        ];
-        
-        position = this.toWorldCoordinates(position, true);
-        return new RectRegion(
-            position[0] - this.radius, 
-            position[1] - this.radius, 
-            position[0] + this.radius, 
-            position[1] + this.radius
-        );
-    };
 
     return PolarRenderable;
 });
