@@ -386,12 +386,17 @@ define([
     Scene.prototype.getDepthFirstHitStack = function(x, y, stack, parent, insertIndex) {
         var child = parent.getChildHitTarget(x, y);
         while (child !== null) {
-            stack.splice(startIndex, 0, child);
+            stack.splice(insertIndex, 0, child);
             // If the child is a leaf node and the scene has the full stack enabled
-            if (this.shouldFindAllRenderables && !child.isLeafNode) {
-                this.getDepthFirstHitStack(x, y, stack, child, startIndex + 1);
+            if (!child.isLeafNode) {
+                this.getDepthFirstHitStack(x, y, stack, child, insertIndex + 1);
             }
-            child = parent.getNextChildHitTarget(x, y, child);
+            
+            if (this.shouldFindAllRenderables) {
+                child = parent.getNextChildHitTarget(x, y, child);
+            } else {
+                child = null;
+            }
         }
     };
     
@@ -475,7 +480,6 @@ define([
     Scene.prototype.onMove = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         this.updateActiveTarget(hitStack, mouse.x, mouse.y);
-        console.log('Hit Stack Length: ' + hitStack.length, hitStack);
 
         this.activeMouse = mouse;
 
