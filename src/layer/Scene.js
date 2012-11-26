@@ -136,14 +136,27 @@ define([
          */
         this.activeMouse = null;
         
-        this.setupHandlers();
-
-        var namespace = this.input.getNamespace();
+        /**
+         * Flag to determine whether the layer system should find all elements
+         * If this is disabled, it only finds the path to the top-most element
+         *
+         * @name Scene#shouldFindAllRenderables
+         * @type {boolean}
+         * @since 1.4
+         */
+        this.shouldFindAllRenderables = false;
         
-        Events.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
-        Events.on(Input.MOUSE_UP + namespace, this.onUpHandler);
-        Events.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
-        Events.on(Input.CLICK + namespace, this.onClickHandler);
+        /**
+         * Flag for whether the scene is enabled or not
+         * If the scene is enabled, it will listen to the input
+         *
+         * @name Scene#isEnabled
+         * @type {boolean}
+         * @since 1.4
+         */
+        this.isEnabled = false;
+        
+        return this.setupHandlers().enable();
     };
 
     /**
@@ -172,6 +185,52 @@ define([
         this.onUpHandler = this.onUp.bind(this);
         this.onDownHandler = this.onDown.bind(this);
         this.onClickHandler = this.onClick.bind(this);
+        
+        return this;
+    };
+    
+    /**
+     * Enables interactivity
+     *
+     * @returns {Scene}
+     * @since 1.4
+     */
+    Scene.prototype.enable = function() {
+        if (this.isEnabled) {
+            return this;
+        }
+        
+        this.isEnabled = true;
+        
+        var namespace = this.input.getNamespace();
+        
+        Events.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
+        Events.on(Input.MOUSE_UP + namespace, this.onUpHandler);
+        Events.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
+        Events.on(Input.CLICK + namespace, this.onClickHandler);
+        
+        return this;
+    };
+    
+    /**
+     * Disables interactivity
+     *
+     * @returns {Scene}
+     * @since 1.4
+     */
+    Scene.prototype.disable = function() {
+        if (!this.isEnabled) {
+            return this;
+        }
+        
+        this.isEnabled = false;
+        
+        var namespace = this.input.getNamespace();
+        
+        Events.off(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
+        Events.off(Input.MOUSE_UP + namespace, this.onUpHandler);
+        Events.off(Input.MOUSE_DOWN + namespace, this.onDownHandler);
+        Events.off(Input.CLICK + namespace, this.onClickHandler);
         
         return this;
     };
@@ -282,10 +341,11 @@ define([
      * Generates a stack of renderables
      * If it no target exists, returns an empty stack
      * Performs a depth first search to find the scene graph elements in order
+     * If the scene has shouldFindAllRenderables enabled, it performs a full-graph DFS
+     * Prunes naturally if a branch is not interactive or fails a hit test
      *
      * Generates a hit stack array object from a renderable source and point
      * The stack is in ordered by the origin at 0 to the front-most hit area at the end
-     * TODO: Resolve issues with stack order - currently adding items to the stack in a reverse order
      * TODO: Update hit stack to only gather methods that have the proper hit callback methods implemented
      *
      * @param {number} x X Position
@@ -298,13 +358,12 @@ define([
         var target = null;
         var self = this;
         
+        // Follows the layer order - untested against a large layer set
         this.stage.forEachLayer(function(layer) {
             target = layer.getRoot();
             
-            self.getDepthFirstHitStack(x, y, hitStack, target);
+            self.getDepthFirstHitStack(x, y, hitStack, target, 0);
         });
-        
-        console.log('Hit Stack Length: ' + hitStack.length);
         
         return hitStack;
     };
@@ -320,15 +379,17 @@ define([
      * @param {number} y Y Position
      * @param {Renderable[]} stack Hit stack
      * @param {Renderable} parent Parent renderable to perform search from
+     * @param {number} insertIndex Index in the stack to insert discovered elements
      * @returns {Renderable[]}
      * @since 1.4
      */
-    Scene.prototype.getDepthFirstHitStack = function(x, y, stack, parent) {
+    Scene.prototype.getDepthFirstHitStack = function(x, y, stack, parent, insertIndex) {
         var child = parent.getChildHitTarget(x, y);
         while (child !== null) {
-            stack.push(child);
-            if (!child.isLeafNode) {
-                this.getDepthFirstHitStack(x, y, stack, child);
+            stack.splice(startIndex, 0, child);
+            // If the child is a leaf node and the scene has the full stack enabled
+            if (this.shouldFindAllRenderables && !child.isLeafNode) {
+                this.getDepthFirstHitStack(x, y, stack, child, startIndex + 1);
             }
             child = parent.getNextChildHitTarget(x, y, child);
         }
@@ -414,6 +475,7 @@ define([
     Scene.prototype.onMove = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
         this.updateActiveTarget(hitStack, mouse.x, mouse.y);
+        console.log('Hit Stack Length: ' + hitStack.length, hitStack);
 
         this.activeMouse = mouse;
 
@@ -496,11 +558,15 @@ define([
     /**
      * Updates the scene input elements
      * Tells the active target to update in case something has moved
-     * TODO: Update the hit stack logic to remove so much computational complexity
+     * If disabled, the loop does not fully process
      *
      * @since 1.1
      */
     Scene.prototype.update = function() {
+        if (!this.isEnabled) {
+            return;
+        }
+        
         var activeMouse = this.activeMouse;
         if (activeMouse === null) {
             return;
