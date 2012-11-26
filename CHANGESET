@@ -1,5 +1,18 @@
 # RELEASE NOTE/CHANGESET
 
+## v0.9
+ - Removed quadtree logic
+ - Added touch support
+ - Click handling has an enable-able depth-first search to collect all possible click targets, only collects the first branch otherwise
+ - Integrated isInteractive flag to allow for hit detection to not discover elements if they are not interactive
+   - Allows for optimization
+ - Updated stage and input to respond to namespaces to separate canvases
+ - Implemented Dictionary
+ - Fixed touch/drag outside of the canvas space
+ - Added addChild/removeChild convenience translation logic
+ - Added multiple canvases testbed
+ - *BUG* Multiple canvases with touch/click does not always respond when interacting with a second canvas
+
 ## v0.7
  - Added Polar Renderable group and leaf renderable
  - Resolved issues with circle tests in Geometry and added some PI-based constants
