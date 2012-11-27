@@ -156,7 +156,9 @@ define([
      * @since 1.0
      */
     var Input = function(container) {
-        this.init(container);
+        if (container) {
+            this.init(container);
+        }
     };
 
     /**

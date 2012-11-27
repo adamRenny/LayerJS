@@ -111,7 +111,9 @@ define([
      * @since 1.0
      */
     var Stage = function(viewport, width, height) {
-        this.init(viewport, width, height);
+        if (viewport !== undefined && width !== undefined && height !== undefined) {
+            this.init(viewport, width, height);
+        }
     };
     
     /**

@@ -67,7 +67,9 @@ define([
      * @since 1.0
      */
     var Layer = function(canvas) {
-        this.init(canvas);
+        if (canvas) {
+            this.init(canvas);
+        }
     };
     
     /**
