@@ -30,12 +30,12 @@ define([
     'layer/Stage',
     'layer/Input',
     'layer/HitEvent',
-    'layer/Events'
+    'layer/EventBus'
 ], function(
     Stage,
     Input,
     HitEvent,
-    Events
+    EventBus
 ) {
     'use strict';
     
@@ -204,10 +204,10 @@ define([
         
         var namespace = this.input.getNamespace();
         
-        Events.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
-        Events.on(Input.MOUSE_UP + namespace, this.onUpHandler);
-        Events.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
-        Events.on(Input.CLICK + namespace, this.onClickHandler);
+        EventBus.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
+        EventBus.on(Input.MOUSE_UP + namespace, this.onUpHandler);
+        EventBus.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
+        EventBus.on(Input.CLICK + namespace, this.onClickHandler);
         
         return this;
     };
@@ -227,10 +227,10 @@ define([
         
         var namespace = this.input.getNamespace();
         
-        Events.off(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
-        Events.off(Input.MOUSE_UP + namespace, this.onUpHandler);
-        Events.off(Input.MOUSE_DOWN + namespace, this.onDownHandler);
-        Events.off(Input.CLICK + namespace, this.onClickHandler);
+        EventBus.off(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
+        EventBus.off(Input.MOUSE_UP + namespace, this.onUpHandler);
+        EventBus.off(Input.MOUSE_DOWN + namespace, this.onDownHandler);
+        EventBus.off(Input.CLICK + namespace, this.onClickHandler);
         
         return this;
     };

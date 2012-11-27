@@ -28,10 +28,10 @@
  */
 define([
     'jquery',
-    'layer/Events'
+    'layer/EventBus'
 ], function(
     $,
-    Events
+    EventBus
 ) {
     'use strict';
 
@@ -526,7 +526,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
 
     /**
@@ -542,7 +542,7 @@ define([
 
         this.stopDragMode();
 
-        Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
 
     /**
@@ -560,7 +560,7 @@ define([
 
         this.startDragMode();
 
-        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
 
     /**
@@ -577,7 +577,7 @@ define([
         // Prevent body from scrolling
         event.preventDefault();
 
-        Events.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
     };
 
     /**
@@ -591,7 +591,7 @@ define([
         // touchend does not return any x/y coordinates, so leave the
         // mouse object as the last coordinates from onTouchMove or onTouchStart
 
-        Events.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
 
     /**
@@ -607,7 +607,7 @@ define([
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
 
-        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
 
     /**
@@ -621,7 +621,7 @@ define([
         this.mouse.x = event.offsetX;
         this.mouse.y = event.offsetY;
 
-        Events.trigger(Input.CLICK + this.namespace, this.mouse);
+        EventBus.trigger(Input.CLICK + this.namespace, this.mouse);
     };
 
     /**
