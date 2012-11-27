@@ -67,7 +67,7 @@ define([
      * @since 1.0
      */
     var Scene = function(container, width, height) {
-        if (container && width && height) {
+        if (container !== undefined && width !== undefined && height !== undefined) {
             this.init(container, width, height);
         }
     };

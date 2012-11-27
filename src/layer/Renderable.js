@@ -126,7 +126,9 @@ define([
      * @since 1.0
      */
     var Renderable = function(x, y, width, height) {
-        this.init(x, y, width, height);
+        if (x !== undefined && y !== undefined && width !== undefined && height !== undefined) {
+            this.init(x, y, width, height);
+        }
     };
     
     /**
