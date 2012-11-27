@@ -117,7 +117,7 @@ define([
      * @since 1.0
      */
     var PolarRenderable = function(x, y, radius, theta) {
-        if (x !== undefined && y !== undefined && radius !== undefined && theta) {
+        if (x !== undefined && y !== undefined && radius !== undefined && theta !== undefined) {
             this.init(x, y, radius, theta);
         }
     };
