@@ -678,10 +678,13 @@ define([
     /**
      * Update container offset
      *
+     * @returns {Input}
      * @since 1.6
      */
     Input.prototype.updateOffset = function() {
         getOffset(this.container, this.containerOffset);
+
+        return this;
     };
 
     /**
