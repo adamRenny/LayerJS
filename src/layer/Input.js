@@ -384,8 +384,6 @@ define([
 
         this.isActive = true;
 
-        this.updateOffset();
-
         $(this.container)
             .on('mouseenter', this.onEnterHandler)
             .on('touchstart', this.onEnterHandler)
@@ -661,7 +659,7 @@ define([
     Input.prototype.onEnter = function(event) {
         if (!Input.CURRENTLY_DRAGGING) {
             this.isMouseOver = true;
-            this.enable();
+            this.updateOffset().enable();
         }
     };
 
