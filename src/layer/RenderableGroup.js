@@ -220,7 +220,7 @@ define([
         
         vector = this.toLocalCoordinates(vector, true);
         
-        return Geometry.isPointInRect(vector[0], vector[1], this.contentX, this.contextY, this.contentWidth, this.contentHeight);
+        return Geometry.isPointInRect(vector[0], vector[1], this.contentX, this.contentY, this.contentWidth, this.contentHeight);
     };
     
     /**
