@@ -406,6 +406,14 @@ define([
             return this;
         }
 
+        if (this.isDragging) {
+            this.stopDragging();
+        }
+
+        if (this.enabled) {
+            this.disable();
+        }
+
         this.isActive = false;
 
         $(this.container)
