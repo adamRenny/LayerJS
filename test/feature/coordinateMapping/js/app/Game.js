@@ -32,7 +32,7 @@ define([
         stage.enableCSSAcceleration();
         
         var firstRect = null;
-        var group = window.group = new RenderableGroup(20, 100);
+        var group = window.group = new RenderableGroup(20, 100, 600, 600);
         for (var i = 0; i < 3; i++) {
             rect = new Rectangle(Math.random() * 400, Math.random() * 400, Math.random() * 200, Math.random() * 200);
             if (firstRect === null) {
