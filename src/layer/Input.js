@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt <adamRenny@gmail.com>
- * @version 1.5
+ * @version 1.6
  */
 define([
     'jquery',
@@ -89,6 +89,15 @@ define([
     var BODY = DOCUMENT.body;
 
     /**
+     * jQuery page body element
+     *
+     * @type {jQuery}
+     * @constant
+     * @since 1.6
+     */
+    var $BODY = $(BODY);
+
+    /**
      * Calculate position offset of container
      *
      * @param {HTMLElement} container
@@ -146,7 +155,6 @@ define([
      * Controller to manage all UI inputs from a specific container
      * All hit positions are normalized to the container's origin
      * Enabled after initialization
-     * TODO: Handle mouseleave
      *
      * @name Input
      * @class Input controller to listen to UI Events
@@ -216,21 +224,31 @@ define([
          * Active state listens for when the mouse enters to begin listening for input
          *
          * @default false
-         * @name Input#enabled
+         * @name Input#isActive
          * @type {boolean}
          * @since 1.1.1
          */
         this.isActive = false;
 
         /**
-         * Active state flag for drage mode
+         * Active state flag for drag mode
          *
          * @default false
-         * @name Input#inDragMode
+         * @name Input#isDragging
          * @type {boolean}
          * @since 1.5
          */
-        this.inDragMode = false;
+        this.isDragging = false;
+
+        /**
+         * Active state flag for mouse currently being over container
+         * 
+         * @default false
+         * @name Input#isMouseOver
+         * @type {boolean}
+         * @since 1.6
+         */
+        this.isMouseOver = false;
 
         /**
          * Container position offset on page
@@ -241,7 +259,7 @@ define([
          */
         this.containerOffset = { top: 0, left: 0 };
 
-        return this.setupHandlers().activate().enable();
+        return this.setupHandlers().activate();
     };
 
     /**
@@ -341,6 +359,16 @@ define([
          */
         this.onExitHandler = this.onExit.bind(this);
 
+        /**
+         * Boudn updateOffset Handler
+         *
+         * @private
+         * @name Input#onResizeHandler
+         * @type {function}
+         * @since 1.6
+         */
+        this.onResizeHandler = this.updateOffset.bind(this);
+
         return this;
     };
 
@@ -358,12 +386,13 @@ define([
 
         this.isActive = true;
 
-        getOffset(this.container, this.containerOffset);
+        $(this.container)
+            .on('mouseenter', this.onEnterHandler)
+            .on('touchstart', this.onEnterHandler)
+            .on('touchstart', this.onTouchStartHandler)
+            .on('mouseleave', this.onExitHandler);
 
-        var $container = $(this.container);
-
-        $container.on('mouseover', this.onEnterHandler);
-        $container.on('mouseout', this.onExitHandler);
+        $WINDOW.on('resize', this.onResizeHandler);
 
         return this;
     };
@@ -379,12 +408,23 @@ define([
             return this;
         }
 
+        if (this.isDragging) {
+            this.stopDragging();
+        }
+
+        if (this.enabled) {
+            this.disable();
+        }
+
         this.isActive = false;
 
-        var $container = $(this.container);
+        $(this.container)
+            .off('mouseenter', this.onEnterHandler)
+            .off('touchstart', this.onEnterHandler)
+            .off('touchstart', this.onTouchStartHandler)
+            .off('mouseleave', this.onExitHandler);
 
-        $container.off('mouseover', this.onEnterHandler);
-        $container.off('mouseout', this.onExitHandler);
+        $WINDOW.off('resize', this.onResizeHandler);
 
         return this;
     };
@@ -403,15 +443,9 @@ define([
 
         this.enabled = true;
 
-        var $container = $(this.container);
-
-        $container
+        $(this.container)
             .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler)
             .on('mousedown', this.onDownHandler)
-            .on('touchmove', this.onTouchMoveHandler)
-            .on('touchend', this.onTouchEndHandler)
-            .on('touchstart', this.onTouchStartHandler)
             .on('click', this.onClickHandler);
 
         return this;
@@ -425,21 +459,15 @@ define([
      * @since 1.0
      */
     Input.prototype.disable = function() {
-        if (!this.enabled) {
+        if (!this.enabled || this.isDragging) {
             return this;
         }
 
         this.enabled = false;
 
-        var $container = $(this.container);
-
-        $container
+        $(this.container)
             .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler)
             .off('mousedown', this.onDownHandler)
-            .off('touchmove', this.onTouchMoveHandler)
-            .off('touchend', this.onTouchEndHandler)
-            .off('touchstart', this.onTouchStartHandler)
             .off('click', this.onClickHandler);
 
         return this;
@@ -452,24 +480,24 @@ define([
      * @private
      * @since 1.5
      */
-    Input.prototype.startDragMode = function() {
-        if (this.inDragMode) {
+    Input.prototype.startDragging = function() {
+        if (this.isDragging) {
             return this;
         }
 
-        this.inDragMode = true;
+        Input.CURRENTLY_DRAGGING = this.isDragging = true;
 
-        var $container = $(this.container);
+        $(this.container).off('mousemove', this.onMoveHandler);
 
-        $container
-            .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler)
-            .off('touchmove', this.onTouchMoveHandler)
-            .off('touchend', this.onTouchEndHandler);
-
+        // Mouse events must be bound to window because
+        // body may not be the full window height
         $WINDOW
             .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler)
+            .on('mouseup', this.onUpHandler);
+
+        // Touch events must be bound to body
+        // to prevent scrolling on touchmove events
+        $BODY
             .on('touchmove', this.onTouchMoveHandler)
             .on('touchend', this.onTouchEndHandler);
 
@@ -483,26 +511,28 @@ define([
      * @private
      * @since 1.5
      */
-    Input.prototype.stopDragMode = function() {
-        if (!this.inDragMode) {
+    Input.prototype.stopDragging = function() {
+        if (!this.isDragging) {
             return this;
         }
 
-        this.inDragMode = false;
-
-        var $container = $(this.container);
+        Input.CURRENTLY_DRAGGING = this.isDragging = false;
 
         $WINDOW
             .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler)
+            .off('mouseup', this.onUpHandler);
+
+        $BODY
             .off('touchmove', this.onTouchMoveHandler)
             .off('touchend', this.onTouchEndHandler);
 
-        $container
-            .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler)
-            .on('touchmove', this.onTouchMoveHandler)
-            .on('touchend', this.onTouchEndHandler);
+        // If we are still over the container, rebind the mousemove event.
+        // Otherwise, call the onExit handler
+        if (this.isMouseOver) {
+            $(this.container).on('mousemove', this.onMoveHandler);
+        } else {
+            this.onExit();
+        }
 
         return this;
     };
@@ -542,7 +572,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        this.stopDragMode();
+        this.stopDragging();
 
         EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -555,12 +585,12 @@ define([
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
-        getOffset(this.container, this.containerOffset);
+        this.updateOffset();
 
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        this.startDragMode();
+        this.startDragging();
 
         EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
@@ -592,6 +622,7 @@ define([
     Input.prototype.onTouchEnd = function(event) {
         // touchend does not return any x/y coordinates, so leave the
         // mouse object as the last coordinates from onTouchMove or onTouchStart
+        this.stopDragging();
 
         EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
     };
@@ -604,12 +635,14 @@ define([
      * @since 1.4
      */
     Input.prototype.onTouchStart = function(event) {
-        getOffset(this.container, this.containerOffset);
+        this.updateOffset();
 
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
 
-        EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+        this.startDragging();
+
+        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
     };
 
     /**
@@ -634,7 +667,10 @@ define([
      * @since 1.1.1
      */
     Input.prototype.onEnter = function(event) {
-        this.enable();
+        if (!Input.CURRENTLY_DRAGGING) {
+            this.isMouseOver = true;
+            this.updateOffset().enable();
+        }
     };
 
     /**
@@ -645,7 +681,20 @@ define([
      * @since 1.1.1
      */
     Input.prototype.onExit = function(event) {
+        this.isMouseOver = false;
         this.disable();
+    };
+
+    /**
+     * Update container offset
+     *
+     * @returns {Input}
+     * @since 1.6
+     */
+    Input.prototype.updateOffset = function() {
+        getOffset(this.container, this.containerOffset);
+
+        return this;
     };
 
     /**
@@ -691,6 +740,15 @@ define([
      * @since 1.0
      */
     Input.CLICK = 'input/mouseclick';
+
+    /**
+     * Flag to determine if any instance of Input is currently dragging
+     *
+     * @type {boolean}
+     * @static
+     * @since 1.6
+     */
+    Input.CURRENTLY_DRAGGING = false;
 
     return Input;
 });
