@@ -430,8 +430,8 @@ define([
             this.width = this.unscaledWidth * this.scaleX;
             this.height = this.unscaledHeight * this.scaleY;
             mat3.scale(matrix, vector);
-            vector[0] = -vector[0];
-            vector[1] = -vector[1];
+            vector[0] = -this.unscaledOffsetX;
+            vector[1] = -this.unscaledOffsetY;
             mat3.translate(matrix, vector);
         }
         
