@@ -422,11 +422,17 @@ define([
         
         // Only setup the scale if the scaleX or scaleY is set
         if (this.scaleX != 1 || this.scaleY != 1) {
+            vector[0] = this.unscaledOffsetX;
+            vector[1] = this.unscaledOffsetY;
+            mat3.translate(matrix, vector);
             vector[0] = this.scaleX;
             vector[1] = this.scaleY;
             this.width = this.unscaledWidth * this.scaleX;
             this.height = this.unscaledHeight * this.scaleY;
             mat3.scale(matrix, vector);
+            vector[0] = -vector[0];
+            vector[1] = -vector[1];
+            mat3.translate(matrix, vector);
         }
         
         // Only setup the rotation if the rotation is non-zero
