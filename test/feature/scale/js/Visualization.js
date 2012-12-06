@@ -1,8 +1,10 @@
 define([
+    'jquery',
     'layer/RunLoop',
     'Box',
     'layer/Scene'
 ], function(
+    $,
     RunLoop,
     Box,
     Scene
