@@ -653,8 +653,8 @@ define([
      * @since 1.0
      */
     Input.prototype.onClick = function(event) {
-        this.mouse.x = event.offsetX;
-        this.mouse.y = event.offsetY;
+        this.mouse.x = event.pageX - this.containerOffset.left;
+        this.mouse.y = event.pageY - this.containerOffset.top;
 
         EventBus.trigger(Input.CLICK + this.namespace, this.mouse);
     };
