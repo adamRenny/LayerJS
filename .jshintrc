@@ -1,0 +1,41 @@
+{
+	// Globals
+	"globals": {
+		"require": false,
+		"define": false
+	},
+
+	// Environments
+	"browser": true,
+	"worker": true,
+
+	// Warnings
+	"es5": true,
+	"bitwise": false,
+	"camelcase": true,
+	"curly": true,
+	"eqeqeq": true,
+	"forin": true,
+	"immed": true,
+	"indent": 4,
+	"latedef": true,
+	"newcap": true,
+	"noarg": true,
+	"noempty": true,
+	"plusplus": false,
+	"quotmark": "single",
+	"regexp": false,
+	"undef": true,
+	"unused": true,
+	"strict": true,
+	"trailing": true,
+	"maxparams": 7,
+	"maxdepth": 4,
+	"maxlen": 120,
+	"eqnull": true,
+
+	// Suppressions
+	"evil": false,
+	"onecase": true,
+	"devel": true
+}
