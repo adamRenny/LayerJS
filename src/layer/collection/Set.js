@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Set Module Definition
- * @author Adam Ranfelt <adamRenny@gmail.com>
+ * @author Adam Ranfelt 
  * @version 1.0
  */
 

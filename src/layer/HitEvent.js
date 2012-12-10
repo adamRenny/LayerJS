@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * HitEvent Module Definition
- * @author Adam Ranfelt <adamRenny@gmail.com>
+ * @author Adam Ranfelt 
  * @version 1.1
  */
 define(function() {
