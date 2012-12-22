@@ -46,7 +46,12 @@ define([
     ColorLine.prototype.init = function(x1, y1, x2, y2) {
         this.Line_init(x1, y1, x2, y2);
         
-        this.color = 'rgb(' + (Math.random() * 255) + ', ' + (Math.random() * 255) + ', ' + (Math.random() * 255) + ')';
+        var red = Math.ceil((Math.random() * 255));
+        var green = Math.ceil((Math.random() * 255));
+        var blue = Math.ceil((Math.random() * 255));
+
+        this.color = 'rgba(' + red + ', ' + green + ', ' + blue + ', 255)';
+        console.log(this.color);
         
         return this;
     };

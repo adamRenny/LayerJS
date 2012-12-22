@@ -29,7 +29,7 @@ define([
         stage.createAndAppendLayer(layerName);
         stage.enableCSSAcceleration();
         
-        var line = new ColorLine(0, 23, 45, 65);
+        var line = new ColorLine(100, 23, 45, 65);
         this.line = line;
         console.log(line);
         scene.addChildToLayerByName(line, layerName);
