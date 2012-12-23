@@ -45,6 +45,7 @@ define([
         var polarVector = this.convertWorldToPolar(mouse.x, mouse.y);
         
         this.currentRadius = polarVector[0];
+        this.setNeedsRender();
     };
     
     SliceView.prototype.render = function(context) {

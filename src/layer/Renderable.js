@@ -384,9 +384,7 @@ define([
      */
     Renderable.prototype.setParentNamespace = function(namespace) {
         this.parentNamespace = namespace;
-        if (namespace !== EMPTY_NAMESPACE) {
-            RenderMediator.setNeedsRender(namespace);
-        }
+        this.setNeedsRender();
 
         return this;
     };
@@ -411,6 +409,21 @@ define([
     };
 
     /**
+     * Sets the renderable to be dirty
+     * Pushes a render request to the RenderMediator to inform the scene to render
+     *
+     * @returns {Renderable}
+     * @since 1.5
+     */
+    Renderable.prototype.setNeedsRender = function() {
+        if (this.parentNamespace !== EMPTY_NAMESPACE) {
+            RenderMediator.setNeedsRender(this.parentNamespace);
+        }
+
+        return this;
+    };
+
+    /**
      * Sets the renderable to be dirty and need to update its current spatial logic
      * Pushes a render request to the RenderMediator to inform the scene to render
      *
@@ -419,9 +432,7 @@ define([
      */
     Renderable.prototype.setNeedsUpdate = function() {
         this.needsUpdate = true;
-        if (this.parentNamespace !== EMPTY_NAMESPACE) {
-            RenderMediator.setNeedsRender(this.parentNamespace);
-        }
+        this.setNeedsRender();
         
         return this;
     };
