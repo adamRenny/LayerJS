@@ -24,7 +24,7 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt 
- * @version 1.6
+ * @version 1.7
  */
 define([
     'jquery',
@@ -470,6 +470,8 @@ define([
             .off('mousedown', this.onDownHandler)
             .off('click', this.onClickHandler);
 
+        EventBus.trigger(Input.DISABLE + this.namespace, this.mouse);
+
         return this;
     };
 
@@ -572,9 +574,9 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        this.stopDragging();
-
         EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+
+        this.stopDragging();
     };
 
     /**
@@ -590,9 +592,9 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        this.startDragging();
-
         EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+
+        this.startDragging();
     };
 
     /**
@@ -622,9 +624,9 @@ define([
     Input.prototype.onTouchEnd = function(event) {
         // touchend does not return any x/y coordinates, so leave the
         // mouse object as the last coordinates from onTouchMove or onTouchStart
-        this.stopDragging();
-
         EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+
+        this.stopDragging();
     };
 
     /**
@@ -640,9 +642,9 @@ define([
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
 
-        this.startDragging();
-
         Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+
+        this.startDragging();
     };
 
     /**
@@ -740,6 +742,17 @@ define([
      * @since 1.0
      */
     Input.CLICK = 'input/mouseclick';
+
+    /**
+     * Input disable event name
+     * Includes a layer-js namespace
+     * Supplies the mouse object and the containing element
+     *
+     * @type {string}
+     * @constant
+     * @since 1.7
+     */
+    Input.DISABLE = 'input/disable';
 
     /**
      * Flag to determine if any instance of Input is currently dragging
