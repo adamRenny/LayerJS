@@ -24,17 +24,19 @@
  *
  * Scene Module Definition
  * @author Adam Ranfelt 
- * @version 1.4
+ * @version 1.5
  */
 define([
     'layer/Stage',
     'layer/Input',
     'layer/HitEvent',
+    'layer/RenderMediator',
     'layer/EventBus'
 ], function(
     Stage,
     Input,
     HitEvent,
+    RenderMediator,
     EventBus
 ) {
     'use strict';
@@ -103,8 +105,6 @@ define([
          * @since 1.3.1
          */
         this.container = container;
-
-        this.setupStage(container, width, height);
         
         /**
          * Scene Input controller to listen from the container
@@ -114,6 +114,17 @@ define([
          * @since 1.0
          */
         this.input = new Input(container);
+
+        /**
+         * Scene Input controller namespace to associate directly with the scene
+         *
+         * @name Scene#namespace
+         * @type {string}
+         * @since 1.5
+         */
+        this.namespace = this.input.getNamespace();
+
+        this.setupStage(container, width, height);
         
         /**
          * Currently active input target
@@ -155,6 +166,8 @@ define([
          * @since 1.4
          */
         this.isEnabled = false;
+
+        RenderMediator.setNeedsRender(this.namespace);
         
         return this.setupHandlers().enable();
     };
@@ -169,7 +182,7 @@ define([
      * @since 1.3
      */
     Scene.prototype.setupStage = function(container, width, height) {
-        this.stage = new Stage(container, width, height);
+        this.stage = new Stage(container, width, height, this.namespace);
 
         return this;
     };
@@ -202,7 +215,7 @@ define([
         
         this.isEnabled = true;
         
-        var namespace = this.input.getNamespace();
+        var namespace = this.namespace;
         
         EventBus.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
         EventBus.on(Input.MOUSE_UP + namespace, this.onUpHandler);
@@ -225,7 +238,7 @@ define([
         
         this.isEnabled = false;
         
-        var namespace = this.input.getNamespace();
+        var namespace = this.namespace;
         
         EventBus.off(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
         EventBus.off(Input.MOUSE_UP + namespace, this.onUpHandler);
@@ -586,7 +599,9 @@ define([
      * @since 1.0
      */
     Scene.prototype.render = function() {
-        this.stage.forEachLayer(_renderLayer);
+        if (RenderMediator.getNeedsRender(this.namespace)) {
+            this.stage.forEachLayer(_renderLayer);
+        }
     };
 
     return Scene;

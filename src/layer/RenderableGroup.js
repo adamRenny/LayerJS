@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt 
- * @version 1.3
+ * @version 1.4
  */
 define([
     'layer/Renderable',
@@ -75,6 +75,11 @@ define([
      * @see Renderable#updateTransform
      */
     RenderableGroup.prototype.Renderable_updateTransform = Renderable.prototype.updateTransform;
+
+    /**
+     * @see Renderable#setParentNamespace
+     */
+    RenderableGroup.prototype.Renderable_setParentNamespace = Renderable.prototype.setParentNamespace;
     
     /**
      * Initializes the RenderableGroup with the Renderable parameters
@@ -151,6 +156,27 @@ define([
          */
         this.isLeafNode = false;
     };
+
+    /**
+     * Sets the parent namespace reference normally and pushes the namespace to its children
+     *
+     * @param {string} namespace Parent namespace that the renderable is a part of
+     * @returns {Renderable}
+     * @since 1.4
+     */
+    RenderableGroup.prototype.setParentNamespace = function(namespace) {
+        this.Renderable_setParentNamespace(namespace);
+
+        var i = 0;
+        var children = this.children;
+        var length = children.length;
+
+        for (; i < length; i++) {
+            children[i].setParentNamespace(namespace);
+        }
+
+        return this;
+    };
     
     /**
      * Adds a child to the stack and pushes the parent transform
@@ -169,6 +195,7 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
+        child.setParentNamespace(this.parentNamespace);
         child.setParentTransform(this.transform);
         
         return this;
@@ -200,6 +227,7 @@ define([
         }
         
         this.children.splice(index, 1);
+        child.setParentNamespace('');
         child.setParentTransform(null);
         
         return this;

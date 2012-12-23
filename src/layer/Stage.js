@@ -24,7 +24,7 @@
  *
  * Stage Module Definition
  * @author Adam Ranfelt 
- * @version 1.1
+ * @version 1.2
  */
 define([
     'jquery',
@@ -108,11 +108,12 @@ define([
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
+     * @param {string} namespace Scene namespace firing events from
      * @since 1.0
      */
-    var Stage = function(viewport, width, height) {
-        if (viewport !== undefined && width !== undefined && height !== undefined) {
-            this.init(viewport, width, height);
+    var Stage = function(viewport, width, height, namespace) {
+        if (viewport !== undefined && width !== undefined && height !== undefined && namespace !== undefined) {
+            this.init(viewport, width, height, namespace);
         }
     };
     
@@ -127,12 +128,13 @@ define([
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
+     * @param {string} namespace Scene namespace firigin events from
      * @returns {Stage}
      * @since 1.0
      */
-    Stage.prototype.init = function(viewport, width, height) {
-        if (arguments.length !== 3) {
-            throw new Error('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height) received ' + arguments.length);
+    Stage.prototype.init = function(viewport, width, height, namespace) {
+        if (arguments.length !== 4) {
+            throw new Error('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, namespace) received ' + arguments.length);
         }
         
         /**
@@ -169,6 +171,15 @@ define([
          * @since 1.0
          */
         this.height = height;
+
+        /**
+         * Namespace of the scene firing events from
+         *
+         * @name Stage#namespace
+         * @type {string}
+         * @since 1.2
+         */
+        this.namespace = namespace;
         
         /**
          * Layer list which mimics the DOM representation
@@ -194,7 +205,7 @@ define([
         this.$viewport.children().each(function() {
             this.width = width;
             this.height = height;
-            layers.push(new Layer(this));
+            layers.push(new Layer(this, namespace));
         });
         
         /**
@@ -223,7 +234,7 @@ define([
             throw new Error('ArgumentsError: Layer name is undefined');
         }
         
-        return new Layer(RenderCache.createCanvas(name, this.width, this.height));
+        return new Layer(RenderCache.createCanvas(name, this.width, this.height), this.namespace);
     };
     
     /**

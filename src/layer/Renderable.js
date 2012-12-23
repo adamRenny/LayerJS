@@ -24,14 +24,16 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt 
- * @version 1.4
+ * @version 1.5
  */
 define([
     'lib/gl-matrix',
-    'layer/Geometry'
+    'layer/Geometry',
+    'layer/RenderMediator'
 ], function(
     glMatrix,
-    Geometry
+    Geometry,
+    RenderMediator
 ) {
     'use strict';
     
@@ -104,6 +106,17 @@ define([
      * @since 1.0
      */
     var matrixBuffer = mat3.identity();
+
+    /**
+     * Empty namespace placeholder
+     * Used for namespace checking
+     *
+     * @private
+     * @constant
+     * @type {string}
+     * @since 1.5
+     */
+    var EMPTY_NAMESPACE = '';
     
     /**
      * Renderable Constructor
@@ -301,17 +314,16 @@ define([
          * @since 1.0
          */
         this.parentTransform = null;
-        
+
         /**
-         * Needs Render validation flag
-         * Dirty flag for whether the renderable requires to be rendered
+         * Parent namespace used to identify which scene
+         * the renderable is a part of in the click stack
          *
-         * @default false
-         * @name Renderable#needsRender
-         * @type {boolean}
-         * @since 1.0
+         * @name Renderable#parentNamespace
+         * @type {string}
+         * @since 1.5
          */
-        this.needsRender = false;
+        this.parentNamespace = EMPTY_NAMESPACE;
         
         /**
          * Needs Update validation flag
@@ -349,7 +361,7 @@ define([
     
     /**
      * Sets the parent transform reference
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
+     * Requests the renderable to update the transform
      *
      * @param {number[]} transform Parent transform
      * @returns {Renderable}
@@ -358,14 +370,30 @@ define([
     Renderable.prototype.setParentTransform = function(transform) {
         this.parentTransform = transform;
         this.needsUpdate = true;
-        this.needsRender = true;
         
+        return this;
+    };
+
+    /**
+     * Sets the parent namespace reference
+     * Pushes a render request to the RenderMediator to inform the scene to render
+     *
+     * @param {string} namespace Parent namespace that the renderable is a part of
+     * @returns {Renderable}
+     * @since 1.5
+     */
+    Renderable.prototype.setParentNamespace = function(namespace) {
+        this.parentNamespace = namespace;
+        if (namespace !== EMPTY_NAMESPACE) {
+            RenderMediator.setNeedsRender(namespace);
+        }
+
         return this;
     };
     
     /**
      * Sets the center point to rotate from
-     * Updates the <em>needsUpdate</em> and <em>needsRender</em> flags
+     * Requests the renderable to update
      *
      * @param {number} x X Position
      * @param {number} y Y Position
@@ -377,21 +405,23 @@ define([
         this.centerOffsetY = y;
         this.unscaledOffsetX = this.unscaledWidth * this.centerOffsetX;
         this.unscaledOffsetY = this.unscaledHeight * this.centerOffsetY;
-        this.needsUpdate = true;
-        this.needsRender = true;
+        this.setNeedsUpdate();
         
         return this;
     };
-    
+
     /**
      * Sets the renderable to be dirty and need to update its current spatial logic
+     * Pushes a render request to the RenderMediator to inform the scene to render
      *
      * @returns {Renderable}
      * @since 1.0
      */
     Renderable.prototype.setNeedsUpdate = function() {
         this.needsUpdate = true;
-        this.needsRender = true;
+        if (this.parentNamespace !== EMPTY_NAMESPACE) {
+            RenderMediator.setNeedsRender(this.parentNamespace);
+        }
         
         return this;
     };
@@ -576,8 +606,6 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        
-        this.needsRender = false;
         
         this.applyTransform(context);
     };
