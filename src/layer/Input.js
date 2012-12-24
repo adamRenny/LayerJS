@@ -642,7 +642,7 @@ define([
         this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
 
-        Events.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+        EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
 
         this.startDragging();
     };
