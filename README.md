@@ -1,7 +1,7 @@
 # LayerJS
 
 ## Canvas Rendering Library
-LayerJS is a graphics rendering library, much like [KineticJS](http://www.kineticjs.com/) and [EaselJS](http://www.createjs.com/#!/EaselJS).
+LayerJS is a graphics rendering library.
 LayerJS focuses on using multiple ```<canvas>``` elements to optimize its render cycle.
     
 [LayerJS Testbeds](http://adamrenny.github.com/LayerJS/)
@@ -15,8 +15,6 @@ The ```dependency.js``` is intended to be included separate from the EventBus to
 
 The other dependencies:
  - [RequireJS](http://requirejs.org/)
- - [webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)
- - [webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)
  - [gl-matrix](https://github.com/toji/gl-matrix)
  - [jQuery](http://jquery.com/)
  
@@ -85,8 +83,6 @@ With elements
 
 ## Dependencies
  - [RequireJS](http://requirejs.org/)
- - [webgl-utils](http://www.khronos.org/webgl/wiki/FAQ)
- - [webgl-debug](http://www.khronos.org/webgl/wiki/Debugging)
  - [gl-matrix](https://github.com/toji/gl-matrix)
  - [jQuery](http://jquery.com/)
  

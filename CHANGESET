@@ -1,5 +1,22 @@
 # RELEASE NOTE/CHANGESET
 
+## v1.1.2
+ - Added needsRender implementation to only render when a position update or ```setNeedsRender``` is called
+ - Added ```onMouseEnter``` support for input controller
+ - Added ```requestAnimationFrame``` polyfill to replace ```webgl-utils```
+ - Resolved issue with ```onMouseOut``` not being triggered
+ - Resolved onTouchStart event handling
+
+## v1.1.1
+ - Resolved comments
+
+## v1.1
+ - Added scaling to occur from the center-point of the renderable
+
+## v1.0
+ - Initial Stable Version
+ - Resolved multi-canvas issues
+
 ## v0.9
  - Removed quadtree logic
  - Added touch support
