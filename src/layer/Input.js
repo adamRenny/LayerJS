@@ -152,7 +152,10 @@ define([
     };
 
     /**
-     * Current X/Y mouse coordinates
+     * Current Window X/Y mouse coordinates
+     * Updated on mousemove within window
+     * Used to track the mouse position for activation of 
+     * input controllers upon entry into their containers
      *
      * @type {Mouse}
      * @private
