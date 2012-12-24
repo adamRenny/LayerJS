@@ -121,5 +121,4 @@
 		requestAnimFrame: requestAnimFrame,
 		cancelAnimFrame: cancelAnimFrame
 	};
-
-});
+}));

@@ -24,10 +24,39 @@
  *
  * RunLoop Module Definition
  * @author Adam Ranfelt 
- * @version 1.1
+ * @version 1.2
  */
-define(function() {
+define([
+    'lib/requestAnimFrame'
+], function(
+    rAF
+) {
     'use strict';
+    
+    /**
+     * requestAnimationFrame Polyfill
+     * Request animation frame call structure to perform a callback after the next frame is ready
+     * Requests another frame, which should function at roughly 60 frames per second
+     *
+     * @private
+     * @function
+     * @param {function} callback Callback function to callback after requestAnimFrame returns an animation frame
+     * @returns {*} Opaque reference to the animation frame
+     * @since 1.2
+     */
+    var requestAnimFrame = rAF.requestAnimFrame;
+    
+    /**
+     * cancelAnimationFrame Polyfill
+     * Cancel animation frame call structure to cancel a callback for the next frame
+     * Cancels the next frame callback, which should function at roughly 60 frames per second
+     *
+     * @private
+     * @function
+     * @param {*} requestedAnimationFrame Opaque reference to the animation frame
+     * @since 1.2
+     */
+    var cancelAnimFrame = rAF.cancelAnimFrame;
     
     /**
      * Max number of milliseconds allowed within a frame
