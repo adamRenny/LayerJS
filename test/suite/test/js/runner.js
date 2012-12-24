@@ -7,7 +7,9 @@ require([
     mocha.setup('bdd');
     
     require([
-        'suite/set.test'
+        'unit/collection/set.test',
+        'unit/collection/dictionary.test',
+        'unit/region/region.test'
     ], function() {
         mocha.run();
     });
