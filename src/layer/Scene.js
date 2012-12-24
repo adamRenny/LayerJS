@@ -198,7 +198,8 @@ define([
         this.onUpHandler = this.onUp.bind(this);
         this.onDownHandler = this.onDown.bind(this);
         this.onClickHandler = this.onClick.bind(this);
-        
+        this.onInputDisableHandler = this.onInputDisable.bind(this);
+
         return this;
     };
     
@@ -221,7 +222,8 @@ define([
         EventBus.on(Input.MOUSE_UP + namespace, this.onUpHandler);
         EventBus.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
         EventBus.on(Input.CLICK + namespace, this.onClickHandler);
-        
+        EventBus.on(Input.DISABLE + namespace, this.onInputDisableHandler);
+
         return this;
     };
     
@@ -244,7 +246,8 @@ define([
         EventBus.off(Input.MOUSE_UP + namespace, this.onUpHandler);
         EventBus.off(Input.MOUSE_DOWN + namespace, this.onDownHandler);
         EventBus.off(Input.CLICK + namespace, this.onClickHandler);
-        
+        EventBus.off(Input.DISABLE + namespace, this.onInputDisableHandler);
+
         return this;
     };
     
@@ -480,6 +483,21 @@ define([
      */
     Scene.prototype.getStage = function() {
         return this.stage;
+    };
+
+    /**
+     * Trigger onOut with active target when input is disabled
+     *
+     * @param {String} type
+     * @param {Mouse} mouse
+     * @since 1.5
+     */
+    Scene.prototype.onInputDisable = function(type, mouse) {
+        if (this.activeTarget !== null) {
+            this.onOut(this.activeTarget, mouse.x, mouse.y);
+        }
+
+        this.activeTarget = null;
     };
     
     /**
