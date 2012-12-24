@@ -24,14 +24,16 @@
  *
  * Input Module Definition
  * @author Adam Ranfelt 
- * @version 1.7
+ * @version 1.8
  */
 define([
     'jquery',
-    'layer/EventBus'
+    'layer/EventBus',
+    'layer/Geometry'
 ], function(
     $,
-    EventBus
+    EventBus,
+    Geometry
 ) {
     'use strict';
 
@@ -148,6 +150,25 @@ define([
          */
         this.y = 0;
     };
+
+    /**
+     * Global X/Y mouse coordinates
+     *
+     * @type {Mouse}
+     * @static
+     * @since 1.8
+     */
+    var GLOBAL_MOUSE = (function() {
+        var mouse = new Mouse();
+
+        $WINDOW
+            .on('mousemove.global', function(e) {
+                mouse.x = e.pageX;
+                mouse.y = e.pageY;
+            });
+
+        return mouse;
+    }());
 
     /**
      * Input Controller Constructor
@@ -393,6 +414,19 @@ define([
             .on('mouseleave', this.onExitHandler);
 
         $WINDOW.on('resize', this.onResizeHandler);
+
+        this.updateOffset();
+
+        if (Geometry.isPointInRect(
+            GLOBAL_MOUSE.x,
+            GLOBAL_MOUSE.y,
+            this.containerOffset.left,
+            this.containerOffset.top,
+            this.container.clientWidth,
+            this.container.clientHeight
+        )) {
+            $(this.container).trigger('mouseenter');
+        }
 
         return this;
     };
