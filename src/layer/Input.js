@@ -152,13 +152,13 @@ define([
     };
 
     /**
-     * Global X/Y mouse coordinates
+     * Current X/Y mouse coordinates
      *
      * @type {Mouse}
-     * @static
+     * @private
      * @since 1.8
      */
-    var GLOBAL_MOUSE = (function() {
+    var _windowMousePosition = (function() {
         var mouse = new Mouse();
 
         $WINDOW
@@ -418,8 +418,8 @@ define([
         this.updateOffset();
 
         if (Geometry.isPointInRect(
-            GLOBAL_MOUSE.x,
-            GLOBAL_MOUSE.y,
+            _windowMousePosition.x,
+            _windowMousePosition.y,
             this.containerOffset.left,
             this.containerOffset.top,
             this.container.clientWidth,
