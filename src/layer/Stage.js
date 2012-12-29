@@ -108,12 +108,12 @@ define([
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
-     * @param {string} namespace Scene namespace firing events from
+     * @param {string} sceneNamespace Scene namespace firing events from
      * @since 1.0
      */
-    var Stage = function(viewport, width, height, namespace) {
-        if (viewport !== undefined && width !== undefined && height !== undefined && namespace !== undefined) {
-            this.init(viewport, width, height, namespace);
+    var Stage = function(viewport, width, height, sceneNamespace) {
+        if (viewport !== undefined && width !== undefined && height !== undefined && sceneNamespace !== undefined) {
+            this.init(viewport, width, height, sceneNamespace);
         }
     };
     

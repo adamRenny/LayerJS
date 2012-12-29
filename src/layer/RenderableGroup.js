@@ -164,15 +164,15 @@ define([
      * @returns {Renderable}
      * @since 1.4
      */
-    RenderableGroup.prototype.setSceneNamespace = function(namespace) {
-        this.Renderable_setSceneNamespace(namespace);
+    RenderableGroup.prototype.setSceneNamespace = function(sceneNamespace) {
+        this.Renderable_setSceneNamespace(sceneNamespace);
 
         var i = 0;
         var children = this.children;
         var length = children.length;
 
         for (; i < length; i++) {
-            children[i].setSceneNamespace(namespace);
+            children[i].setSceneNamespace(sceneNamespace);
         }
 
         return this;

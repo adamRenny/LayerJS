@@ -378,12 +378,12 @@ define([
      * Sets the scene namespace reference
      * Pushes a render request to the RenderMediator to inform the scene to render
      *
-     * @param {string} namespace Scene namespace that the renderable is a part of
+     * @param {string} sceneNamespace Scene namespace that the renderable is a part of
      * @returns {Renderable}
      * @since 1.5
      */
-    Renderable.prototype.setSceneNamespace = function(namespace) {
-        this.sceneNamespace = namespace;
+    Renderable.prototype.setSceneNamespace = function(sceneNamespace) {
+        this.sceneNamespace = sceneNamespace;
         this.setNeedsRender();
 
         return this;
