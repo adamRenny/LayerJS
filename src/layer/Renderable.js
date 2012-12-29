@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Renderable Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.5
  */
 define([
@@ -127,11 +127,11 @@ define([
      * Updates the transform content on demand
      * Supports demand flag for when the renderable has been modified
      * Spatial data is based on the origin being placed at top left corner
-     * 
+     *
      * @name Renderable
      * @class Base Renderable structure used to render objects
      * @constructor
-     * 
+     *
      * @param {number} x X position
      * @param {number} y Y position
      * @param {number} width Base unscaled width
@@ -268,7 +268,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.centerOffsetX = .5;
+        this.centerOffsetX = 0.5;
         
         /**
          * Normalized center position in y
@@ -279,7 +279,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.centerOffsetY = .5;
+        this.centerOffsetY = 0.5;
         
         /**
          * Actual unscaled offset of the X position
@@ -455,14 +455,14 @@ define([
         }
         
         // Only setup the translate if x or y is set
-        if (this.x != 0 || this.y != 0) {
+        if (this.x !== 0 || this.y !== 0) {
             vector[0] = this.x;
             vector[1] = this.y;
             mat3.translate(matrix, vector);
         }
         
         // Only setup the scale if the scaleX or scaleY is set
-        if (this.scaleX != 1 || this.scaleY != 1) {
+        if (this.scaleX !== 1 || this.scaleY !== 1) {
             vector[0] = this.unscaledOffsetX;
             vector[1] = this.unscaledOffsetY;
             mat3.translate(matrix, vector);

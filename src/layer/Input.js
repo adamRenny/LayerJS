@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Input Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.8
  */
 define([
@@ -115,7 +115,7 @@ define([
         var clientLeft = DOCUMENT.clientLeft || BODY.clientLeft || 0;
 
         var scrollTop  = WINDOW.pageYOffset || DOCUMENT.scrollTop || 0;
-       	var scrollLeft = WINDOW.pageXOffset || DOCUMENT.scrollLeft || 0;
+        var scrollLeft = WINDOW.pageXOffset || DOCUMENT.scrollLeft || 0;
 
         containerOffset.top = offset.top + scrollTop - clientTop;
         containerOffset.left = offset.left + scrollLeft - clientLeft;
@@ -154,7 +154,7 @@ define([
     /**
      * Current Window X/Y mouse coordinates
      * Updated on mousemove within window
-     * Used to track the mouse position for activation of 
+     * Used to track the mouse position for activation of
      * input controllers upon entry into their containers
      *
      * @type {Mouse}
@@ -266,7 +266,7 @@ define([
 
         /**
          * Active state flag for mouse currently being over container
-         * 
+         *
          * @default false
          * @name Input#isMouseOver
          * @type {boolean}
