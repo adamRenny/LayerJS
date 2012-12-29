@@ -316,14 +316,14 @@ define([
         this.parentTransform = null;
 
         /**
-         * Parent namespace used to identify which scene
+         * Namespace used to identify which scene
          * the renderable is a part of in the click stack
          *
-         * @name Renderable#parentNamespace
+         * @name Renderable#sceneNamespace
          * @type {string}
          * @since 1.5
          */
-        this.parentNamespace = EMPTY_NAMESPACE;
+        this.sceneNamespace = EMPTY_NAMESPACE;
         
         /**
          * Needs Update validation flag
@@ -375,15 +375,15 @@ define([
     };
 
     /**
-     * Sets the parent namespace reference
+     * Sets the scene namespace reference
      * Pushes a render request to the RenderMediator to inform the scene to render
      *
-     * @param {string} namespace Parent namespace that the renderable is a part of
+     * @param {string} namespace Scene namespace that the renderable is a part of
      * @returns {Renderable}
      * @since 1.5
      */
-    Renderable.prototype.setParentNamespace = function(namespace) {
-        this.parentNamespace = namespace;
+    Renderable.prototype.setSceneNamespace = function(namespace) {
+        this.sceneNamespace = namespace;
         this.setNeedsRender();
 
         return this;
@@ -416,8 +416,8 @@ define([
      * @since 1.5
      */
     Renderable.prototype.setNeedsRender = function() {
-        if (this.parentNamespace !== EMPTY_NAMESPACE) {
-            RenderMediator.setNeedsRender(this.parentNamespace);
+        if (this.sceneNamespace !== EMPTY_NAMESPACE) {
+            RenderMediator.setNeedsRender(this.sceneNamespace);
         }
 
         return this;

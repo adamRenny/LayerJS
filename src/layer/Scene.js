@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Scene Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.5
  */
 define([
@@ -118,11 +118,11 @@ define([
         /**
          * Scene Input controller namespace to associate directly with the scene
          *
-         * @name Scene#namespace
+         * @name Scene#sceneNamespace
          * @type {string}
          * @since 1.5
          */
-        this.namespace = this.input.getNamespace();
+        this.sceneNamespace = this.input.getNamespace();
 
         this.setupStage(container, width, height);
         
@@ -167,7 +167,7 @@ define([
          */
         this.isEnabled = false;
 
-        RenderMediator.setNeedsRender(this.namespace);
+        RenderMediator.setNeedsRender(this.sceneNamespace);
         
         return this.setupHandlers().enable();
     };
@@ -182,7 +182,7 @@ define([
      * @since 1.3
      */
     Scene.prototype.setupStage = function(container, width, height) {
-        this.stage = new Stage(container, width, height, this.namespace);
+        this.stage = new Stage(container, width, height, this.sceneNamespace);
 
         return this;
     };
@@ -216,13 +216,13 @@ define([
         
         this.isEnabled = true;
         
-        var namespace = this.namespace;
+        var sceneNamespace = this.sceneNamespace;
         
-        EventBus.on(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
-        EventBus.on(Input.MOUSE_UP + namespace, this.onUpHandler);
-        EventBus.on(Input.MOUSE_DOWN + namespace, this.onDownHandler);
-        EventBus.on(Input.CLICK + namespace, this.onClickHandler);
-        EventBus.on(Input.DISABLE + namespace, this.onInputDisableHandler);
+        EventBus.on(Input.MOUSE_MOVE + sceneNamespace, this.onMoveHandler);
+        EventBus.on(Input.MOUSE_UP + sceneNamespace, this.onUpHandler);
+        EventBus.on(Input.MOUSE_DOWN + sceneNamespace, this.onDownHandler);
+        EventBus.on(Input.CLICK + sceneNamespace, this.onClickHandler);
+        EventBus.on(Input.DISABLE + sceneNamespace, this.onInputDisableHandler);
 
         return this;
     };
@@ -240,13 +240,13 @@ define([
         
         this.isEnabled = false;
         
-        var namespace = this.namespace;
+        var sceneNamespace = this.sceneNamespace;
         
-        EventBus.off(Input.MOUSE_MOVE + namespace, this.onMoveHandler);
-        EventBus.off(Input.MOUSE_UP + namespace, this.onUpHandler);
-        EventBus.off(Input.MOUSE_DOWN + namespace, this.onDownHandler);
-        EventBus.off(Input.CLICK + namespace, this.onClickHandler);
-        EventBus.off(Input.DISABLE + namespace, this.onInputDisableHandler);
+        EventBus.off(Input.MOUSE_MOVE + sceneNamespace, this.onMoveHandler);
+        EventBus.off(Input.MOUSE_UP + sceneNamespace, this.onUpHandler);
+        EventBus.off(Input.MOUSE_DOWN + sceneNamespace, this.onDownHandler);
+        EventBus.off(Input.CLICK + sceneNamespace, this.onClickHandler);
+        EventBus.off(Input.DISABLE + sceneNamespace, this.onInputDisableHandler);
 
         return this;
     };
@@ -617,7 +617,7 @@ define([
      * @since 1.0
      */
     Scene.prototype.render = function() {
-        if (RenderMediator.getNeedsRender(this.namespace)) {
+        if (RenderMediator.getNeedsRender(this.sceneNamespace)) {
             this.stage.forEachLayer(_renderLayer);
         }
     };

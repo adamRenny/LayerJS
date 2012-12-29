@@ -77,9 +77,9 @@ define([
     RenderableGroup.prototype.Renderable_updateTransform = Renderable.prototype.updateTransform;
 
     /**
-     * @see Renderable#setParentNamespace
+     * @see Renderable#setSceneNamespace
      */
-    RenderableGroup.prototype.Renderable_setParentNamespace = Renderable.prototype.setParentNamespace;
+    RenderableGroup.prototype.Renderable_setSceneNamespace = Renderable.prototype.setSceneNamespace;
     
     /**
      * Initializes the RenderableGroup with the Renderable parameters
@@ -158,21 +158,21 @@ define([
     };
 
     /**
-     * Sets the parent namespace reference normally and pushes the namespace to its children
+     * Sets the scene namespace reference normally and pushes the namespace to its children
      *
-     * @param {string} namespace Parent namespace that the renderable is a part of
+     * @param {string} namespace Scene namespace that the renderable is a part of
      * @returns {Renderable}
      * @since 1.4
      */
-    RenderableGroup.prototype.setParentNamespace = function(namespace) {
-        this.Renderable_setParentNamespace(namespace);
+    RenderableGroup.prototype.setSceneNamespace = function(namespace) {
+        this.Renderable_setSceneNamespace(namespace);
 
         var i = 0;
         var children = this.children;
         var length = children.length;
 
         for (; i < length; i++) {
-            children[i].setParentNamespace(namespace);
+            children[i].setSceneNamespace(namespace);
         }
 
         return this;
@@ -195,7 +195,7 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        child.setParentNamespace(this.parentNamespace);
+        child.setSceneNamespace(this.sceneNamespace);
         child.setParentTransform(this.transform);
         
         return this;
@@ -227,7 +227,7 @@ define([
         }
         
         this.children.splice(index, 1);
-        child.setParentNamespace('');
+        child.setSceneNamespace('');
         child.setParentTransform(null);
         
         return this;

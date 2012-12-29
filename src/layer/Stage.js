@@ -128,13 +128,13 @@ define([
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
-     * @param {string} namespace Scene namespace firigin events from
+     * @param {string} sceneNamespace Scene namespace firing events from
      * @returns {Stage}
      * @since 1.0
      */
-    Stage.prototype.init = function(viewport, width, height, namespace) {
+    Stage.prototype.init = function(viewport, width, height, sceneNamespace) {
         if (arguments.length !== 4) {
-            throw new Error('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, namespace) received ' + arguments.length);
+            throw new Error('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, sceneNamespace) received ' + arguments.length);
         }
         
         /**
@@ -175,11 +175,11 @@ define([
         /**
          * Namespace of the scene firing events from
          *
-         * @name Stage#namespace
+         * @name Stage#sceneNamespace
          * @type {string}
          * @since 1.2
          */
-        this.namespace = namespace;
+        this.sceneNamespace = sceneNamespace;
         
         /**
          * Layer list which mimics the DOM representation
@@ -205,7 +205,7 @@ define([
         this.$viewport.children().each(function() {
             this.width = width;
             this.height = height;
-            layers.push(new Layer(this, namespace));
+            layers.push(new Layer(this, sceneNamespace));
         });
         
         /**
@@ -234,7 +234,7 @@ define([
             throw new Error('ArgumentsError: Layer name is undefined');
         }
         
-        return new Layer(RenderCache.createCanvas(name, this.width, this.height), this.namespace);
+        return new Layer(RenderCache.createCanvas(name, this.width, this.height), this.sceneNamespace);
     };
     
     /**

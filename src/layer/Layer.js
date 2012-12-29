@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Layer Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.2
  */
 define([
@@ -64,12 +64,12 @@ define([
      * @extends RenderableGroup
      *
      * @param {HTMLCanvasElement} canvas Canvas element that the layer represents
-     * @param {string} namespace Scene namespace firigin events from
+     * @param {string} sceneNamespace Scene namespace firing events from
      * @since 1.0
      */
-    var Layer = function(canvas, namespace) {
-        if (canvas !== undefined && namespace !== undefined) {
-            this.init(canvas, namespace);
+    var Layer = function(canvas, sceneNamespace) {
+        if (canvas !== undefined && sceneNamespace !== undefined) {
+            this.init(canvas, sceneNamespace);
         }
     };
     
@@ -77,11 +77,11 @@ define([
      * Initializes the layer and sets up the width, height, canvas, and context
      *
      * @param {HTMLCanvasElement} canvas Canvas element that the layer represents
-     * @param {string} namespace Scene namespace firigin events from
+     * @param {string} sceneNamespace Scene namespace firing events from
      * @returns {Layer}
      * @since 1.0
      */
-    Layer.prototype.init = function(canvas, namespace) {
+    Layer.prototype.init = function(canvas, sceneNamespace) {
         // If the id is undefined, define it
         if (canvas.id === undefined) {
             canvas.id = LAYER_PREFIX + _canvasId;
@@ -132,8 +132,14 @@ define([
          */
         this.height = canvas.height;
 
-
-        this.namespace = namespace;
+        /**
+         * Scene Namespace that input events will be firing from
+         *
+         * @name Layer#sceneNamespace
+         * @type {string}
+         * @since 1.2
+         */
+        this.sceneNamespace = sceneNamespace;
         
         /**
          * Root Layer Node
@@ -144,15 +150,7 @@ define([
          * @since 1.1
          */
         this.root = new RenderableGroup(0, 0, this.width, this.height);
-
-        /**
-         * Namespace of the scene firing events from
-         *
-         * @name Layer#namespace
-         * @type {string}
-         * @since 1.2
-         */
-        this.root.setParentNamespace(this.namespace);
+        this.root.setSceneNamespace(this.sceneNamespace);
         
         return this;
     };
