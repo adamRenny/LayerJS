@@ -172,7 +172,7 @@ define([
         });
 
         it('will return nothing as a child hit target', function() {
-            expect(renderable.getChildHitTarget(x, y)).to.be(renderable);
+            expect(renderable.getChildHitTarget(x, y)).to.be(null);
         });
     });
 });
