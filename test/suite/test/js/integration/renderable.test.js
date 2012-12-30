@@ -29,41 +29,51 @@ define([
         });
 
         it('will produce a DOM-level rendering exception without a supplied valid width', function() {
-            rectangle = new CacheRectangle(0, 0, 0, 10);
-            scene.addChild(rectangle);
-
-            var hasFailed = false;
             try {
+                rectangle = new CacheRectangle(0, 0, 0, 10);
+                scene.addChild(rectangle);
+
+                var hasFailed = false;
                 scene.render();
+
+                scene.removeChild(rectangle);
+                rectangle = null;
             } catch (exception) {
-                expect(exception.name).to.be('INVALID_STATE_ERR');
-                expect(exception.code).to.be(11);
+                if (typeof exception !== 'string') {
+                    expect(exception.name).to.be('INVALID_STATE_ERR');
+                    expect(exception.code).to.be(11);
+                } else {
+                    expect(exception).to.be('RenderCache::init - Error: width and height must be greater than 0');
+                }
+                
                 hasFailed = true;
             }
 
             expect(hasFailed).to.be(true);
-            
-            scene.removeChild(rectangle);
-            rectangle = null;
         });
 
         it('will produce a DOM-level rendering exception without a supplied valid height', function() {
-            rectangle = new CacheRectangle(0, 0, 10, 0);
-            scene.addChild(rectangle);
-
-            var hasFailed = false;
             try {
+                rectangle = new CacheRectangle(0, 0, 10, 0);
+                scene.addChild(rectangle);
+
+                var hasFailed = false;
                 scene.render();
+
+                scene.removeChild(rectangle);
+                rectangle = null;
             } catch (exception) {
-                expect(exception.name).to.be('INVALID_STATE_ERR');
-                expect(exception.code).to.be(11);
+                if (typeof exception !== 'string') {
+                    expect(exception.name).to.be('INVALID_STATE_ERR');
+                    expect(exception.code).to.be(11);
+                } else {
+                    expect(exception).to.be('RenderCache::init - Error: width and height must be greater than 0');
+                }
+                
                 hasFailed = true;
             }
 
             expect(hasFailed).to.be(true);
-            
-            scene.removeChild(rectangle);
-            rectangle = null;
         });
     });
 });

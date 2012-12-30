@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Render Cache Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.1
  */
 define(function() {
@@ -82,11 +82,11 @@ define(function() {
      *
      * Cache structure used to render out content from a functional source
      * Content rendered onto the RenderCache is not updated until render is called
-     * 
+     *
      * @name RenderCache
      * @class Render Cache structure which renders content on demand to be used for later rendering
      * @constructor
-     * 
+     *
      * @param {number} width Cache Width
      * @param {number} height Cache Height
      * @param {function} renderCommand Function to render the content with - will include a context parameter
@@ -154,15 +154,15 @@ define(function() {
         this.renderCommand = null;
         
         if (width !== undefined && height !== undefined && renderCommand !== undefined) {
-            this.init(width, height, renderCommand)
+            this.init(width, height, renderCommand);
         }
     };
     
     /**
      * Convenience function to create a canvas
-     * 
+     *
      * @static
-     * 
+     *
      * @param {string} name Name and ID of the canvas element
      * @param {number} width Base width of the canvas element
      * @param {number} height Base height of the canvas element
@@ -177,7 +177,7 @@ define(function() {
      * Initializes the cache by creating the canvas and rendering out the command
      *
      * @throws {Error} When the renderCommand is not of type function
-     * 
+     *
      * @param {number} width Cache Width
      * @param {number} height Cache Height
      * @param {function} renderCommand Function to render the content with - will include a context parameter
@@ -185,6 +185,10 @@ define(function() {
      * @since 1.0
      */
     RenderCache.prototype.init = function(width, height, renderCommand) {
+        if (width === 0 || height === 0) {
+            throw 'RenderCache::init - Error: width and height must be greater than 0';
+        }
+
         this.width = width;
         this.height = height;
         
@@ -205,7 +209,7 @@ define(function() {
     
     /**
      * Sets up the size of the render cache
-     * 
+     *
      * @param {number} width Cache Width
      * @param {number} height Cache Height
      * @returns {RenderCache}
@@ -233,7 +237,7 @@ define(function() {
     /**
      * Renders out the command onto the cache
      * Not intended to be run on the main loop at every step
-     * 
+     *
      * @returns {RenderCache}
      * @since 1.0
      */

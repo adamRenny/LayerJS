@@ -34,7 +34,7 @@ define([
         var firstRect = null;
         var group = window.group = new RenderableGroup(20, 100, 600, 600);
         for (var i = 0; i < 3; i++) {
-            rect = new Rectangle(Math.random() * 400, Math.random() * 400, Math.random() * 200, Math.random() * 200);
+            rect = new Rectangle(Math.random() * 400, Math.random() * 400, 1 + Math.random() * 199, 1 + Math.random() * 199);
             if (firstRect === null) {
                 firstRect = rect;
             }

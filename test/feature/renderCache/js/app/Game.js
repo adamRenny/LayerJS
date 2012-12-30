@@ -33,7 +33,7 @@ define([
         
         var group = window.group = new RenderableGroup(0, 0, 600, 600);
         for (var i = 0; i < 3; i++) {
-            rect = new Rectangle(Math.random() * 400, Math.random() * 400, Math.random() * 200, Math.random() * 200);
+            rect = new Rectangle(Math.random() * 400, Math.random() * 400, 1 + Math.random() * 199, 1 + Math.random() * 199);
         // rect = new Rectangle(0, 0, 200, 100);
         //         rect.scaleX = 2;
         //         rect.scaleY = 2;
