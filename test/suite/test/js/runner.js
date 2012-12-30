@@ -9,7 +9,8 @@ require([
     require([
         'unit/collection/set.test',
         'unit/collection/dictionary.test',
-        'unit/region/region.test'
+        'unit/region/region.test',
+        'integration/renderable.test'
     ], function() {
         mocha.run();
     });
