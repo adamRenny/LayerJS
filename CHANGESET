@@ -1,5 +1,11 @@
 # RELEASE NOTE/CHANGESET
 
+## v1.1.3
+ - Added preliminary Renderable tests
+ - Added error catching for the render cache to disallow invalid sizes
+ - Added integration tests for if a render cache were to be a width or height of 0 before render
+ - Changed term ```namespace``` and ```parentNamespace``` to be ```sceneNamespace```
+
 ## v1.1.2
  - Added needsRender implementation to only render when a position update or ```setNeedsRender``` is called
  - Added ```onMouseEnter``` support for input controller
