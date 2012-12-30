@@ -10,6 +10,8 @@ require([
         'unit/collection/set.test',
         'unit/collection/dictionary.test',
         'unit/region/region.test',
+        'unit/geometry/geometry.test',
+        'unit/layer/renderable.test',
         'integration/renderable.test'
     ], function() {
         mocha.run();
