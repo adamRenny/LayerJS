@@ -215,12 +215,12 @@ define([
             throw new Error('ExistentialError: Child already exists in group');
         }
 
-        if (index <= 0) {
+        if (index < 0) {
             this.children.unshift(child);
-        } else if (index < this.children.length) {
-            this.children.splice(index, 0, child);
-        } else {
+        } else if (index >= this.children.length) {
             this.children.push(child);
+        } else {
+            this.children.splice(index, 0, child);
         }
 
         if (this.needsUpdate) {
