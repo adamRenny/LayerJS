@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt 
- * @version 1.4
+ * @version 1.5
  */
 define([
     'layer/Renderable',
@@ -190,14 +190,45 @@ define([
         if (this.children.indexOf(child) !== -1) {
             throw new Error('ExistentialError: Child already exists in group');
         }
-        
+
         this.children.push(child);
         if (this.needsUpdate) {
             this.updateTransform();
         }
         child.setSceneNamespace(this.sceneNamespace);
         child.setParentTransform(this.transform);
-        
+
+        return this;
+    };
+
+    /**
+     * Add child to the stack at index and pushes the parent transform
+     *
+     * @throws {ExistentialError} If the child is already a child of this object
+     * @param {Number} index Index to insert child at
+     * @param {Renderable} child Child to add
+     * @return {RenderableGroup}
+     * @since 1.5
+     */
+    RenderableGroup.prototype.insertChildAtIndex = function(index, child) {
+        if (this.children.indexOf(child) !== -1) {
+            throw new Error('ExistentialError: Child already exists in group');
+        }
+
+        if (index <= 0) {
+            this.children.unshift(child);
+        } else if (index < this.children.length) {
+            this.children.splice(index, 0, child);
+        } else {
+            this.children.push(child);
+        }
+
+        if (this.needsUpdate) {
+            this.updateTransform();
+        }
+        child.setSceneNamespace(this.sceneNamespace);
+        child.setParentTransform(this.transform);
+
         return this;
     };
     
