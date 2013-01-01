@@ -355,7 +355,7 @@ define([
      * @since 1.0
      */
     Stage.prototype.prependLayer = function(layer) {
-        if (!this.viewport.children.length) {
+        if (!this.viewport.hasChildNodes()) {
             return this.appendLayer(layer);
         }
 
