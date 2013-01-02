@@ -625,7 +625,7 @@ define([
      */
     Input.prototype.onDown = function(event) {
         if (event.which !== 1) {
-            return
+            return;
         }
 
         this.updateOffset();
