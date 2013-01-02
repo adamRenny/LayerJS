@@ -1,5 +1,8 @@
 # RELEASE NOTE/CHANGESET
 
+## v1.1.4
+ - Added insertChildAtIndex to RenderableGroup objects
+
 ## v1.1.3
  - Added preliminary Renderable tests
  - Added error catching for the render cache to disallow invalid sizes
