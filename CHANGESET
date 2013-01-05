@@ -1,5 +1,8 @@
 # RELEASE NOTE/CHANGESET
 
+## v1.1.4.1
+ - Resolved issue with right clicking triggering onClick/onMouseMove events
+
 ## v1.1.4
  - Added insertChildAtIndex to RenderableGroup objects
 
