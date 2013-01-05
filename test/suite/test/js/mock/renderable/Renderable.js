@@ -29,16 +29,12 @@ define([
         this.isDragging = true;
     };
 
-    Box.prototype.onMouseMove = function() {
-    };
-
     Box.prototype.onMouseUp = function() {
         this.isDragging = false;
     };
 
     Box.prototype.onMouseOver = function(event) {
         this.isOver = true;
-        console.log('over', event);
     };
 
     Box.prototype.onMouseOut = function() {
