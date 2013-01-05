@@ -25,11 +25,12 @@
 
         this.target = elem;
         this.options = options;
+        var event;
 
         if ( this[ method ] ) {
-            this[ method ]();
+            event = this[ method ]();
         } else {
-            this.simulateEvent( elem, type, options );
+            event = this.simulateEvent( elem, type, options );
         }
     };
 
@@ -72,6 +73,7 @@
         simulateEvent: function( elem, type, options ) {
             var event = this.createEvent( type, options );
             this.dispatchEvent( elem, type, event, options );
+            return event;
         },
 
         createEvent: function( type, options ) {
@@ -283,25 +285,27 @@
                 target = this.target,
                 options = this.options,
                 center = findCenter( target ),
-                x = Math.floor( center.x ),
-                y = Math.floor( center.y ),
+                x = options.x,
+                y = options.y,
                 dx = options.dx || 0,
                 dy = options.dy || 0,
                 moves = options.moves || 3,
                 coord = { clientX: x, clientY: y };
 
+            console.log(target);
             this.simulateEvent( target, "mousedown", coord );
 
             for ( ; i < moves ; i++ ) {
                 x += dx / moves;
                 y += dy / moves;
 
-                coord = {
-                    clientX: Math.round( x ),
-                    clientY: Math.round( y )
-                };
+                coord.clientX = Math.round(x);
+                coord.clientY = Math.round(y);
 
                 this.simulateEvent( document, "mousemove", coord );
+                if (typeof options.step === 'function') {
+                    options.step(x, y);
+                }
             }
 
             this.simulateEvent( target, "mouseup", coord );

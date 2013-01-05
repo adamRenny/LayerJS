@@ -22,26 +22,40 @@ define([
         this.isOver = false;
         this.clicked = false;
 
+        this.startX = 0;
+        this.startY = 0;
+
         return this;
     };
 
-    Box.prototype.onMouseDown = function() {
+    Box.prototype.onMouseDown = function(event) {
         this.isDragging = true;
+        this.startX = event.x - this.x;
+        this.startY = event.y - this.y;
     };
 
-    Box.prototype.onMouseUp = function() {
+    Box.prototype.onMouseUp = function(event) {
         this.isDragging = false;
+    };
+
+    Box.prototype.onMouseMove = function(event) {
+        if (this.isDragging) {
+            this.x = event.x - this.startX;
+            this.y = event.y - this.startY;
+            this.setNeedsUpdate();
+        }
+        console.log('move', this.x, this.y);
     };
 
     Box.prototype.onMouseOver = function(event) {
         this.isOver = true;
     };
 
-    Box.prototype.onMouseOut = function() {
+    Box.prototype.onMouseOut = function(event) {
         this.isOver = false;
     };
 
-    Box.prototype.onClick = function() {
+    Box.prototype.onClick = function(event) {
         this.clicked = true;
     };
 

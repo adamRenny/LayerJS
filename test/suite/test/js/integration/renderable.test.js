@@ -24,6 +24,7 @@ define([
         });
 
         afterEach(function() {
+            scene.input.deactivate();
             scene = null;
             viewport.innerHTML = '';
         });
