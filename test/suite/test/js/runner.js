@@ -12,7 +12,8 @@ require([
         'unit/region/region.test',
         'unit/geometry/geometry.test',
         'unit/layer/renderable.test',
-        'integration/renderable.test'
+        'integration/renderable.test',
+        'integration/input.test'
     ], function() {
         mocha.run();
     });
