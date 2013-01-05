@@ -624,6 +624,10 @@ define([
      * @since 1.0
      */
     Input.prototype.onDown = function(event) {
+        if (event.which !== 1) {
+            return;
+        }
+
         this.updateOffset();
 
         this.mouse.x = event.pageX - this.containerOffset.left;
