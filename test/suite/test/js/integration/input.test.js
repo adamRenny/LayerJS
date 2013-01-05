@@ -9,47 +9,70 @@ define([
 
     var TEST_VIEWPORT_ID = 'js-viewport';
 
-    var scene;
     var viewport = document.getElementById(TEST_VIEWPORT_ID);
     var $viewport = jQuery(viewport);
     var width = 500;
     var height = 500;
     var layerName = 'test';
+
+    var scene;
     var input;
     var layer;
     var renderable;
 
     var renderableX = 20;
     var renderableY = 20;
-    var renderableWidth = 50;
-    var renderableHeight = 50;
-    var position = {
-        x: 50,
-        y: 50
+    var renderableWidth = 100;
+    var renderableHeight = 100;
+    var position = { x: 50, y: 50 };
+    var viewportCss = {
+        position: 'absolute',
+        left: position.x,
+        top: position.y,
+        pointerEvents: 'none'
+    };
+
+    var _x = function(delta) {
+        return renderableX + position.x + delta - document.body.scrollLeft;
+    };
+
+    var _y = function(delta) {
+        return renderableY + position.y + delta - document.body.scrollTop;
     };
 
     var _beforeEach = function() {
         scene = new Scene(viewport, width, height);
         input = scene.input;
 
-        scene.getStage().createAndAppendLayer(layerName).enableCSSAcceleration();
-        layer = scene.getStage().getLayerByName(layerName);
+        layer = scene
+            .getStage()
+            .createAndAppendLayer(layerName)
+            .enableCSSAcceleration()
+            .getLayerByName(layerName);
+
         renderable = new Renderable(renderableX, renderableY, renderableWidth, renderableHeight);
 
-        layer.getRoot().addChild(renderable);
-        $viewport.css({
-            position: 'absolute',
-            left: position.x,
-            top: position.y
-        });
+        layer
+            .getRoot()
+            .addChild(renderable);
+
+        $viewport.css(viewportCss);
         scene.render();
     };
 
     var _afterEach = function() {
+        $viewport
+//            .simulate('mouseup')
+            .simulate('mouseout');
+
         input.deactivate();
+
+        input = null;
+        renderable = null;
+        layer = null;
         scene = null;
-        viewport.innerHTML = '';
-        $viewport.removeAttr('style');
+
+        $viewport.removeAttr('style').empty();
     };
 
     describe('Input', function() {
@@ -75,8 +98,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(input.isDragging).to.be(true);
@@ -86,19 +109,19 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 })
                 .simulate('mouseup', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(input.isDragging).to.be(false);
         });
     });
 
-    describe('Renderable + Input', function() {
+    describe('Input Renderable', function() {
 
         beforeEach(_beforeEach);
         afterEach(_afterEach);
@@ -107,8 +130,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(renderable.isOver).to.be(true);
@@ -118,8 +141,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: position.x - document.body.scrollLeft,
-                    clientY: position.y - document.body.scrollTop
+                    clientX: _x(-20),
+                    clientY: _y(-20)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -129,12 +152,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 })
                 .simulate('mousemove', {
-                    clientX: position.x - document.body.scrollLeft,
-                    clientY: position.y - document.body.scrollTop
+                    clientX: _x(-20),
+                    clientY: _y(-20)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -144,8 +167,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(renderable.isDragging).to.be(true);
@@ -155,8 +178,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: position.x - document.body.scrollLeft,
-                    clientY: position.y - document.body.scrollTop
+                    clientX: _x(-20),
+                    clientY: _y(-20)
                 });
 
             expect(renderable.isDragging).to.be(false);
@@ -166,8 +189,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(renderable.isOver).to.be(true);
@@ -177,8 +200,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: position.x - document.body.scrollLeft,
-                    clientY: position.y - document.body.scrollTop
+                    clientX: _x(-20),
+                    clientY: _y(-20)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -188,12 +211,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 })
                 .simulate('mouseup', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(renderable.isDragging).to.be(false);
@@ -203,12 +226,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 })
                 .simulate('mouseup', {
-                    clientX: position.x - document.body.scrollLeft,
-                    clientY: position.y - document.body.scrollTop
+                    clientX: _x(-20),
+                    clientY: _y(-20)
                 });
 
             expect(renderable.isDragging).to.be(true);
@@ -218,8 +241,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('click', {
-                    clientX: position.x + renderableX + 20 - document.body.scrollLeft,
-                    clientY: position.y + renderableY + 20 - document.body.scrollTop
+                    clientX: _x(20),
+                    clientY: _y(20)
                 });
 
             expect(renderable.clicked).to.be(true);
@@ -229,11 +252,51 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('click', {
-                    clientX: position.x + document.body.scrollLeft,
-                    clientY: position.y + document.body.scrollTop
+                    clientX: _x(-20),
+                    clientY: _y(-20)
                 });
 
             expect(renderable.clicked).to.be(false);
+        });
+
+        it('will be at x position 30 after being dragged', function() {
+            var delta = 10;
+            $viewport
+                .simulate('mouseover')
+                .simulate('mousedown', {
+                    clientX: _x(20),
+                    clientY: _y(20)
+                })
+                .simulate('mousemove', {
+                    clientX: _x(20 + delta),
+                    clientY: _y(20 + delta)
+                })
+                .simulate('mouseup', {
+                    clientX: _x(20 + delta),
+                    clientY: _y(20 + delta)
+                });
+
+            expect(renderable.x).to.be(renderableX + delta);
+        });
+
+        it('will be at x position ' + (width * 2) + ' after being dragged outside of layer', function() {
+            var start = 20;
+            var end = width * 2;
+            var step = 20;
+            $viewport
+                .simulate('mouseover')
+                .simulate('drag', {
+                    x: _x(start),
+                    y: _y(start),
+                    dx: end - start,
+                    dy: end - start,
+                    moves: end / step,
+                    step: function() {
+                        scene.render();
+                    }
+                });
+
+            expect(renderable.x).to.be(end);
         });
     });
 });
