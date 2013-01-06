@@ -292,7 +292,6 @@
                 moves = options.moves || 3,
                 coord = { clientX: x, clientY: y };
 
-            console.log(target);
             this.simulateEvent( target, "mousedown", coord );
 
             for ( ; i < moves ; i++ ) {

@@ -105,6 +105,21 @@ define([
             expect(input.isDragging).to.be(true);
         });
 
+        it('will be in drag mode on mousedown and mouseout', function() {
+            $viewport
+                .simulate('mouseover')
+                .simulate('mousedown', {
+                    clientX: _x(20),
+                    clientY: _y(20)
+                })
+                .simulate('mousemove', {
+                    clientX: _x(-200),
+                    clientY: _y(-220)
+                });
+
+            expect(input.isDragging).to.be(true);
+        });
+
         it('will not be in drag mode on mouseup', function() {
             $viewport
                 .simulate('mouseover')
@@ -156,8 +171,23 @@ define([
                     clientY: _y(20)
                 })
                 .simulate('mousemove', {
-                    clientX: _x(-20),
-                    clientY: _y(-20)
+                    clientX: _x(-10),
+                    clientY: _y(-10)
+                });
+
+            expect(renderable.isOver).to.be(false);
+        });
+
+        it('onMouseOut will trigger when moused out of layer', function() {
+            $viewport
+                .simulate('mouseover')
+                .simulate('mousemove', {
+                    clientX: _x(20),
+                    clientY: _y(20)
+                })
+                .simulate('mousemove', {
+                    clientX: _x(-200),
+                    clientY: _y(-200)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -260,20 +290,21 @@ define([
         });
 
         it('will be at x position 30 after being dragged', function() {
-            var delta = 10;
+            var start = 20;
+            var end = 50;
+            var delta = end - start;
+            var step = 1;
             $viewport
                 .simulate('mouseover')
-                .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
-                })
-                .simulate('mousemove', {
-                    clientX: _x(20 + delta),
-                    clientY: _y(20 + delta)
-                })
-                .simulate('mouseup', {
-                    clientX: _x(20 + delta),
-                    clientY: _y(20 + delta)
+                .simulate('drag', {
+                    x: _x(start),
+                    y: _y(start),
+                    dx: delta,
+                    dy: delta,
+                    moves: end / step,
+                    step: function() {
+                        scene.render();
+                    }
                 });
 
             expect(renderable.x).to.be(renderableX + delta);
@@ -282,21 +313,22 @@ define([
         it('will be at x position ' + (width * 2) + ' after being dragged outside of layer', function() {
             var start = 20;
             var end = width * 2;
+            var delta = end - start;
             var step = 20;
             $viewport
                 .simulate('mouseover')
                 .simulate('drag', {
                     x: _x(start),
                     y: _y(start),
-                    dx: end - start,
-                    dy: end - start,
+                    dx: delta,
+                    dy: delta,
                     moves: end / step,
                     step: function() {
                         scene.render();
                     }
                 });
 
-            expect(renderable.x).to.be(end);
+            expect(renderable.x).to.be(renderableX + delta);
         });
     });
 });
