@@ -44,7 +44,6 @@ define([
             this.y = event.y - this.startY;
             this.setNeedsUpdate();
         }
-        console.log('move', this.x, this.y);
     };
 
     Box.prototype.onMouseOver = function(event) {
