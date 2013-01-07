@@ -93,10 +93,8 @@
                 cancelable: (type !== "mousemove"),
                 view: window,
                 detail: 0,
-                screenX: 0,
-                screenY: 0,
-                clientX: 1,
-                clientY: 1,
+                x: 0,
+                y: 0,
                 ctrlKey: false,
                 altKey: false,
                 shiftKey: false,
@@ -109,7 +107,7 @@
                 event = document.createEvent( "MouseEvents" );
                 event.initMouseEvent( type, options.bubbles, options.cancelable,
                     options.view, options.detail,
-                    options.screenX, options.screenY, options.clientX, options.clientY,
+                    options.screenX, options.screenY, options.x, options.y,
                     options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
                     options.button, options.relatedTarget || document.body.parentNode );
 
@@ -123,19 +121,20 @@
 
                     Object.defineProperty( event, "pageX", {
                         get: function() {
-                            return options.clientX +
+                            return options.x +
                                 ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) -
                                 ( doc && doc.clientLeft || body && body.clientLeft || 0 );
                         }
                     });
                     Object.defineProperty( event, "pageY", {
                         get: function() {
-                            return options.clientY +
+                            return options.y +
                                 ( doc && doc.scrollTop || body && body.scrollTop || 0 ) -
                                 ( doc && doc.clientTop || body && body.clientTop || 0 );
                         }
                     });
                 }
+                console.log(event);
             } else if ( document.createEventObject ) {
                 event = document.createEventObject();
                 $.extend( event, options );
@@ -263,34 +262,19 @@
         }
     });
 
-
-
     /** complex events **/
-
-    function findCenter( elem ) {
-        var offset,
-            document = $( elem.ownerDocument );
-        elem = $( elem );
-        offset = elem.offset();
-
-        return {
-            x: offset.left + elem.outerWidth() / 2 - document.scrollLeft(),
-            y: offset.top + elem.outerHeight() / 2 - document.scrollTop()
-        };
-    }
 
     $.extend( $.simulate.prototype, {
         simulateDrag: function() {
             var i = 0,
                 target = this.target,
                 options = this.options,
-                center = findCenter( target ),
-                x = options.x,
-                y = options.y,
+                x = options.x || 0,
+                y = options.y || 0,
                 dx = options.dx || 0,
                 dy = options.dy || 0,
-                moves = options.moves || 3,
-                coord = { clientX: x, clientY: y };
+                moves = options.moves || 10,
+                coord = { x: x, y: y };
 
             this.simulateEvent( target, "mousedown", coord );
 
@@ -298,8 +282,8 @@
                 x += dx / moves;
                 y += dy / moves;
 
-                coord.clientX = Math.round(x);
-                coord.clientY = Math.round(y);
+                coord.x = Math.round(x);
+                coord.y = Math.round(y);
 
                 this.simulateEvent( document, "mousemove", coord );
                 if (typeof options.step === 'function') {
@@ -308,7 +292,6 @@
             }
 
             this.simulateEvent( target, "mouseup", coord );
-            this.simulateEvent( target, "click", coord );
         }
     });
 
