@@ -25,19 +25,20 @@ define([
     var renderableWidth = 100;
     var renderableHeight = 100;
     var position = { x: 50, y: 50 };
+
     var viewportCss = {
-        position: 'absolute',
+        position: 'fixed', // Needs to be fixed to resolve mocha auto scrolling when printing test results.
         left: position.x,
         top: position.y,
-        pointerEvents: 'none'
+        pointerEvents: 'none' // Ignore real mouse events
     };
 
     var _x = function(delta) {
-        return renderableX + position.x + delta - document.body.scrollLeft;
+        return renderableX + position.x + delta;
     };
 
     var _y = function(delta) {
-        return renderableY + position.y + delta - document.body.scrollTop;
+        return renderableY + position.y + delta;
     };
 
     var _beforeEach = function() {
@@ -61,10 +62,7 @@ define([
     };
 
     var _afterEach = function() {
-        $viewport
-//            .simulate('mouseup')
-            .simulate('mouseout');
-
+        $viewport.simulate('mouseout');
         input.deactivate();
 
         input = null;
@@ -98,8 +96,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(input.isDragging).to.be(true);
@@ -109,12 +107,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 })
                 .simulate('mousemove', {
-                    clientX: _x(-200),
-                    clientY: _y(-220)
+                    x: _x(-200),
+                    y: _y(-220)
                 });
 
             expect(input.isDragging).to.be(true);
@@ -124,12 +122,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 })
                 .simulate('mouseup', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(input.isDragging).to.be(false);
@@ -145,8 +143,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(renderable.isOver).to.be(true);
@@ -156,8 +154,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: _x(-20),
-                    clientY: _y(-20)
+                    x: _x(-20),
+                    y: _y(-20)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -167,12 +165,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 })
                 .simulate('mousemove', {
-                    clientX: _x(-10),
-                    clientY: _y(-10)
+                    x: _x(-10),
+                    y: _y(-10)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -182,12 +180,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 })
                 .simulate('mousemove', {
-                    clientX: _x(-200),
-                    clientY: _y(-200)
+                    x: _x(-200),
+                    y: _y(-200)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -197,8 +195,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(renderable.isDragging).to.be(true);
@@ -208,8 +206,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(-20),
-                    clientY: _y(-20)
+                    x: _x(-20),
+                    y: _y(-20)
                 });
 
             expect(renderable.isDragging).to.be(false);
@@ -219,8 +217,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(renderable.isOver).to.be(true);
@@ -230,8 +228,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousemove', {
-                    clientX: _x(-20),
-                    clientY: _y(-20)
+                    x: _x(-20),
+                    y: _y(-20)
                 });
 
             expect(renderable.isOver).to.be(false);
@@ -241,12 +239,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 })
                 .simulate('mouseup', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(renderable.isDragging).to.be(false);
@@ -256,12 +254,12 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 })
                 .simulate('mouseup', {
-                    clientX: _x(-20),
-                    clientY: _y(-20)
+                    x: _x(-20),
+                    y: _y(-20)
                 });
 
             expect(renderable.isDragging).to.be(true);
@@ -271,8 +269,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('click', {
-                    clientX: _x(20),
-                    clientY: _y(20)
+                    x: _x(20),
+                    y: _y(20)
                 });
 
             expect(renderable.clicked).to.be(true);
@@ -282,8 +280,8 @@ define([
             $viewport
                 .simulate('mouseover')
                 .simulate('click', {
-                    clientX: _x(-20),
-                    clientY: _y(-20)
+                    x: _x(-20),
+                    y: _y(-20)
                 });
 
             expect(renderable.clicked).to.be(false);
