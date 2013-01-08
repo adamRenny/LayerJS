@@ -134,7 +134,6 @@
                         }
                     });
                 }
-                console.log(event);
             } else if ( document.createEventObject ) {
                 event = document.createEventObject();
                 $.extend( event, options );
