@@ -473,7 +473,7 @@ define([
         this.container.removeEventListener('touchstart', this.onEnterHandler, false);
         this.container.removeEventListener('touchstart', this.onTouchStartHandler, false);
 
-        WINDOW.removeEventListener('resize', this.onResizeHandler);
+        WINDOW.removeEventListener('resize', this.onResizeHandler, false);
 
         return this;
     };
