@@ -80,6 +80,24 @@ define([
      */
     var BODY = DOCUMENT.body;
 
+    // Element.contains polyfill
+    if (!Element.prototype.contains) {
+        if (document.compareDocumentPosition) {
+            Element.prototype.contains = function(b) {
+                return b && !!(this.compareDocumentPosition(b) & 16);
+            }
+        } else {
+            Element.prototype.contains = function(b) {
+                while ((b = b.parentNode)) {
+                    if (b === this) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+    }
+
     /**
      * Calculate position offset of container
      *
@@ -429,7 +447,7 @@ define([
         this.container.addEventListener('touchstart', this.onEnterHandler, false);
         this.container.addEventListener('touchstart', this.onTouchStartHandler, false);
 
-        WINDOW.addEventListener('resize', this.onResizeHandler);
+        WINDOW.addEventListener('resize', this.onResizeHandler, false);
 
         this.updateOffset();
 
