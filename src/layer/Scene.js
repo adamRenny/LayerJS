@@ -24,7 +24,7 @@
  *
  * Scene Module Definition
  * @author Adam Ranfelt
- * @version 1.5
+ * @version 1.7
  */
 define([
     'layer/Stage',
@@ -40,6 +40,14 @@ define([
     EventBus
 ) {
     'use strict';
+
+    /**
+     * Scene.container css position attribute
+     *
+     * @type {String}
+     * @static
+     */
+    var CONTAINER_POSITION = 'relative';
     
     /**
      * Render Layer
@@ -169,7 +177,19 @@ define([
 
         RenderMediator.setNeedsRender(this.sceneNamespace);
         
-        return this.setupHandlers().enable();
+        return this.setupHandlers().layout().enable();
+    };
+
+    /**
+     * Apply css properties to container
+     *
+     * @return {Scene}
+     * @since 1.7
+     */
+    Scene.prototype.layout = function() {
+        this.container.style.position = CONTAINER_POSITION;
+
+        return this;
     };
 
     /**
