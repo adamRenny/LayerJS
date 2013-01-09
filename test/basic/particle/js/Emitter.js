@@ -4,7 +4,7 @@ define([
 ], function(
     RenderableGroup,
     Particle
-    ) {
+) {
     'use strict';
 
     var NUMBER_OF_PARTICLES = 1300;

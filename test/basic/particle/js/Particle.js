@@ -2,7 +2,7 @@ define([
     'layer/Renderable'
 ], function(
     Renderable
-    ) {
+) {
     'use strict';
 
     var MAX_SPEED = 200;

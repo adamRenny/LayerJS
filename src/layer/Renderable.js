@@ -34,7 +34,7 @@ define([
     glMatrix,
     Geometry,
     RenderMediator
-    ) {
+) {
     'use strict';
 
     /**

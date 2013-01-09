@@ -4,7 +4,7 @@ define([
 ], function(
     Renderable,
     Geometry
-    ) {
+) {
     'use strict';
 
     var Box = function(x, y, width, height) {

@@ -8,7 +8,7 @@ define([
     RunLoop,
     Box,
     Scene
-    ) {
+) {
     'use strict';
 
     var WIDTH = 250;
