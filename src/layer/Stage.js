@@ -27,11 +27,9 @@
  * @version 1.2
  */
 define([
-    'jquery',
     'layer/Layer',
     'layer/RenderCache'
 ], function(
-    $,
     Layer,
     RenderCache
 ) {
@@ -46,7 +44,7 @@ define([
      * @since 1.0
      */
     var HARDWARE_STYLES = [
-        '-webkit-transform'
+        'webkitTransform'
     ];
     
     /**
@@ -58,7 +56,7 @@ define([
      * @since 1.0
      */
     var HARDWARE_SETTINGS = {
-        '-webkit-transform': 'matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)'
+        'webkitTransform': 'matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1)'
     };
     
     /**
@@ -72,17 +70,13 @@ define([
      * @since 1.0
      */
     var _prepareHardwareSettings = function(element) {
-        var $element = $(element);
         var i = 0;
         var length = HARDWARE_STYLES.length;
-        var styles = {};
         for (; i < length; i++) {
-            if ($element.css(HARDWARE_STYLES[i]) === "none") {
-                styles[HARDWARE_STYLES[i]] = HARDWARE_SETTINGS[HARDWARE_STYLES[i]];
+            if (element.style[HARDWARE_STYLES[i]] === '') {
+                element.style[HARDWARE_STYLES[i]] = HARDWARE_SETTINGS[HARDWARE_STYLES[i]];
             }
         }
-        
-        return styles;
     };
     
     /**
@@ -145,14 +139,6 @@ define([
          * @since 1.0
          */
         this.viewport = viewport;
-
-        /**
-         * jQuery object of viewport
-         *
-         * @name Stage#$viewport
-         * @type {jQuery}
-         */
-        this.$viewport = $(this.viewport);
         
         /**
          * Width of the stage
@@ -200,13 +186,17 @@ define([
          * @since 1.0
          */
         this.layerCache = {};
-        
+
+        var children = this.viewport.children;
+        var i = 0;
+        var length = children.length;
+
         // Creates representative layers for existing canvases
-        this.$viewport.children().each(function() {
-            this.width = width;
-            this.height = height;
-            layers.push(new Layer(this, sceneNamespace));
-        });
+        for (; i < length; i++) {
+            children[i].width = width;
+            children[i].height = height;
+            layers.push(new Layer(children[i], sceneNamespace));
+        }
         
         /**
          * Count of the layers in the stage
@@ -262,7 +252,7 @@ define([
      */
     Stage.prototype.enableCSSAccelerationForLayer = function(layer) {
         var canvas = layer.getCanvas();
-        $(canvas).css(_prepareHardwareSettings(canvas));
+        _prepareHardwareSettings(canvas);
         
         return this;
     };
@@ -365,7 +355,11 @@ define([
      * @since 1.0
      */
     Stage.prototype.prependLayer = function(layer) {
-        this.$viewport.prepend(layer.getCanvas());
+        if (!this.viewport.hasChildNodes()) {
+            return this.appendLayer(layer);
+        }
+
+        this.viewport.insertBefore(layer.getCanvas(), this.viewport.firstChild);
         this.layerCache[layer.name] = layer;
         this.layers.unshift(layer);
         this.layerCount = this.layers.length;
@@ -405,7 +399,9 @@ define([
         }
 
         var targetLayer = this.layers[index];
-        this.$viewport.find('#' + targetLayer.name).before(layer.getCanvas());
+        var targetCanvas = targetLayer.getCanvas();
+        targetCanvas.parentNode.insertBefore(layer.getCanvas(), targetCanvas);
+
         this.layerCache[layer.name] = layer;
         this.layers.splice(index, 0, layer);
         this.layerCount = this.layers.length;

@@ -23,15 +23,14 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Input Module Definition
- * @author Adam Ranfelt
- * @version 1.8
+ * @author Adam Ranfelt 
+ * @author Aaron Gloege
+ * @version 1.9
  */
 define([
-    'jquery',
     'layer/EventBus',
     'layer/Geometry'
 ], function(
-    $,
     EventBus,
     Geometry
 ) {
@@ -74,14 +73,6 @@ define([
     var WINDOW = window;
 
     /**
-     * jQuery object of window object
-     * @type {jQuery}
-     * @constant
-     * @since 1.5
-     */
-    var $WINDOW = $(WINDOW);
-
-    /**
      * Page body element
      *
      * @type {HTMLElement}
@@ -90,14 +81,23 @@ define([
      */
     var BODY = DOCUMENT.body;
 
-    /**
-     * jQuery page body element
-     *
-     * @type {jQuery}
-     * @constant
-     * @since 1.6
-     */
-    var $BODY = $(BODY);
+    // Element.contains polyfill
+    if (!Element.prototype.contains) {
+        if (document.compareDocumentPosition) {
+            Element.prototype.contains = function(b) {
+                return b && !!(this.compareDocumentPosition(b) & 16);
+            }
+        } else {
+            Element.prototype.contains = function(b) {
+                while ((b = b.parentNode)) {
+                    if (b === this) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+    }
 
     /**
      * Calculate position offset of container
@@ -164,14 +164,37 @@ define([
     var _windowMousePosition = (function() {
         var mouse = new Mouse();
 
-        $WINDOW
-            .on('mousemove.global', function(e) {
-                mouse.x = e.pageX;
-                mouse.y = e.pageY;
-            });
+        var onScroll = function(e) {
+            mouse.x = e.pageX;
+            mouse.y = e.pageY;
+        };
+
+        WINDOW.addEventListener('mousemove', onScroll, false);
 
         return mouse;
     }());
+
+    /**
+     * Mouse Enter/Leave handler to determine if use has moused over/out container
+     *
+     * @param {Event} e
+     * @private
+     * @since 1.9
+     */
+    var _mouseEnterMouseLeaveHandler = function(e) {
+        var target = e.target;
+        var related = e.relatedTarget;
+
+        // For mousenter/leave call the handler if related is outside the target.
+        // NB: No relatedTarget if the mouse left/entered the browser window
+        if (!related || (related !== target && !target.contains(related))) {
+            if (e.type === 'mouseover') {
+                this.onEnter();
+            } else {
+                this.onExit();
+            }
+        }
+    };
 
     /**
      * Input Controller Constructor
@@ -393,6 +416,16 @@ define([
          */
         this.onResizeHandler = this.updateOffset.bind(this);
 
+        /**
+         * Bound onMouseEnterMouseLeaveHandler Handler
+         *
+         * @private
+         * @name Input#onMouseEnterMouseLeaveHandler
+         * @type {function}
+         * @since 1.7
+         */
+        this.onMouseEnterMouseLeaveHandler = _mouseEnterMouseLeaveHandler.bind(this);
+
         return this;
     };
 
@@ -410,13 +443,12 @@ define([
 
         this.isActive = true;
 
-        $(this.container)
-            .on('mouseenter', this.onEnterHandler)
-            .on('touchstart', this.onEnterHandler)
-            .on('touchstart', this.onTouchStartHandler)
-            .on('mouseleave', this.onExitHandler);
+        this.container.addEventListener('mouseover', this.onMouseEnterMouseLeaveHandler, false);
+        this.container.addEventListener('mouseout', this.onMouseEnterMouseLeaveHandler, false);
+        this.container.addEventListener('touchstart', this.onEnterHandler, false);
+        this.container.addEventListener('touchstart', this.onTouchStartHandler, false);
 
-        $WINDOW.on('resize', this.onResizeHandler);
+        WINDOW.addEventListener('resize', this.onResizeHandler, false);
 
         this.updateOffset();
 
@@ -428,7 +460,7 @@ define([
             this.container.clientWidth,
             this.container.clientHeight
         )) {
-            $(this.container).trigger('mouseenter');
+            this.onEnterHandler();
         }
 
         return this;
@@ -455,13 +487,12 @@ define([
 
         this.isActive = false;
 
-        $(this.container)
-            .off('mouseenter', this.onEnterHandler)
-            .off('touchstart', this.onEnterHandler)
-            .off('touchstart', this.onTouchStartHandler)
-            .off('mouseleave', this.onExitHandler);
+        this.container.removeEventListener('mouseover', this.onMouseEnterMouseLeaveHandler, false);
+        this.container.removeEventListener('mouseout', this.onMouseEnterMouseLeaveHandler, false);
+        this.container.removeEventListener('touchstart', this.onEnterHandler, false);
+        this.container.removeEventListener('touchstart', this.onTouchStartHandler, false);
 
-        $WINDOW.off('resize', this.onResizeHandler);
+        WINDOW.removeEventListener('resize', this.onResizeHandler, false);
 
         return this;
     };
@@ -480,10 +511,9 @@ define([
 
         this.enabled = true;
 
-        $(this.container)
-            .on('mousemove', this.onMoveHandler)
-            .on('mousedown', this.onDownHandler)
-            .on('click', this.onClickHandler);
+        this.container.addEventListener('mousemove', this.onMoveHandler, false);
+        this.container.addEventListener('mousedown', this.onDownHandler, false);
+        this.container.addEventListener('click', this.onClickHandler, false);
 
         return this;
     };
@@ -502,10 +532,9 @@ define([
 
         this.enabled = false;
 
-        $(this.container)
-            .off('mousemove', this.onMoveHandler)
-            .off('mousedown', this.onDownHandler)
-            .off('click', this.onClickHandler);
+        this.container.removeEventListener('mousemove', this.onMoveHandler, false);
+        this.container.removeEventListener('mousedown', this.onDownHandler, false);
+        this.container.removeEventListener('click', this.onClickHandler, false);
 
         EventBus.trigger(Input.DISABLE + this.namespace, this.mouse);
 
@@ -526,19 +555,17 @@ define([
 
         Input.CURRENTLY_DRAGGING = this.isDragging = true;
 
-        $(this.container).off('mousemove', this.onMoveHandler);
+        this.container.removeEventListener('mousemove', this.onMoveHandler, false);
 
         // Mouse events must be bound to window because
         // body may not be the full window height
-        $WINDOW
-            .on('mousemove', this.onMoveHandler)
-            .on('mouseup', this.onUpHandler);
+        WINDOW.addEventListener('mousemove', this.onMoveHandler, false);
+        WINDOW.addEventListener('mouseup', this.onUpHandler, false);
 
         // Touch events must be bound to body
         // to prevent scrolling on touchmove events
-        $BODY
-            .on('touchmove', this.onTouchMoveHandler)
-            .on('touchend', this.onTouchEndHandler);
+        BODY.addEventListener('touchmove', this.onTouchMoveHandler, false);
+        BODY.addEventListener('touchend', this.onTouchEndHandler, false);
 
         return this;
     };
@@ -557,18 +584,16 @@ define([
 
         Input.CURRENTLY_DRAGGING = this.isDragging = false;
 
-        $WINDOW
-            .off('mousemove', this.onMoveHandler)
-            .off('mouseup', this.onUpHandler);
+        WINDOW.removeEventListener('mousemove', this.onMoveHandler, false);
+        WINDOW.removeEventListener('mouseup', this.onUpHandler, false);
 
-        $BODY
-            .off('touchmove', this.onTouchMoveHandler)
-            .off('touchend', this.onTouchEndHandler);
+        BODY.removeEventListener('touchmove', this.onTouchMoveHandler, false);
+        BODY.removeEventListener('touchend', this.onTouchEndHandler, false);
 
         // If we are still over the container, rebind the mousemove event.
         // Otherwise, call the onExit handler
         if (this.isMouseOver) {
-            $(this.container).on('mousemove', this.onMoveHandler);
+            this.container.addEventListener('mousemove', this.onMoveHandler, false);
         } else {
             this.onExit();
         }
@@ -646,8 +671,8 @@ define([
      * @since 1.4
      */
     Input.prototype.onTouchMove = function(event) {
-        this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
-        this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+        this.mouse.x = event.touches[0].pageX - this.containerOffset.left;
+        this.mouse.y = event.touches[0].pageY - this.containerOffset.top;
 
         // Prevent body from scrolling
         event.preventDefault();
@@ -680,8 +705,8 @@ define([
     Input.prototype.onTouchStart = function(event) {
         this.updateOffset();
 
-        this.mouse.x = event.originalEvent.touches[0].pageX - this.containerOffset.left;
-        this.mouse.y = event.originalEvent.touches[0].pageY - this.containerOffset.top;
+        this.mouse.x = event.touches[0].pageX - this.containerOffset.left;
+        this.mouse.y = event.touches[0].pageY - this.containerOffset.top;
 
         EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
 
