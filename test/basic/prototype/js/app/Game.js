@@ -42,7 +42,7 @@ define([
         //         rect.setNeedsUpdate();
         
         // rect.setRotation(Math.PI / 2);
-            group.addChild(rect);
+            group.appendChild(rect);
         }
         
         rect.isInteractive = true;

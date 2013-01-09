@@ -43,7 +43,7 @@ define([
         //x, y, theta, radialWidth, maxRadius, numberOfSections
         for (; i < length; i++) {
             slice = new SliceView(0, 0, theta, radialWidth, this.radius);
-            this.addChild(slice);
+            this.appendChild(slice);
             theta = theta + radialWidth;
         }
     };

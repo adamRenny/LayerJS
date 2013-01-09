@@ -33,7 +33,7 @@ define([
     
     Emitter.prototype.emit = function() {
         var particle = new Particle(Math.random() * this.unscaledWidth, Math.random() * this.unscaledHeight, 20, 20);
-        this.addChild(particle);
+        this.appendChild(particle);
     };
     
     Emitter.prototype.update = function(elapsed) {

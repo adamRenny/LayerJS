@@ -39,7 +39,7 @@ define([
                 firstRect = rect;
             }
             
-            group.addChild(rect);
+            group.appendChild(rect);
         }
         
         scene.addChild(group);

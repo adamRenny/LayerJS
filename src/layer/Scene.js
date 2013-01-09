@@ -344,7 +344,7 @@ define([
      */
     Scene.prototype.addChildToLayerByIndex = function(child, layerIndex) {
         var layer = this.stage.getLayerByIndex(layerIndex);
-        layer.root.addChild(child);
+        layer.root.appendChild(child);
         
         return this;
     };
@@ -374,7 +374,7 @@ define([
      */
     Scene.prototype.addChildToLayerByName = function(child, layerName) {
         var layer = this.stage.getLayerByName(layerName);
-        layer.root.addChild(child);
+        layer.root.appendChild(child);
         
         return this;
     };
