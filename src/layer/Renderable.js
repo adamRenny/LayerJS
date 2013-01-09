@@ -24,7 +24,7 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt
- * @version 1.6
+ * @version 1.7
  */
 define([
     'lib/gl-matrix',
@@ -34,9 +34,9 @@ define([
     glMatrix,
     Geometry,
     RenderMediator
-) {
+    ) {
     'use strict';
-    
+
     /**
      * Locally cached Math.round function
      * Optimization step to decrease the access to Math.round
@@ -47,7 +47,7 @@ define([
      * @since 1.0
      */
     var round = Math.round;
-    
+
     /**
      * Locally cached glMatrix.mat3 object
      * Optimization step to decrease the access to mat3
@@ -57,7 +57,7 @@ define([
      * @since 1.0
      */
     var mat3 = glMatrix.mat3;
-    
+
     /**
      * Locally cached glMatrix.vec2 object
      * Optimization step to decrease the access to vec2
@@ -67,7 +67,7 @@ define([
      * @since 1.0
      */
     var vec2 = glMatrix.vec2;
-    
+
     /**
      * Reused cache version of the 2d vector
      * Used to calculate vector calculations without the need
@@ -80,7 +80,7 @@ define([
      * @since 1.0
      */
     var vector = [0, 0];
-    
+
     /**
      * Reused cache version of a 3x3 matrix
      * Used to calculate matrix calculations without the need
@@ -93,7 +93,7 @@ define([
      * @since 1.0
      */
     var matrix = mat3.identity();
-    
+
     /**
      * Reused cache version of the 3x3 matrix
      * Used to calculate matrix calculations without the need
@@ -117,7 +117,7 @@ define([
      * @since 1.5
      */
     var EMPTY_NAMESPACE = '';
-    
+
     /**
      * Renderable Constructor
      *
@@ -143,7 +143,7 @@ define([
             this.init(x, y, width, height);
         }
     };
-    
+
     /**
      * Initializes the Renderable by setting up the spatial properties
      * Sets up the center offset, position, size, scale, rotation, and transform
@@ -157,6 +157,25 @@ define([
      */
     Renderable.prototype.init = function(x, y, width, height) {
         /**
+         * Position in 2d space for the X position unscaled
+         *
+         * @default 0
+         * @name Renderable#unscaledX
+         * @type {number}
+         * @since 1.7
+         */
+        this.unscaledX = x || 0;
+
+        /**
+         * Position in 2d space for the Y position unscaled
+         *
+         * @default 0
+         * @name Renderable#unscaledY
+         * @type {number}
+         * @since 1.7
+         */
+        this.unscaledY = y || 0;
+        /**
          * Position in 2d space for the X position
          *
          * @default 0
@@ -164,8 +183,8 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.x = x || 0;
-        
+        this.x = this.unscaledX;
+
         /**
          * Position in 2d space for the Y position
          *
@@ -174,8 +193,8 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.y = y || 0;
-        
+        this.y = this.unscaledY;
+
         /**
          * Size in 2d space of width without any scale
          *
@@ -185,7 +204,7 @@ define([
          * @since 1.0
          */
         this.unscaledWidth = width || 0;
-        
+
         /**
          * Size in 2d space of height without any scale
          *
@@ -195,7 +214,7 @@ define([
          * @since 1.0
          */
         this.unscaledHeight = height || 0;
-        
+
         /**
          * Fully scaled size in 2d space of width
          * Read-only Value
@@ -206,7 +225,7 @@ define([
          * @since 1.0
          */
         this.width = this.unscaledWidth;
-        
+
         /**
          * Fully scaled size in 2d space of height
          * Read-only Value
@@ -217,7 +236,7 @@ define([
          * @since 1.0
          */
         this.height = this.unscaledHeight;
-        
+
         /**
          * Scale of the renderable in the x axis
          *
@@ -227,7 +246,7 @@ define([
          * @since 1.0
          */
         this.scaleX = 1;
-        
+
         /**
          * Scale of the renderable in the y axis
          *
@@ -237,7 +256,7 @@ define([
          * @since 1.0
          */
         this.scaleY = 1;
-        
+
         /**
          * Rotation of the renderable in radians
          *
@@ -247,7 +266,7 @@ define([
          * @since 1.0
          */
         this.rotation = 0;
-        
+
         /**
          * Spatial 3x3 matrix transform of the renderable
          * Intended to be an affine transform
@@ -258,7 +277,7 @@ define([
          * @since 1.0
          */
         this.transform = mat3.identity();
-        
+
         /**
          * Normalized center position in x
          * Value should be within the range [0, 1]
@@ -269,7 +288,7 @@ define([
          * @since 1.0
          */
         this.centerOffsetX = 0.5;
-        
+
         /**
          * Normalized center position in y
          * Value should be within the range [0, 1]
@@ -280,7 +299,7 @@ define([
          * @since 1.0
          */
         this.centerOffsetY = 0.5;
-        
+
         /**
          * Actual unscaled offset of the X position
          * Read-only Value
@@ -291,7 +310,7 @@ define([
          * @since 1.0
          */
         this.unscaledOffsetX = this.unscaledWidth * this.centerOffsetX;
-        
+
         /**
          * Actual unscaled offset of the Y position
          * Read-only Value
@@ -302,7 +321,7 @@ define([
          * @since 1.0
          */
         this.unscaledOffsetY = this.unscaledHeight * this.centerOffsetY;
-        
+
         /**
          * Renderable's parent's transform
          * Reference only
@@ -324,7 +343,7 @@ define([
          * @since 1.5
          */
         this.sceneNamespace = EMPTY_NAMESPACE;
-        
+
         /**
          * Needs Update validation flag
          * Dirty flag for whether the renderable requires an update to the transform
@@ -335,7 +354,7 @@ define([
          * @since 1.0
          */
         this.needsUpdate = true;
-        
+
         /**
          * Is interactive flag
          * When it is inactive, the hit detection will disregard the renderable
@@ -346,7 +365,7 @@ define([
          * @since 1.2
          */
         this.isInteractive = true;
-        
+
         /**
          * Flag for whether the renderable is a leaf node
          * When it is a leaf node, hit stacks will not perform a DFS
@@ -368,7 +387,7 @@ define([
     Renderable.prototype.destroy = function() {
         return this;
     };
-    
+
     /**
      * Sets the parent transform reference
      * Requests the renderable to update the transform
@@ -380,7 +399,7 @@ define([
     Renderable.prototype.setParentTransform = function(transform) {
         this.parentTransform = transform;
         this.needsUpdate = true;
-        
+
         return this;
     };
 
@@ -398,7 +417,7 @@ define([
 
         return this;
     };
-    
+
     /**
      * Sets the center point to rotate from
      * Requests the renderable to update
@@ -414,7 +433,7 @@ define([
         this.unscaledOffsetX = this.unscaledWidth * this.centerOffsetX;
         this.unscaledOffsetY = this.unscaledHeight * this.centerOffsetY;
         this.setNeedsUpdate();
-        
+
         return this;
     };
 
@@ -443,10 +462,10 @@ define([
     Renderable.prototype.setNeedsUpdate = function() {
         this.needsUpdate = true;
         this.setNeedsRender();
-        
+
         return this;
     };
-    
+
     /**
      * Updates the transform based on the position, scale, and rotation of the object
      * Calculates the transform from the parent if it exists, identify if otherwise
@@ -459,18 +478,18 @@ define([
         if (this.parentTransform) {
             mat3.set(this.parentTransform, this.transform);
             matrix = this.transform;
-        // Sets up the base transform with an identity
+            // Sets up the base transform with an identity
         } else {
             matrix = mat3.identity(this.transform);
         }
-        
-        // Only setup the translate if x or y is set
-        if (this.x !== 0 || this.y !== 0) {
-            vector[0] = this.x;
-            vector[1] = this.y;
+
+        // Only setup the translate if unscaledX or unscaledY is set
+        if (this.unscaledX !== 0 || this.unscaledY !== 0) {
+            vector[0] = this.unscaledX;
+            vector[1] = this.unscaledY;
             mat3.translate(matrix, vector);
         }
-        
+
         // Only setup the scale if the scaleX or scaleY is set
         if (this.scaleX !== 1 || this.scaleY !== 1) {
             vector[0] = this.unscaledOffsetX;
@@ -485,7 +504,10 @@ define([
             vector[1] = -this.unscaledOffsetY;
             mat3.translate(matrix, vector);
         }
-        
+
+        this.x = this.unscaledX - (this.unscaledOffsetX * (this.scaleX - 1));
+        this.y = this.unscaledY - (this.unscaledOffsetY * (this.scaleY - 1));
+
         // Only setup the rotation if the rotation is non-zero
         if (this.rotation) {
             vector[0] = this.unscaledOffsetX;
@@ -496,10 +518,10 @@ define([
             vector[1] = -vector[1];
             mat3.translate(matrix, vector);
         }
-        
+
         this.needsUpdate = false;
     };
-    
+
     /**
      * Converts the passed in vector to local coordinates
      *
@@ -512,18 +534,18 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        
+
         mat3.identity(matrixBuffer);
         mat3.multiplyVec2(mat3.inverse(this.transform, matrixBuffer), vec);
-        
+
         if (shouldRound) {
             vec[0] = round(vec[0]);
             vec[1] = round(vec[1]);
         }
-        
+
         return vec;
     };
-    
+
     /**
      * Converts the passed in vector to world coordinates
      *
@@ -536,16 +558,16 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        
+
         mat3.multiplyVec2(this.transform, vec);
         if (shouldRound) {
             vec[0] = round(vec[0]);
             vec[1] = round(vec[1]);
         }
-        
+
         return vec;
     };
-    
+
     /**
      * Tests the hit to see if it exists within the bounding box of this renderable
      * Uses a rectangle test method
@@ -558,12 +580,12 @@ define([
     Renderable.prototype.hitTest = function(x, y) {
         vector[0] = x;
         vector[1] = y;
-        
+
         vector = this.toLocalCoordinates(vector, true);
-        
+
         return Geometry.isPointInRect(vector[0], vector[1], 0, 0, this.unscaledWidth, this.unscaledHeight);
     };
-    
+
     /**
      * Returns the first child hit target for the given position
      * If there is no child, returns null
@@ -576,7 +598,7 @@ define([
     Renderable.prototype.getChildHitTarget = function(x, y) {
         return null;
     };
-    
+
     /**
      * Finds the next child hit target if it exists
      * If it doesn't exist, returns null
@@ -590,7 +612,7 @@ define([
     Renderable.prototype.getNextChildHitTarget = function(x, y, sibling) {
         return null;
     };
-    
+
     /**
      * Returns the target for the given position
      * If there is no target, returns this
@@ -603,7 +625,7 @@ define([
     Renderable.prototype.getHitTarget = function(x, y) {
         return this;
     };
-    
+
     /**
      * Applies the transform to the context
      * Bypasses traditional save, restore methods and uses a setTransform instead
@@ -615,7 +637,7 @@ define([
         matrix = this.transform;
         context.setTransform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
     };
-    
+
     /**
      * Sets up the update transform stack and applies the transform
      * Updates the transform if necessary
@@ -627,7 +649,7 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        
+
         this.applyTransform(context);
     };
 
