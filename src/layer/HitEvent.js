@@ -234,4 +234,4 @@ define(function() {
     HitEvent.MOUSE_OUT = 'mouseout';
     
     return HitEvent;
-})
+});

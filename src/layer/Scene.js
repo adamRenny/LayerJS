@@ -270,6 +270,27 @@ define([
 
         return this;
     };
+
+    /**
+     * Destroy scene, call destroy on each layer, and clear out the container
+     *
+     * @param {Boolean} doNotClearContainer If true, this.container will not be emptied
+     * @return {Scene}
+     * @since 1.6
+     */
+    Scene.prototype.destroy = function(doNotClearContainer) {
+        this.input.destroy();
+
+        this.stage.forEachLayer(function(layer) {
+            layer.destroy();
+        });
+
+        if (doNotClearContainer !== true) {
+            this.container.innerHTML = '';
+        }
+
+        return this.disable();
+    };
     
     /**
      * Adds a child to the layer at index 0 if no target is defined

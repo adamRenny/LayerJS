@@ -192,6 +192,18 @@ define([
 
         return this;
     };
+
+    /**
+     * Destroy Layer
+     *
+     * @return {Layer}
+     * @since 1.3
+     */
+    Layer.prototype.destroy = function() {
+        this.root.destroy();
+
+        return this;
+    };
     
     /**
      * Gets the layer's canvas element

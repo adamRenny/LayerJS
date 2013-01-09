@@ -24,8 +24,8 @@ define([
         });
 
         afterEach(function() {
+            scene.destroy();
             scene = null;
-            viewport.innerHTML = '';
         });
 
         it('will produce a DOM-level rendering exception without a supplied valid width', function() {

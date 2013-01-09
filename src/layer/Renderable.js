@@ -24,7 +24,7 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt
- * @version 1.5
+ * @version 1.6
  */
 define([
     'lib/gl-matrix',
@@ -357,6 +357,16 @@ define([
          * @since 1.3
          */
         this.isLeafNode = true;
+    };
+
+    /**
+     * Destroys the renderable
+     *
+     * @returns {Renderable}
+     * @since 1.6
+     */
+    Renderable.prototype.destroy = function() {
+        return this;
     };
     
     /**

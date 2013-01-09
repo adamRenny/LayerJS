@@ -177,4 +177,4 @@ define(function() {
     };
     
     return Geometry;
-})
+});
