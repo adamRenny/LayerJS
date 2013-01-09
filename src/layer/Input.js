@@ -515,7 +515,7 @@ define([
         this.container.addEventListener('mousedown', this.onDownHandler, false);
         this.container.addEventListener('click', this.onClickHandler, false);
 
-        return this;
+        return this.updateOffset();
     };
 
     /**
@@ -744,9 +744,9 @@ define([
      * @since 1.1.1
      */
     Input.prototype.onEnter = function(event) {
+        this.isMouseOver = true;
         if (!Input.CURRENTLY_DRAGGING) {
-            this.isMouseOver = true;
-            this.updateOffset().enable();
+            this.enable();
         }
     };
 
