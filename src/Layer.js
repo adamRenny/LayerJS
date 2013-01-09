@@ -27,8 +27,6 @@ require([
 	PolarRenderable,
 	PolarRenderableGroup
 ) {
-	'use strict';
-
 	var layer = {};
 	
 	layer.Geometry = Geometry;
@@ -49,4 +47,4 @@ require([
 	if (root !== null) {
 		root.layer = layer;
 	}
-});
+}, undefined, true);
