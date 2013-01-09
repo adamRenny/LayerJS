@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt 
- * @version 1.5
+ * @version 1.6
  */
 define([
     'layer/Renderable',
@@ -158,9 +158,27 @@ define([
     };
 
     /**
+     * Destroy RenderableGroup and call destroy on children
+     *
+     * @return {RenderableGroup}
+     * @since 1.6
+     */
+    RenderableGroup.prototype.destroy = function() {
+        var i = 0;
+        var children = this.children;
+        var length = children.length;
+
+        for (; i < length; i++) {
+            children[i].destroy();
+        }
+
+        return this;
+    };
+
+    /**
      * Sets the scene namespace reference normally and pushes the namespace to its children
      *
-     * @param {string} namespace Scene namespace that the renderable is a part of
+     * @param {string} sceneNamespace Scene namespace that the renderable is a part of
      * @returns {Renderable}
      * @since 1.4
      */

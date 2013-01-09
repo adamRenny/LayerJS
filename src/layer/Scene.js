@@ -24,7 +24,7 @@
  *
  * Scene Module Definition
  * @author Adam Ranfelt
- * @version 1.5
+ * @version 1.6
  */
 define([
     'layer/Stage',
@@ -249,6 +249,27 @@ define([
         EventBus.off(Input.DISABLE + sceneNamespace, this.onInputDisableHandler);
 
         return this;
+    };
+
+    /**
+     * Destroy scene, call destroy on each layer, and clear out the container
+     *
+     * @param {Boolean} doNotClearContainer If true, this.container will not be emptied
+     * @return {Scene}
+     * @since 1.6
+     */
+    Scene.prototype.destroy = function(doNotClearContainer) {
+        this.input.deactivate();
+
+        this.stage.forEachLayer(function(layer) {
+            layer.destroy();
+        });
+
+        if (doNotClearContainer !== true) {
+            this.container.innerHTML = '';
+        }
+
+        return this.disable();
     };
     
     /**

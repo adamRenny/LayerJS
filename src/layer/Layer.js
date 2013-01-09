@@ -24,7 +24,7 @@
  *
  * Layer Module Definition
  * @author Adam Ranfelt
- * @version 1.2
+ * @version 1.3
  */
 define([
     'layer/RenderableGroup'
@@ -152,6 +152,18 @@ define([
         this.root = new RenderableGroup(0, 0, this.width, this.height);
         this.root.setSceneNamespace(this.sceneNamespace);
         
+        return this;
+    };
+
+    /**
+     * Destroy Layer
+     *
+     * @return {Layer}
+     * @since 1.3
+     */
+    Layer.prototype.destroy = function() {
+        this.root.destroy();
+
         return this;
     };
     
