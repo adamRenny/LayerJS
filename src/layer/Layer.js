@@ -24,7 +24,7 @@
  *
  * Layer Module Definition
  * @author Adam Ranfelt
- * @version 1.2
+ * @version 1.4
  */
 define([
     'layer/RenderableGroup'
@@ -32,6 +32,30 @@ define([
     RenderableGroup
 ) {
     'use strict';
+
+    /**
+     * Canvas css position value
+     *
+     * @type {String}
+     * @static
+     */
+    var CANVAS_POSITION = 'absolute';
+
+    /**
+     * Canvas css top value
+     *
+     * @type {String}
+     * @static
+     */
+    var CANVAS_TOP = '0px';
+
+    /**
+     * Canvas css left value
+     *
+     * @type {String}
+     * @static
+     */
+    var CANVAS_LEFT = '0px';
     
     /**
      * Layer ID Prefix
@@ -152,6 +176,20 @@ define([
         this.root = new RenderableGroup(0, 0, this.width, this.height);
         this.root.setSceneNamespace(this.sceneNamespace);
         
+        return this.layout();
+    };
+
+    /**
+     * Apply css properties to canvas
+     *
+     * @return {Layer}
+     * @since 1.4
+     */
+    Layer.prototype.layout = function() {
+        this.canvas.style.position = CANVAS_POSITION;
+        this.canvas.style.top = CANVAS_TOP;
+        this.canvas.style.left = CANVAS_LEFT;
+
         return this;
     };
     
