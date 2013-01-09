@@ -4,7 +4,6 @@ require([
 	'layer/RunLoop',
 	'layer/Input',
 	'layer/RenderMediator',
-	'layer/RenderRequest',
 	'layer/Layer',
 	'layer/Stage',
 	'layer/Scene',
@@ -19,7 +18,6 @@ require([
 	RunLoop,
 	Input,
 	RenderMediator,
-	RenderRequest,
 	Layer,
 	Stage,
 	Scene,
@@ -38,7 +36,6 @@ require([
 	layer.RunLoop = RunLoop;
 	layer.Input = Input;
 	layer.RenderMediator = RenderMediator;
-	layer.RenderRequest = RenderRequest;
 	layer.Layer = Layer;
 	layer.Stage = Stage;
 	layer.Scene = Scene;
@@ -48,5 +45,8 @@ require([
 	layer.PolarRenderable = PolarRenderable;
 	layer.PolarRenderableGroup = PolarRenderableGroup;
 
-	window.layer = layer;
+	// UMD Pattern used in conjunction with build.js's wrapper
+	if (root !== null) {
+		root.layer = layer;
+	}
 });
