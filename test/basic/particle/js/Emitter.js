@@ -44,22 +44,22 @@ define([
             particle.update(elapsed);
             needsUpdate = false;
             if (particle.x > this.unscaledWidth) {
-                particle.unscaledX = -particle.unscaledWidth;
+                particle.x = -particle.unscaledWidth;
                 needsUpdate = true;
             }
             
             if (particle.y > this.unscaledHeight) {
-                particle.unscaledY = -particle.unscaledHeight;
+                particle.y = -particle.unscaledHeight;
                 needsUpdate = true;
             }
             
-            if (particle.y < -particle.height) {
-                particle.unscaledY = this.unscaledHeight;
+            if (particle.y < -particle.unscaledHeight) {
+                particle.y = this.unscaledHeight;
                 needsUpdate = true;
             }
             
-            if (particle.x < -particle.width) {
-                particle.unscaledX = this.unscaledWidth;
+            if (particle.x < -particle.unscaledWidth) {
+                particle.x = this.unscaledWidth;
                 needsUpdate = true;
             }
             

@@ -48,8 +48,8 @@ define([
 
     Box.prototype.onMouseMove = function(event) {
         if (this.dragging) {
-            this.unscaledX = event.x - this.startX;
-            this.unscaledY = event.y - this.startY;
+            this.x = event.x - this.startX;
+            this.y = event.y - this.startY;
             this.setNeedsUpdate();
         }
     };
@@ -70,23 +70,23 @@ define([
 
     Box.prototype.onMouseDown = function(event) {
         this.dragging = true;
-        this.startX = event.x - this.unscaledX;
-        this.startY = event.y - this.unscaledY;
+        this.startX = event.x - this.x;
+        this.startY = event.y - this.y;
     };
 
     Box.prototype.onMouseUp = function(event) {
         this.dragging = false;
 
-        if (this.unscaledX > this.sceneWidth - this.width * 0.2) {
-            this.unscaledX = this.sceneWidth - this.width;
-        } else if (this.unscaledX < -this.width * 0.8) {
-            this.unscaledX = 0;
+        if (this.x > this.sceneWidth - this.width * 0.2) {
+            this.x = this.sceneWidth - this.width;
+        } else if (this.x < -this.width * 0.8) {
+            this.x = 0;
         }
 
-        if (this.unscaledY > this.sceneHeight - this.height * 0.2) {
-            this.unscaledY = this.sceneHeight - this.height;
+        if (this.y > this.sceneHeight - this.height * 0.2) {
+            this.y = this.sceneHeight - this.height;
         } else if (this.y < -this.height * 0.8) {
-            this.unscaledY = 0;
+            this.y = 0;
         }
 
         this.setNeedsUpdate();

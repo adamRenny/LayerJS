@@ -36,10 +36,7 @@ define([
         );
 
         this.scene.addChild(this.box, 0);
-
-        this.$x = $('#x');
-        this.$y = $('#y');
-
+        
         return this.setupHandlers().enable();
     };
 
@@ -48,7 +45,6 @@ define([
         this.renderCycle = this.render.bind(this);
         this.onScaleUpHandler = this.onScaleUp.bind(this);
         this.onScaleDownHandler = this.onScaleDown.bind(this);
-        this.onChangeHandler = this.onChange.bind(this);
 
         return this;
     };
@@ -60,8 +56,6 @@ define([
 
         $('#scale-up').on('click', this.onScaleUpHandler);
         $('#scale-down').on('click', this.onScaleDownHandler);
-        this.$x.on('change', this.onChangeHandler);
-        this.$y.on('change', this.onChangeHandler);
 
         return this;
     };
@@ -73,8 +67,6 @@ define([
 
         $('#scale-up').off('click', this.onScaleUpHandler);
         $('#scale-down').off('click', this.onScaleDownHandler);
-        this.$x.off('change', this.onChangeHandler);
-        this.$y.off('change', this.onChangeHandler);
 
         return this;
     };
@@ -97,13 +89,6 @@ define([
     
     Visualization.prototype.render = function() {
         this.scene.render();
-    };
-
-    Visualization.prototype.onChange = function() {
-        var x = parseFloat(this.$x.val());
-        var y = parseFloat(this.$y.val());
-
-        this.box.setCenterPoint(x, y);
     };
 
     Visualization.prototype.onScaleDown = function() {
