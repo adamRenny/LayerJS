@@ -259,7 +259,7 @@ define([
      * @since 1.6
      */
     Scene.prototype.destroy = function(doNotClearContainer) {
-        this.input.deactivate();
+        this.input.destroy();
 
         this.stage.forEachLayer(function(layer) {
             layer.destroy();

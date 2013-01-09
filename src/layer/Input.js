@@ -25,7 +25,7 @@
  * Input Module Definition
  * @author Adam Ranfelt 
  * @author Aaron Gloege
- * @version 1.9
+ * @version 2.0
  */
 define([
     'layer/EventBus',
@@ -539,6 +539,15 @@ define([
         EventBus.trigger(Input.DISABLE + this.namespace, this.mouse);
 
         return this;
+    };
+
+    /**
+     * Destroy Input by calling deactivate
+     * @return {Input}
+     * @since 2.0
+     */
+    Input.prototype.destroy = function() {
+        return this.deactivate();
     };
 
     /**
