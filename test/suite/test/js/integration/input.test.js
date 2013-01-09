@@ -95,21 +95,23 @@ define([
         beforeEach(_beforeEach);
         afterEach(_afterEach);
 
-        it('will be active on mouseover', function() {
+        it('will be active on mouseover and will be inactive on mouseout', function() {
             $viewport.simulate('mouseover');
 
             expect(input.enabled).to.be(true);
-        });
 
-        it('will be inactive on mouseout', function() {
-            $viewport
-                .simulate('mouseover')
-                .simulate('mouseout');
+            $viewport.simulate('mouseout');
 
             expect(input.enabled).to.be(false);
         });
 
-        it('will be in drag mode on mousedown', function() {
+        it('will be inactive on mouseout (without mouseover)', function() {
+            $viewport.simulate('mouseout');
+
+            expect(input.enabled).to.be(false);
+        });
+
+        it('will be in drag mode on mousedown, on mouseout, and not be in drag mode on mouseup', function() {
             $viewport
                 .simulate('mouseover')
                 .simulate('mousedown', {
@@ -118,30 +120,16 @@ define([
                 });
 
             expect(input.isDragging).to.be(true);
-        });
 
-        it('will be in drag mode on mousedown and mouseout', function() {
             $viewport
-                .simulate('mouseover')
-                .simulate('mousedown', {
-                    x: _x(20),
-                    y: _y(20)
-                })
                 .simulate('mousemove', {
                     x: _x(-200),
                     y: _y(-220)
                 });
 
             expect(input.isDragging).to.be(true);
-        });
 
-        it('will not be in drag mode on mouseup', function() {
             $viewport
-                .simulate('mouseover')
-                .simulate('mousedown', {
-                    x: _x(20),
-                    y: _y(20)
-                })
                 .simulate('mouseup', {
                     x: _x(20),
                     y: _y(20)
@@ -150,7 +138,7 @@ define([
             expect(input.isDragging).to.be(false);
         });
 
-        it('will be active when dragging outside bounds', function() {
+        it('will be active when dragging outside bounds and still be considered as mouseover', function() {
             var start = 20;
             var end = width * 2;
             var delta = end - start;
@@ -169,26 +157,6 @@ define([
                 });
 
             expect(input.enabled).to.be(true);
-        });
-
-        it('will be mouse over when dragging outside bounds', function() {
-            var start = 20;
-            var end = width * 2;
-            var delta = end - start;
-            var step = 20;
-            $viewport
-                .simulate('mouseover')
-                .simulate('drag', {
-                    x: _x(start),
-                    y: _y(start),
-                    dx: delta,
-                    dy: delta,
-                    moves: end / step,
-                    step: function() {
-                        scene.render();
-                    }
-                });
-
             expect(input.isMouseOver).to.be(true);
         });
 
@@ -220,17 +188,6 @@ define([
 
         beforeEach(_beforeEach);
         afterEach(_afterEach);
-
-        it('onMouseOver will trigger when moused over', function() {
-            $viewport
-                .simulate('mouseover')
-                .simulate('mousemove', {
-                    x: _x(20),
-                    y: _y(20)
-                });
-
-            expect(renderable.isOver).to.be(true);
-        });
 
         it('onMouseOver will trigger when moused over', function() {
             $viewport
