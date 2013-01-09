@@ -447,6 +447,7 @@ define([
         this.container.addEventListener('mouseout', this.onMouseEnterMouseLeaveHandler, false);
         this.container.addEventListener('touchstart', this.onEnterHandler, false);
         this.container.addEventListener('touchstart', this.onTouchStartHandler, false);
+        this.container.addEventListener('touchend', this.onExitHandler, false);
 
         WINDOW.addEventListener('resize', this.onResizeHandler, false);
 
@@ -491,6 +492,7 @@ define([
         this.container.removeEventListener('mouseout', this.onMouseEnterMouseLeaveHandler, false);
         this.container.removeEventListener('touchstart', this.onEnterHandler, false);
         this.container.removeEventListener('touchstart', this.onTouchStartHandler, false);
+        this.container.removeEventListener('touchend', this.onExitHandler, false);
 
         WINDOW.removeEventListener('resize', this.onResizeHandler, false);
 
@@ -571,10 +573,15 @@ define([
         WINDOW.addEventListener('mousemove', this.onMoveHandler, false);
         WINDOW.addEventListener('mouseup', this.onUpHandler, false);
 
-        // Touch events must be bound to body
+        // Touch move event must be bound to body
         // to prevent scrolling on touchmove events
         BODY.addEventListener('touchmove', this.onTouchMoveHandler, false);
-        BODY.addEventListener('touchend', this.onTouchEndHandler, false);
+
+        // Remove onExitHandler handler so we can bind the onTouchEndHandler handler first
+        // This will ensure events will trigger in the correct order: onUp, onOut
+        this.container.removeEventListener('touchend', this.onExitHandler, false);
+        this.container.addEventListener('touchend', this.onTouchEndHandler, false);
+        this.container.addEventListener('touchend', this.onExitHandler, false);
 
         return this;
     };
@@ -597,7 +604,8 @@ define([
         WINDOW.removeEventListener('mouseup', this.onUpHandler, false);
 
         BODY.removeEventListener('touchmove', this.onTouchMoveHandler, false);
-        BODY.removeEventListener('touchend', this.onTouchEndHandler, false);
+        this.container.removeEventListener('touchend', this.onTouchEndHandler, false);
+        // No need to remove the exit handler here. Deactivate will handle that
 
         // If we are still over the container, rebind the mousemove event.
         // Otherwise, call the onExit handler

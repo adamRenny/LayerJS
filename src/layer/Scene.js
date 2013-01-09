@@ -585,6 +585,10 @@ define([
      */
     Scene.prototype.onDown = function(type, mouse) {
         var hitStack = this.getHitStack(mouse.x, mouse.y);
+        this.updateActiveTarget(hitStack, mouse.x, mouse.y);
+
+        this.activeMouse = mouse;
+
         if (hitStack.length > 0) {
             var event = new HitEvent(HitEvent.MOUSE_DOWN, mouse.x, mouse.y, hitStack, true);
         }
