@@ -24,7 +24,7 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt
- * @version 1.7
+ * @version 1.6
  */
 define([
     'lib/gl-matrix',
@@ -157,25 +157,6 @@ define([
      */
     Renderable.prototype.init = function(x, y, width, height) {
         /**
-         * Position in 2d space for the X position unscaled
-         *
-         * @default 0
-         * @name Renderable#unscaledX
-         * @type {number}
-         * @since 1.7
-         */
-        this.unscaledX = x || 0;
-
-        /**
-         * Position in 2d space for the Y position unscaled
-         *
-         * @default 0
-         * @name Renderable#unscaledY
-         * @type {number}
-         * @since 1.7
-         */
-        this.unscaledY = y || 0;
-        /**
          * Position in 2d space for the X position
          *
          * @default 0
@@ -183,7 +164,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.x = this.unscaledX;
+        this.x = x || 0;
         
         /**
          * Position in 2d space for the Y position
@@ -193,7 +174,7 @@ define([
          * @type {number}
          * @since 1.0
          */
-        this.y = this.unscaledY;
+        this.y = y || 0;
         
         /**
          * Size in 2d space of width without any scale
@@ -483,10 +464,10 @@ define([
             matrix = mat3.identity(this.transform);
         }
         
-        // Only setup the translate if unscaledX or unscaledY is set
-        if (this.unscaledX !== 0 || this.unscaledY !== 0) {
-            vector[0] = this.unscaledX;
-            vector[1] = this.unscaledY;
+        // Only setup the translate if x or y is set
+        if (this.x !== 0 || this.y !== 0) {
+            vector[0] = this.x;
+            vector[1] = this.y;
             mat3.translate(matrix, vector);
         }
         
@@ -504,9 +485,6 @@ define([
             vector[1] = -this.unscaledOffsetY;
             mat3.translate(matrix, vector);
         }
-
-        this.x = this.unscaledX - (this.unscaledOffsetX * (this.scaleX - 1));
-        this.y = this.unscaledY - (this.unscaledOffsetY * (this.scaleY - 1));
         
         // Only setup the rotation if the rotation is non-zero
         if (this.rotation) {
