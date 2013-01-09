@@ -30,8 +30,8 @@ define([
     };
     
     Particle.prototype.update = function(elapsed) {
-        this.x = this.x + this.vx * elapsed;
-        this.y = this.y + this.vy * elapsed;
+        this.unscaledX = this.unscaledX + this.vx * elapsed;
+        this.unscaledY = this.unscaledY + this.vy * elapsed;
         this.setNeedsUpdate();
     };
     
