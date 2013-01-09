@@ -539,6 +539,7 @@ define([
         }
 
         this.activeTarget = null;
+        this.activeMouse = null;
     };
     
     /**
@@ -639,7 +640,7 @@ define([
      * @since 1.1
      */
     Scene.prototype.update = function() {
-        if (!this.isEnabled) {
+        if (!this.input.isEnabled) {
             return;
         }
         
