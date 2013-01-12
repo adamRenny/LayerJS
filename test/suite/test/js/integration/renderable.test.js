@@ -25,6 +25,7 @@ define([
 
         afterEach(function() {
             scene.destroy();
+            scene.input.deactivate();
             scene = null;
         });
 
