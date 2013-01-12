@@ -697,8 +697,9 @@ define([
      * @since 1.4
      */
     Input.prototype.onTouchEnd = function(event) {
-        // touchend does not return any x/y coordinates, so leave the
-        // mouse object as the last coordinates from onTouchMove or onTouchStart
+        this.mouse.x = event.changedTouches[0].pageX - this.containerOffset.left;
+        this.mouse.y = event.changedTouches[0].pageY - this.containerOffset.top;
+
         EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
 
         this.stopDragging();

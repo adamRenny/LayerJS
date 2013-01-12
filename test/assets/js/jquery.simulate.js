@@ -11,8 +11,9 @@
 
 ;(function( $, undefined ) {
 
-    var rkeyEvent = /^key/,
-        rmouseEvent = /^(?:mouse|contextmenu)|click/;
+    var rkeyEvent = /^key/i,
+        rmouseEvent = /^(?:mouse|contextmenu)|click/i,
+        rtouchEvent = /^touch/i;
 
     $.fn.simulate = function( type, options ) {
         return this.each(function() {
@@ -81,6 +82,10 @@
                 return this.keyEvent( type, options );
             }
 
+            if (rtouchEvent.test(type)) {
+                return this.touchEvent(type, options);
+            }
+
             if ( rmouseEvent.test( type ) ) {
                 return this.mouseEvent( type, options );
             }
@@ -93,8 +98,10 @@
                 cancelable: (type !== "mousemove"),
                 view: window,
                 detail: 0,
-                x: 0,
-                y: 0,
+                pageX: 0,
+                pageY: 0,
+                screenX: 0,
+                screenY: 0,
                 ctrlKey: false,
                 altKey: false,
                 shiftKey: false,
@@ -107,7 +114,7 @@
                 event = document.createEvent( "MouseEvents" );
                 event.initMouseEvent( type, options.bubbles, options.cancelable,
                     options.view, options.detail,
-                    options.screenX, options.screenY, options.x, options.y,
+                    options.screenX, options.screenY, options.pageX, options.pageY,
                     options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
                     options.button, options.relatedTarget || document.body.parentNode );
 
@@ -121,14 +128,14 @@
 
                     Object.defineProperty( event, "pageX", {
                         get: function() {
-                            return options.x +
+                            return options.pageX +
                                 ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) -
                                 ( doc && doc.clientLeft || body && body.clientLeft || 0 );
                         }
                     });
                     Object.defineProperty( event, "pageY", {
                         get: function() {
-                            return options.y +
+                            return options.pageY +
                                 ( doc && doc.scrollTop || body && body.scrollTop || 0 ) -
                                 ( doc && doc.clientTop || body && body.clientTop || 0 );
                         }
@@ -147,6 +154,16 @@
                 }[ event.button ] || event.button;
             }
 
+            return event;
+        },
+
+        touchEvent: function( type, options ) {
+            var event = this.mouseEvent(type, options);
+            event.changedTouches = [event];
+            event.touches = [];
+            if (type !== 'touchend') {
+                event.touches.push(event);
+            }
             return event;
         },
 
@@ -268,21 +285,23 @@
             var i = 0,
                 target = this.target,
                 options = this.options,
-                x = options.x || 0,
-                y = options.y || 0,
+                x = options.pageX || 0,
+                y = options.pageY || 0,
                 dx = options.dx || 0,
                 dy = options.dy || 0,
                 moves = options.moves || 10,
-                coord = { x: x, y: y };
+                xStep = dx / moves,
+                yStep = dy / moves,
+                coord = { pageX: x, pageY: y };
 
             this.simulateEvent( target, "mousedown", coord );
 
             for ( ; i < moves ; i++ ) {
-                x += dx / moves;
-                y += dy / moves;
+                x += xStep;
+                y += yStep;
 
-                coord.x = Math.round(x);
-                coord.y = Math.round(y);
+                coord.pageX = Math.round(x);
+                coord.pageY = Math.round(y);
 
                 this.simulateEvent( document, "mousemove", coord );
                 if (typeof options.step === 'function') {
@@ -291,6 +310,37 @@
             }
 
             this.simulateEvent( target, "mouseup", coord );
+        },
+        simulateTouchdrag: function() {
+            var i = 0,
+                target = $(this.target),
+                options = this.options,
+                x = options.pageX || 0,
+                y = options.pageY || 0,
+                dx = options.dx || 0,
+                dy = options.dy || 0,
+                moves = options.moves || 10,
+                xStep = dx / moves,
+                yStep = dy / moves,
+                coord = { pageX: x, pageY: y },
+                $document = $('body');
+
+            target.simulate("touchmove", coord);
+
+            for ( ; i < moves ; i++ ) {
+                x += xStep;
+                y += yStep;
+
+                coord.pageX = Math.round(x);
+                coord.pageY = Math.round(y);
+
+                target.simulate("touchmove", coord);
+                if (typeof options.step === 'function') {
+                    options.step(x, y);
+                }
+            }
+
+//            target.simulate("touchend", coord );
         }
     });
 

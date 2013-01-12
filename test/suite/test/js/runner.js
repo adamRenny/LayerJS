@@ -13,7 +13,8 @@ require([
         'unit/geometry/geometry.test',
         'unit/layer/renderable.test',
         'integration/renderable.test',
-        'integration/input.test'
+        'integration/input.mouse.test',
+        'integration/input.touch.test'
     ], function() {
         mocha.run();
     });
