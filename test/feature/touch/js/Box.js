@@ -47,6 +47,7 @@ define([
     };
 
     Box.prototype.onMouseMove = function(event) {
+        console.log('mousemove');
         if (this.dragging) {
             this.x = event.x - this.startX;
             this.y = event.y - this.startY;
@@ -69,12 +70,14 @@ define([
     };
 
     Box.prototype.onMouseDown = function(event) {
+        console.log('mousedown');
         this.dragging = true;
         this.startX = event.x - this.x;
         this.startY = event.y - this.y;
     };
 
     Box.prototype.onMouseUp = function(event) {
+        console.log('mouseup');
         this.dragging = false;
 
         if (this.x > this.sceneWidth - this.width * 0.2) {
@@ -90,6 +93,14 @@ define([
         }
 
         this.setNeedsUpdate();
+    };
+
+    Box.prototype.onMouseOver = function() {
+        console.log('over');
+    };
+
+    Box.prototype.onMouseOut = function() {
+        console.log('out');
     };
 
     return Box;
