@@ -28,31 +28,13 @@
  * @version 2.0
  */
 define([
-    'layer/EventBus',
+    'lib/EventBus',
     'layer/Geometry'
 ], function(
     EventBus,
     Geometry
 ) {
     'use strict';
-
-    /**
-     * Namespace ID
-     *
-     * @type {number}
-     * @private
-     * @since 1.2
-     */
-    var namespaceId = 0;
-
-    /**
-     * Namespace string
-     *
-     * @type {string}
-     * @constant
-     * @since 1.2
-     */
-    var NAMESPACE = '.input';
 
     /**
      * Page document object
@@ -177,18 +159,18 @@ define([
     /**
      * Mouse Enter/Leave handler to determine if use has moused over/out container
      *
-     * @param {Event} e
+     * @param {MouseEvent} event
      * @private
      * @since 1.9
      */
-    var _mouseEnterMouseLeaveHandler = function(e) {
-        var target = e.target;
-        var related = e.relatedTarget;
+    var _mouseEnterMouseLeaveHandler = function(event) {
+        var target = event.target;
+        var related = event.relatedTarget;
 
         // For mousenter/leave call the handler if related is outside the target.
         // NB: No relatedTarget if the mouse left/entered the browser window
         if (!related || (related !== target && !target.contains(related))) {
-            if (e.type === 'mouseover') {
+            if (event.type === 'mouseover') {
                 this.onEnter();
             } else {
                 this.onExit();
@@ -216,6 +198,9 @@ define([
         }
     };
 
+    Input.prototype = new EventBus();
+    Input.prototype.constructor = Input;
+
     /**
      * Initializes the input by attaching to the container
      * Only propagates content from the input if the input is active
@@ -231,12 +216,8 @@ define([
             throw new Error('ArgumentsError: container not defined for Input');
         }
 
-        /**
-         * Unique namespace
-         * @name Input#namespace
-         * @type {string}
-         */
-        this.namespace = NAMESPACE + (namespaceId++);
+        // Call the super constructor/init
+        EventBus.call(this);
 
         /**
          * HTML Container for the input
@@ -538,7 +519,7 @@ define([
         this.container.removeEventListener('mousedown', this.onDownHandler, false);
         this.container.removeEventListener('click', this.onClickHandler, false);
 
-        EventBus.trigger(Input.DISABLE + this.namespace, this.mouse);
+        this.trigger(Input.DISABLE, this.mouse);
 
         return this;
     };
@@ -564,7 +545,7 @@ define([
             return this;
         }
 
-        Input.CURRENTLY_DRAGGING = this.isDragging = true;
+        Input.isCurrentlyDragging = this.isDragging = true;
 
         this.container.removeEventListener('mousemove', this.onMoveHandler, false);
 
@@ -598,7 +579,7 @@ define([
             return this;
         }
 
-        Input.CURRENTLY_DRAGGING = this.isDragging = false;
+        Input.isCurrentlyDragging = this.isDragging = false;
 
         WINDOW.removeEventListener('mousemove', this.onMoveHandler, false);
         WINDOW.removeEventListener('mouseup', this.onUpHandler, false);
@@ -619,16 +600,6 @@ define([
     };
 
     /**
-     * Get unique namespace
-     *
-     * @return {string}
-     * @since 1.2
-     */
-    Input.prototype.getNamespace = function() {
-        return this.namespace;
-    };
-
-    /**
      * onMove Handler
      * Sets up the mouse state
      *
@@ -639,7 +610,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        EventBus.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
+        this.trigger(Input.MOUSE_MOVE, this.mouse);
     };
 
     /**
@@ -653,7 +624,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+        this.trigger(Input.MOUSE_UP, this.mouse);
 
         this.stopDragging();
     };
@@ -675,7 +646,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+        this.trigger(Input.MOUSE_DOWN, this.mouse);
 
         this.startDragging();
     };
@@ -694,7 +665,7 @@ define([
         // Prevent body from scrolling
         event.preventDefault();
 
-        EventBus.trigger(Input.MOUSE_MOVE + this.namespace, this.mouse);
+        this.trigger(Input.MOUSE_MOVE, this.mouse);
     };
 
     /**
@@ -707,7 +678,7 @@ define([
     Input.prototype.onTouchEnd = function(event) {
         // touchend does not return any x/y coordinates, so leave the
         // mouse object as the last coordinates from onTouchMove or onTouchStart
-        EventBus.trigger(Input.MOUSE_UP + this.namespace, this.mouse);
+        this.trigger(Input.MOUSE_UP, this.mouse);
 
         this.stopDragging();
     };
@@ -725,7 +696,7 @@ define([
         this.mouse.x = event.touches[0].pageX - this.containerOffset.left;
         this.mouse.y = event.touches[0].pageY - this.containerOffset.top;
 
-        EventBus.trigger(Input.MOUSE_DOWN + this.namespace, this.mouse);
+        this.trigger(Input.MOUSE_DOWN, this.mouse);
 
         this.startDragging();
     };
@@ -741,7 +712,7 @@ define([
         this.mouse.x = event.pageX - this.containerOffset.left;
         this.mouse.y = event.pageY - this.containerOffset.top;
 
-        EventBus.trigger(Input.CLICK + this.namespace, this.mouse);
+        this.trigger(Input.CLICK, this.mouse);
     };
 
     /**
@@ -753,7 +724,7 @@ define([
      */
     Input.prototype.onEnter = function(event) {
         this.isMouseOver = true;
-        if (!Input.CURRENTLY_DRAGGING) {
+        if (!Input.isCurrentlyDragging) {
             this.enable();
         }
     };
@@ -844,7 +815,7 @@ define([
      * @static
      * @since 1.6
      */
-    Input.CURRENTLY_DRAGGING = false;
+    Input.isCurrentlyDragging = false;
 
     return Input;
 });

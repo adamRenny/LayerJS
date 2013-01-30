@@ -30,14 +30,12 @@ define([
     'layer/Stage',
     'layer/Input',
     'layer/HitEvent',
-    'layer/RenderMediator',
-    'layer/EventBus'
+    'layer/RenderMediator'
 ], function(
     Stage,
     Input,
     HitEvent,
-    RenderMediator,
-    EventBus
+    RenderMediator
 ) {
     'use strict';
 
@@ -124,13 +122,9 @@ define([
         this.input = new Input(container);
 
         /**
-         * Scene Input controller namespace to associate directly with the scene
-         *
-         * @name Scene#sceneNamespace
-         * @type {string}
-         * @since 1.5
+         * TODO: Figure out what's happening with multiple scenes
          */
-        this.sceneNamespace = this.input.getNamespace();
+        this.renderMediator = new RenderMediator();
 
         this.setupStage(container, width, height);
         
@@ -174,8 +168,6 @@ define([
          * @since 1.4
          */
         this.isEnabled = false;
-
-        RenderMediator.setNeedsRender(this.sceneNamespace);
         
         return this.setupHandlers().layout().enable();
     };
@@ -202,7 +194,7 @@ define([
      * @since 1.3
      */
     Scene.prototype.setupStage = function(container, width, height) {
-        this.stage = new Stage(container, width, height, this.sceneNamespace);
+        this.stage = new Stage(container, width, height, this.renderMediator);
 
         return this;
     };
@@ -236,13 +228,11 @@ define([
         
         this.isEnabled = true;
         
-        var sceneNamespace = this.sceneNamespace;
-        
-        EventBus.on(Input.MOUSE_MOVE + sceneNamespace, this.onMoveHandler);
-        EventBus.on(Input.MOUSE_UP + sceneNamespace, this.onUpHandler);
-        EventBus.on(Input.MOUSE_DOWN + sceneNamespace, this.onDownHandler);
-        EventBus.on(Input.CLICK + sceneNamespace, this.onClickHandler);
-        EventBus.on(Input.DISABLE + sceneNamespace, this.onInputDisableHandler);
+        this.input.on(Input.MOUSE_MOVE, this.onMoveHandler);
+        this.input.on(Input.MOUSE_UP, this.onUpHandler);
+        this.input.on(Input.MOUSE_DOWN, this.onDownHandler);
+        this.input.on(Input.CLICK, this.onClickHandler);
+        this.input.on(Input.DISABLE, this.onInputDisableHandler);
 
         return this;
     };
@@ -260,13 +250,11 @@ define([
         
         this.isEnabled = false;
         
-        var sceneNamespace = this.sceneNamespace;
-        
-        EventBus.off(Input.MOUSE_MOVE + sceneNamespace, this.onMoveHandler);
-        EventBus.off(Input.MOUSE_UP + sceneNamespace, this.onUpHandler);
-        EventBus.off(Input.MOUSE_DOWN + sceneNamespace, this.onDownHandler);
-        EventBus.off(Input.CLICK + sceneNamespace, this.onClickHandler);
-        EventBus.off(Input.DISABLE + sceneNamespace, this.onInputDisableHandler);
+        this.input.off(Input.MOUSE_MOVE, this.onMoveHandler);
+        this.input.off(Input.MOUSE_UP, this.onUpHandler);
+        this.input.off(Input.MOUSE_DOWN, this.onDownHandler);
+        this.input.off(Input.CLICK, this.onClickHandler);
+        this.input.off(Input.DISABLE, this.onInputDisableHandler);
 
         return this;
     };
@@ -663,7 +651,7 @@ define([
      * @since 1.0
      */
     Scene.prototype.render = function() {
-        if (RenderMediator.getNeedsRender(this.sceneNamespace)) {
+        if (this.renderMediator.pullNeedsRender()) {
             this.stage.forEachLayer(_renderLayer);
         }
     };

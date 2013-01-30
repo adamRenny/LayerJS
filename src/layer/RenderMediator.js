@@ -22,16 +22,76 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Render Mediator, Render Request Singleton Module Definition
+ * Render Request Module Definition
  * @author Adam Ranfelt 
  * @version 1.0
  */
-define([
-	'layer/RenderRequest'
-], function(
-	RenderRequest
-) {
-	'use strict';
+define(function() {
+    'use strict';
+    
+    /**
+     * RenderMediator Constructor
+     *
+     * Mediator pattern to communicate from the Renderable infrastructure up to the scene
+     * Scenes and Renderables are related through a namespace string
+     * Uses a reset type of getter, where any retrieval of needsRender will result in resetting the render flag
+     * 
+     * @name RenderMediator
+     * @class Render Request mediator construct used to communicate between child and parent via string
+     * @constructor
+     * 
+     * @since 1.0
+     */
+    var RenderMediator = function() {
+        this.init();
+    };
 
-	return new RenderRequest();
+    /**
+     * Initializes the request structure and builds the base render stack
+     *
+     * @returns {RenderMediator}
+     * @since 1.0
+     */
+    RenderMediator.prototype.init = function() {
+        /**
+         * Flag to determine if the render stack needs a render
+         *
+         * @default false
+         * @name RenderMediator#needsRender
+         * @type {boolean}
+         * @since 1.0
+         */
+        this.needsRender = false;
+
+        return this;
+    };
+
+    /**
+     * Updates the flag for the given namespace to be true
+     *
+     * @param {string} sceneNamespace Namespace of the scene to mark as true
+     * @returns {RenderMediator}
+     * @since 1.0
+     */
+    RenderMediator.prototype.setNeedsRender = function(sceneNamespace) {
+        this.needsRender = true;
+
+        return this;
+    };
+
+    /**
+     * Gets the flag for the given namespace, resets the namespace afterwards
+     *
+     * @param {string} sceneNamespace Namespace of the scene to get the state of
+     * @returns {boolean}
+     * @since 1.0
+     */
+    RenderMediator.prototype.pullNeedsRender = function(sceneNamespace) {
+        var needsRender = this.needsRender;
+        this.needsRender = false;
+
+        return needsRender;
+    };
+
+    return RenderMediator;
 });

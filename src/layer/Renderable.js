@@ -24,16 +24,14 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt
- * @version 1.6
+ * @version 1.7
  */
 define([
     'lib/gl-matrix',
-    'layer/Geometry',
-    'layer/RenderMediator'
+    'layer/Geometry'
 ], function(
     glMatrix,
-    Geometry,
-    RenderMediator
+    Geometry
 ) {
     'use strict';
     
@@ -106,17 +104,6 @@ define([
      * @since 1.0
      */
     var matrixBuffer = mat3.identity();
-
-    /**
-     * Empty namespace placeholder
-     * Used for namespace checking
-     *
-     * @private
-     * @constant
-     * @type {string}
-     * @since 1.5
-     */
-    var EMPTY_NAMESPACE = '';
     
     /**
      * Renderable Constructor
@@ -316,14 +303,13 @@ define([
         this.parentTransform = null;
 
         /**
-         * Namespace used to identify which scene
-         * the renderable is a part of in the click stack
+         * Mediator used for render nodes to communicate to the Scene with render requests
          *
-         * @name Renderable#sceneNamespace
-         * @type {string}
-         * @since 1.5
+         * @name Renderable#renderMediator
+         * @type {RenderMediator}
+         * @since 1.7
          */
-        this.sceneNamespace = EMPTY_NAMESPACE;
+        this.renderMediator = null;
         
         /**
          * Needs Update validation flag
@@ -385,15 +371,15 @@ define([
     };
 
     /**
-     * Sets the scene namespace reference
-     * Pushes a render request to the RenderMediator to inform the scene to render
+     * Sets the scene's render mediator reference
+     * Pushes a render request to the renderMediator to inform the scene to render
      *
-     * @param {string} sceneNamespace Scene namespace that the renderable is a part of
+     * @param {RenderMediator} renderMediator Mediator used for render nodes to communicate to the Scene with render requests
      * @returns {Renderable}
-     * @since 1.5
+     * @since 1.7
      */
-    Renderable.prototype.setSceneNamespace = function(sceneNamespace) {
-        this.sceneNamespace = sceneNamespace;
+    Renderable.prototype.setRenderMediator = function(renderMediator) {
+        this.renderMediator = renderMediator;
         this.setNeedsRender();
 
         return this;
@@ -426,8 +412,8 @@ define([
      * @since 1.5
      */
     Renderable.prototype.setNeedsRender = function() {
-        if (this.sceneNamespace !== EMPTY_NAMESPACE) {
-            RenderMediator.setNeedsRender(this.sceneNamespace);
+        if (this.renderMediator !== null) {
+            this.renderMediator.setNeedsRender(this);
         }
 
         return this;

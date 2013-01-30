@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt 
- * @version 1.6
+ * @version 1.7
  */
 define([
     'layer/Renderable',
@@ -77,9 +77,9 @@ define([
     RenderableGroup.prototype.Renderable_updateTransform = Renderable.prototype.updateTransform;
 
     /**
-     * @see Renderable#setSceneNamespace
+     * @see Renderable#setRenderMediator
      */
-    RenderableGroup.prototype.Renderable_setSceneNamespace = Renderable.prototype.setSceneNamespace;
+    RenderableGroup.prototype.Renderable_setRenderMediator = Renderable.prototype.setRenderMediator;
     
     /**
      * Initializes the RenderableGroup with the Renderable parameters
@@ -176,21 +176,22 @@ define([
     };
 
     /**
-     * Sets the scene namespace reference normally and pushes the namespace to its children
+     * Sets the scene's render mediator reference
+     * Pushes a render request to the renderMediator to inform the scene to render
      *
-     * @param {string} sceneNamespace Scene namespace that the renderable is a part of
+     * @param {RenderMediator} renderMediator Mediator used for render nodes to communicate to the Scene with render requests
      * @returns {Renderable}
-     * @since 1.4
+     * @since 1.7
      */
-    RenderableGroup.prototype.setSceneNamespace = function(sceneNamespace) {
-        this.Renderable_setSceneNamespace(sceneNamespace);
+    RenderableGroup.prototype.setRenderMediator = function(renderMediator) {
+        this.Renderable_setRenderMediator(renderMediator);
 
         var i = 0;
         var children = this.children;
         var length = children.length;
 
         for (; i < length; i++) {
-            children[i].setSceneNamespace(sceneNamespace);
+            children[i].setRenderMediator(renderMediator);
         }
 
         return this;
@@ -213,7 +214,7 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        child.setSceneNamespace(this.sceneNamespace);
+        child.setRenderMediator(this.renderMediator);
         child.setParentTransform(this.transform);
 
         return this;
@@ -244,7 +245,7 @@ define([
         if (this.needsUpdate) {
             this.updateTransform();
         }
-        child.setSceneNamespace(this.sceneNamespace);
+        child.setRenderMediator(this.renderMediator);
         child.setParentTransform(this.transform);
 
         return this;
@@ -276,7 +277,7 @@ define([
         }
         
         this.children.splice(index, 1);
-        child.setSceneNamespace('');
+        child.setRenderMediator(null);
         child.setParentTransform(null);
         
         return this;

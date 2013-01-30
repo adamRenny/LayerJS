@@ -102,12 +102,12 @@ define([
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
-     * @param {string} sceneNamespace Scene namespace firing events from
+     * @param {RenderMediator} renderMediator Mediator used for render nodes to communicate to the Scene with render requests
      * @since 1.0
      */
-    var Stage = function(viewport, width, height, sceneNamespace) {
-        if (viewport !== undefined && width !== undefined && height !== undefined && sceneNamespace !== undefined) {
-            this.init(viewport, width, height, sceneNamespace);
+    var Stage = function(viewport, width, height, renderMediator) {
+        if (viewport !== undefined && width !== undefined && height !== undefined && renderMediator !== undefined) {
+            this.init(viewport, width, height, renderMediator);
         }
     };
     
@@ -122,13 +122,13 @@ define([
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
-     * @param {string} sceneNamespace Scene namespace firing events from
+     * @param {RenderMediator} renderMediator Mediator used for render nodes to communicate to the Scene with render requests
      * @returns {Stage}
      * @since 1.0
      */
-    Stage.prototype.init = function(viewport, width, height, sceneNamespace) {
+    Stage.prototype.init = function(viewport, width, height, renderMediator) {
         if (arguments.length !== 4) {
-            throw new Error('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, sceneNamespace) received ' + arguments.length);
+            throw new TypeError('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, renderMediator) received ' + arguments.length);
         }
         
         /**
@@ -159,13 +159,13 @@ define([
         this.height = height;
 
         /**
-         * Namespace of the scene firing events from
+         * Mediator used for render nodes to communicate to the Scene with render requests
          *
-         * @name Stage#sceneNamespace
-         * @type {string}
+         * @name Stage#renderMediator
+         * @type {RenderMediator}
          * @since 1.2
          */
-        this.sceneNamespace = sceneNamespace;
+        this.renderMediator = renderMediator;
         
         /**
          * Layer list which mimics the DOM representation
@@ -195,7 +195,7 @@ define([
         for (; i < length; i++) {
             children[i].width = width;
             children[i].height = height;
-            layers.push(new Layer(children[i], sceneNamespace));
+            layers.push(new Layer(children[i], renderMediator));
         }
         
         /**
@@ -221,10 +221,10 @@ define([
      */
     Stage.prototype.createLayer = function(name) {
         if (name === undefined) {
-            throw new Error('ArgumentsError: Layer name is undefined');
+            throw new TypeError('ArgumentsError: Layer name is undefined');
         }
         
-        return new Layer(RenderCache.createCanvas(name, this.width, this.height), this.sceneNamespace);
+        return new Layer(RenderCache.createCanvas(name, this.width, this.height), this.renderMediator);
     };
     
     /**
@@ -324,7 +324,7 @@ define([
      */
     Stage.prototype.getLayerByName = function(name) {
         if (!this.layerCache.hasOwnProperty(name)) {
-            throw new Error('UndefinedError: Layer with name ' + name + ' does not exist');
+            throw new TypeError('UndefinedError: Layer with name ' + name + ' does not exist');
         }
         
         return this.layerCache[name];
@@ -341,7 +341,7 @@ define([
      */
     Stage.prototype.getLayerByIndex = function(index) {
         if (index < 0 || index >= this.layerCount) {
-            throw new Error('UndefinedError: Index ' + index + ' is out of bounds');
+            throw new TypeError('UndefinedError: Index ' + index + ' is out of bounds');
         }
         
         return this.layers[index];
