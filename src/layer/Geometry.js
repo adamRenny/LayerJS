@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Geometry Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.1
  */
 define(function() {
@@ -65,7 +65,7 @@ define(function() {
          * @constant
          * @since 1.1
          */
-        HALF_PI: Math.PI * .5,
+        HALF_PI: Math.PI * 0.5,
         
         /**
          * Checks whether a point is within a rectangle

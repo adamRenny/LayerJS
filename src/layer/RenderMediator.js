@@ -22,8 +22,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
- * Render Request Module Definition
- * @author Adam Ranfelt 
+ * Render Mediator Module Definition
+ * @author Adam Ranfelt
  * @version 1.0
  */
 define(function() {
@@ -33,13 +33,13 @@ define(function() {
      * RenderMediator Constructor
      *
      * Mediator pattern to communicate from the Renderable infrastructure up to the scene
-     * Scenes and Renderables are related through a namespace string
+     * Scenes and Renderables are related through this observer
      * Uses a reset type of getter, where any retrieval of needsRender will result in resetting the render flag
-     * 
+     *
      * @name RenderMediator
      * @class Render Request mediator construct used to communicate between child and parent via string
      * @constructor
-     * 
+     *
      * @since 1.0
      */
     var RenderMediator = function() {
@@ -67,26 +67,24 @@ define(function() {
     };
 
     /**
-     * Updates the flag for the given namespace to be true
+     * Updates the flag for the mediator to be true
      *
-     * @param {string} sceneNamespace Namespace of the scene to mark as true
      * @returns {RenderMediator}
      * @since 1.0
      */
-    RenderMediator.prototype.setNeedsRender = function(sceneNamespace) {
+    RenderMediator.prototype.setNeedsRender = function() {
         this.needsRender = true;
 
         return this;
     };
 
     /**
-     * Gets the flag for the given namespace, resets the namespace afterwards
+     * Gets the flag for the given namespace, resets the flag afterwards
      *
-     * @param {string} sceneNamespace Namespace of the scene to get the state of
      * @returns {boolean}
      * @since 1.0
      */
-    RenderMediator.prototype.pullNeedsRender = function(sceneNamespace) {
+    RenderMediator.prototype.pullNeedsRender = function() {
         var needsRender = this.needsRender;
         this.needsRender = false;
 

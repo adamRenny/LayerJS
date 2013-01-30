@@ -1,3 +1,4 @@
+/*global Element:true */
 /**
  * @fileOverview
  * Copyright (c) 2012 Adam Ranfelt
@@ -23,7 +24,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Input Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @author Aaron Gloege
  * @version 2.0
  */
@@ -68,7 +69,7 @@ define([
         if (document.compareDocumentPosition) {
             Element.prototype.contains = function(b) {
                 return b && !!(this.compareDocumentPosition(b) & 16);
-            }
+            };
         } else {
             Element.prototype.contains = function(b) {
                 while ((b = b.parentNode)) {
@@ -77,7 +78,7 @@ define([
                     }
                 }
                 return false;
-            }
+            };
         }
     }
 

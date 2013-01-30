@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * RunLoop Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.2
  */
 define([

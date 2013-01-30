@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * Stage Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.2
  */
 define([
@@ -80,29 +80,19 @@ define([
     };
     
     /**
-     * Applies a statically generated layer name/id
-     *
-     * @private
-     * @function
-     * @since 1.0
-     */
-    var _applyAutoLayerName = function(layer) {
-        layer.id = LAYER_PREFIX + _canvasId++;
-    };
-    
-    /**
      * <p>Stage Constructor</p>
      *
      * <p>Manager of the layers of the stage and controls hardware acceleration</p>
-     * 
+     *
      * @name Stage
      * @class Container to manage the canvas elements and layers
      * @constructor
-     * 
+     *
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
-     * @param {RenderMediator} renderMediator Mediator used for render nodes to communicate to the Scene with render requests
+     * @param {RenderMediator} renderMediator Mediator used for render nodes
+     *      to communicate to the Scene with render requests
      * @since 1.0
      */
     var Stage = function(viewport, width, height, renderMediator) {
@@ -116,19 +106,21 @@ define([
      *
      * Initializes the layer management container
      * Generates layers for canvas layer elements located within the container
-     * 
+     *
      * @throws {ArgumentsError} If the stage doesn't receive all the arguments
-     * 
+     *
      * @param {HTMLElement} viewport Container for the canvas elements
      * @param {number} width Base width of the stage
      * @param {number} height Base height of the stage
-     * @param {RenderMediator} renderMediator Mediator used for render nodes to communicate to the Scene with render requests
+     * @param {RenderMediator} renderMediator Mediator used for render nodes
+     *      to communicate to the Scene with render requests
      * @returns {Stage}
      * @since 1.0
      */
     Stage.prototype.init = function(viewport, width, height, renderMediator) {
         if (arguments.length !== 4) {
-            throw new TypeError('ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, renderMediator) received ' + arguments.length);
+            throw new TypeError(
+                'ArgumentsError: Stage expects arguments: new Stage(viewport, width, height, renderMediator) received ' + arguments.length);
         }
         
         /**
@@ -212,9 +204,9 @@ define([
     
     /**
      * Creates a layer with the dimensions of the stage and name provided
-     * 
+     *
      * @throws {ArgumentsError} If the name is undefined
-     * 
+     *
      * @param {string} name Layer name/id
      * @returns {Layer}
      * @since 1.0

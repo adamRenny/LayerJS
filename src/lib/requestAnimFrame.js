@@ -1,3 +1,4 @@
+/*global global:true, module:true, exports:true */
 /**
  * @fileOverview
  * Copyright (c) 2012 Adam Ranfelt
@@ -23,13 +24,15 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * requestAnimFrame polyfill Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.0
  */
 
 // Updated to use a modification of the "returnExportsGlobal" pattern from https://github.com/umdjs/umd
 
-(function (root, factory) {
+(function(root, factory) {
+	'use strict';
+
     if (typeof exports === 'object') {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like enviroments that support module.exports,
@@ -45,6 +48,7 @@
         factory(root);
     }
 }(this, function (root, undefined) {
+	'use strict';
 	var FRAMERATE = 1000 / 60;
 
 	var noop = function() {};
@@ -70,7 +74,7 @@
 		return vendorFunctionName;
 	};
 
-	var requestAnimFrame = (function() {
+	requestAnimFrame = (function() {
 		var i = 0;
 		var length = vendorPrefixes.length;
 		var vendorPrefix;
@@ -95,7 +99,7 @@
 		return requestMethod;
 	}());
 
-	var cancelAnimFrame = (function() {
+	cancelAnimFrame = (function() {
 		var cancelMethod;
 
 		if (activeVendorPrefix === null) {

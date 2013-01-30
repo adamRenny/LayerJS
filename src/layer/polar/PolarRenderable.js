@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * PolarRenderable Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.0
  */
 define([
@@ -45,17 +45,6 @@ define([
      * @since 1.0
      */
     var sqrt = Math.sqrt;
-    
-    /**
-     * Locally cached Math.round function
-     * Optimization step to decrease the access to Math.round
-     *
-     * @private
-     * @function
-     * @type {function}
-     * @since 1.0
-     */
-    var round = Math.round;
     
     /**
      * Locally cached Math.atan2 function
@@ -104,12 +93,12 @@ define([
      * Updates the transform content on demand
      * Supports demand flag for when the renderable has been modified
      * X and Y is assumed to be the x and y with respect to a polar coordinate space
-     * 
+     *
      * @name PolarRenderable
      * @class Polar Renderable structure used to render objects in polar space
      * @constructor
      * @extends Renderable
-     * 
+     *
      * @param {number} x X position
      * @param {number} y Y position
      * @param {number} radius Radius in polar coordinates

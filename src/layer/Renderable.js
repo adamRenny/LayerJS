@@ -57,16 +57,6 @@ define([
     var mat3 = glMatrix.mat3;
     
     /**
-     * Locally cached glMatrix.vec2 object
-     * Optimization step to decrease the access to vec2
-     *
-     * @private
-     * @type {object}
-     * @since 1.0
-     */
-    var vec2 = glMatrix.vec2;
-    
-    /**
      * Reused cache version of the 2d vector
      * Used to calculate vector calculations without the need
      * for multiple instances of the array within calculations

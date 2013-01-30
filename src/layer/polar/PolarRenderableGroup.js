@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * PolarRenderableGroup Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.0
  */
 
@@ -46,17 +46,6 @@ define([
      * @since 1.0
      */
     var sqrt = Math.sqrt;
-    
-    /**
-     * Locally cached Math.round function
-     * Optimization step to decrease the access to Math.round
-     *
-     * @private
-     * @function
-     * @type {function}
-     * @since 1.0
-     */
-    var round = Math.round;
     
     /**
      * Locally cached Math.atan2 function
@@ -100,12 +89,12 @@ define([
      * <p>Polar Renderable Group Constructor</p>
      *
      * <p>Polar renderable group construct built to support scenegraph based children</p>
-     * 
+     *
      * @name PolarRenderableGroup
      * @class Polar RenderableGroup Container structure used to store Renderable children which owns the origin
      * @constructor
      * @extends RenderableGroup
-     * 
+     *
      * @param {number} x X position
      * @param {number} y Y position
      * @param {number} radius Radius of the renderable group
@@ -184,4 +173,4 @@ define([
     };
     
     return PolarRenderableGroup;
-})
+});

@@ -26,14 +26,16 @@
 	"quotmark": "single",
 	"regexp": false,
 	"undef": true,
-	"unused": true,
 	"strict": true,
 	"trailing": true,
 	"white": false,
-	"maxparams": 7,
 	"maxdepth": 4,
-	"maxlen": 120,
 	"eqnull": true,
+
+	// Taken out due to the collision it causes with the open event parameter
+	// "unused": true,
+	// Taken out due to RequireJS and Realtime Optimization collisions
+	// "maxparams": 7,
 
 	// Suppressions
 	"evil": false,

@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * RenderableGroup Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.7
  */
 define([
@@ -36,8 +36,8 @@ define([
     'use strict';
     
     var Math = window.Math;
-    var MathMax = Math.max;
-    var MathMin = Math.min;
+    var mathMax = Math.max;
+    var mathMin = Math.min;
     
     var vector = [0, 0];
     
@@ -45,12 +45,12 @@ define([
      * <p>Renderable Group Constructor</p>
      *
      * <p>Base group construct built to support scenegraph based children</p>
-     * 
+     *
      * @name RenderableGroup
      * @class Base RenderableGroup Container structure used to store Renderable children
      * @constructor
      * @extends Renderable
-     * 
+     *
      * @param {number} x X position
      * @param {number} y Y position
      * @param {number} width Base unscaled width
@@ -338,7 +338,6 @@ define([
     RenderableGroup.prototype.getNextChildHitTarget = function(x, y, sibling) {
         var target = null;
         var children = this.children;
-        var length = children.length;
         var i = children.indexOf(sibling) - 1;
         for (; i >= 0; i--) {
             if (children[i].isInteractive && children[i].hitTest(x, y)) {
@@ -400,10 +399,10 @@ define([
         i = 0;
         for (; i < length; i++) {
             child = children[i];
-            left = MathMin(child.x, left);
-            top = MathMin(child.y, top);
-            right = MathMax(child.unscaledWidth + child.x, right);
-            bottom = MathMax(child.unscaledHeight + child.y, bottom);
+            left = mathMin(child.x, left);
+            top = mathMin(child.y, top);
+            right = mathMax(child.unscaledWidth + child.x, right);
+            bottom = mathMax(child.unscaledHeight + child.y, bottom);
         }
         
         this.contentX = left;

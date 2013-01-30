@@ -23,7 +23,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * HitEvent Module Definition
- * @author Adam Ranfelt 
+ * @author Adam Ranfelt
  * @version 1.1
  */
 define(function() {
@@ -32,7 +32,7 @@ define(function() {
     /**
      * Hit Event Callback Method Names
      * Maps the event name to the respective method name
-     * 
+     *
      * @private
      * @type {object}
      * @since 1.0
@@ -54,7 +54,7 @@ define(function() {
      * Handles mouse events
      * Transient and intended to be primarily immutable
      * Not intended to be extended
-     * 
+     *
      * @name HitEvent
      * @class Event to represent a user interaction hit point
      * @constructor
