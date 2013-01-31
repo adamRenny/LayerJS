@@ -9,6 +9,7 @@
  - Added prebuilt, [almond](https://github.com/jrburke/almond) driven AMD and script-loadable distribution file
  - Fixed issue when completing a drag would trigger ```onExit```
  - Updated interface for ```Input``` to use instances of the ```EventBus``` instead of a singular source
+ - Added automatic style applications to DOM elements when added to the ```LayerJS``` scene
 
 ## v1.1.4.1
  - Resolved issue with right clicking triggering onClick/onMouseMove events
