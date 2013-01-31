@@ -1,7 +1,7 @@
 /*global Element:true */
 /**
  * @fileOverview
- * Copyright (c) 2012 Adam Ranfelt
+ * Copyright (c) 2012-2013 Adam Ranfelt
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation

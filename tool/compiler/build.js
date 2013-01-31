@@ -29,6 +29,12 @@
         'factory(root);\n' +
     '}\n' +
 '}(this, function(root) {\n',
-        end: '}));'
+        end: '' +
+        'var layer = require(\'Layer\');\n' +
+        'if (root) {\n' +
+            'root.layer = layer;\n' +
+        '}\n' +
+        'return layer;\n' +
+        '}));'
     }
 })

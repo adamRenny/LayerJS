@@ -1,5 +1,5 @@
 define([
-    'layer/RunLoop',
+    'assets/RunLoop',
     'Box',
     'layer/Scene'
 ], function(
@@ -75,7 +75,7 @@ define([
         return this
     };
 
-    Visualization.prototype.update = function(elaapsed) {
+    Visualization.prototype.update = function(elapsed) {
 
     };
     

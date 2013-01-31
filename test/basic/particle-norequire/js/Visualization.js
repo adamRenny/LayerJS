@@ -2,7 +2,7 @@
     'use strict';
     
     var Scene = layer.Scene;
-    var RunLoop = layer.RunLoop;
+    var RunLoop = window.RunLoop;
 
     var WIDTH = 800;
     var HEIGHT = 600;

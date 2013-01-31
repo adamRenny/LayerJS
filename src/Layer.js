@@ -1,7 +1,6 @@
-/*global root:true */
 /**
  * @fileOverview
- * Copyright (c) 2012 Adam Ranfelt
+ * Copyright (c) 2012-2013 Adam Ranfelt
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -29,10 +28,9 @@
  * @version 1.2
  */
 
-require([
+define([
 	'layer/Geometry',
 	'layer/HitEvent',
-	'layer/RunLoop',
 	'layer/Input',
 	'layer/RenderMediator',
 	'layer/Layer',
@@ -46,7 +44,6 @@ require([
 ], function(
 	Geometry,
 	HitEvent,
-	RunLoop,
 	Input,
 	RenderMediator,
 	Layer,
@@ -64,7 +61,6 @@ require([
 	
 	layer.Geometry = Geometry;
 	layer.HitEvent = HitEvent;
-	layer.RunLoop = RunLoop;
 	layer.Input = Input;
 	layer.RenderMediator = RenderMediator;
 	layer.Layer = Layer;
@@ -76,8 +72,5 @@ require([
 	layer.PolarRenderable = PolarRenderable;
 	layer.PolarRenderableGroup = PolarRenderableGroup;
 
-	// UMD Pattern used in conjunction with build.js's wrapper
-	if (root !== null) {
-		root.layer = layer;
-	}
+	return layer;
 }, undefined, true);

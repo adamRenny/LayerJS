@@ -1,5 +1,5 @@
 define([
-    'layer/RunLoop',
+    'assets/RunLoop',
     'layer/Scene',
     'layer/RenderableGroup',
     'app/Rectangle'

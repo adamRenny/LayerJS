@@ -1,5 +1,5 @@
 define([
-    'layer/RunLoop',
+    'assets/RunLoop',
     'Emitter',
     'layer/Scene'
 ], function(
