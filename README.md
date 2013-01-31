@@ -11,12 +11,11 @@ LayerJS is licensed under the [MIT license](http://opensource.org/licenses/mit-l
 
 LayerJS includes functional polyfills for ```Array#indexOf``` and ```Function#bind``` within ```dependency.js```. These are licensed under the [MPL license](http://www.mozilla.org/MPL/2.0/).
 
-The ```dependency.js``` is intended to be included separate from the EventBus to avoid infringing on any sort of licensing breaches that would occur with compilation of the EventBus and the project it is used in.
+The ```dependency.js``` is intended to be included separate from the project to avoid infringing on any sort of licensing breaches that would occur with compilation of the EventBus and the project it is used in.
 
 The other dependencies:
- - [RequireJS](http://requirejs.org/)
  - [gl-matrix](https://github.com/toji/gl-matrix)
- - [jQuery](http://jquery.com/)
+ - [almond](https://github.com/jrburke/almond)
  
 Are all licensed and owned by their respectful owners and contributors.
 
@@ -44,10 +43,10 @@ Layers include a ```Stage``` object that stores the metadata such as size, and i
 Note that a scene that has some layers with CSS acceleration and others without CSS acceleration may have rendering issues that happen on the browser-level.
 
 ### Loop Controller
-To manage the run loop, LayerJS includes a Loop Controller to manage it. 
+To manage the run loop, LayerJS may use a Loop Controller to manage it. 
 The loop controller's sole responsibility is to run the application under the run loop. 
-While most applications have their root at the ```Scene```, LayerJS uses a ```RunLoop``` as the core engine component. 
-This looping structure is meant to have calls added to it but can have its render and update loops overwritten after extension if desired.
+LayerJS employs the use of an external ```RunLoop``` as the core engine component. This is available at the [RunLoop Repo](https://github.com/adamRenny/RunLoop).
+This looping structure is meant to have calls added to it but can have its render and update loops overwritten after extension if desired. This may be replaced by any other animation engine, such as [greensock](http://www.greensock.com/gsap-js/).
 
 ### Render Cache
 Idea courtesy of [Ash Blue](http://blueashes.com/), this library includes a ```RenderCache``` object used to cache renderings for re-use. 
@@ -82,9 +81,8 @@ With elements
 ```
 
 ## Dependencies
- - [RequireJS](http://requirejs.org/)
  - [gl-matrix](https://github.com/toji/gl-matrix)
- - [jQuery](http://jquery.com/)
+ - [almond](https://github.com/jrburke/almond)
  
 ### Notes
 The [glMatrix](https://github.com/toji/gl-matrix) package is a forked glMatrix package that extrapolates a 2d set of matrix operations.

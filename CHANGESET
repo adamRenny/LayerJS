@@ -2,11 +2,11 @@
 
 ## v1.2
  - Removed collections
- - Removed ```RunLoop``` and ```requestAnimFrame``` polyfill, moved to (RunLoop)[https://github.com/adamRenny/RunLoop]
+ - Removed ```RunLoop``` and ```requestAnimFrame``` polyfill, moved to [RunLoop](https://github.com/adamRenny/RunLoop)
  - Updated src layer directory code style to match more closely to JSHint
  - Resolved issue with distribution build not being AMD compatible
  - Added ```Renderable``` and ```Input``` unit tests
- - Added prebuilt, (almond)[https://github.com/jrburke/almond] driven AMD and script-loadable distribution file
+ - Added prebuilt, [almond](https://github.com/jrburke/almond) driven AMD and script-loadable distribution file
  - Fixed issue when completing a drag would trigger ```onExit```
  - Updated interface for ```Input``` to use instances of the ```EventBus``` instead of a singular source
 
