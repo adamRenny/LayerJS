@@ -24,7 +24,7 @@
  *
  * Renderable Module Definition
  * @author Adam Ranfelt
- * @version 1.7
+ * @version 1.7.1
  */
 define([
     'lib/gl-matrix',
@@ -281,6 +281,18 @@ define([
         this.unscaledOffsetY = this.unscaledHeight * this.centerOffsetY;
         
         /**
+         * Renderable's parent node
+         * Reference only
+         * Immutable property
+         *
+         * @default null
+         * @name#parentRenderable
+         * @type {RenderableGroup}
+         * @since 1.7.1
+         */
+        this.parentRenderable = null;
+
+        /**
          * Renderable's parent's transform
          * Reference only
          * Immutable property
@@ -337,24 +349,36 @@ define([
 
     /**
      * Destroys the renderable
+     * Removes the reference to parentRenderable and its transform
+     * Should be called after a node is no longer being used
      *
      * @returns {Renderable}
      * @since 1.6
      */
     Renderable.prototype.destroy = function() {
+        this.parentRenderable = null;
+        this.parentTransform = null;
+        this.renderMediator = null;
+
         return this;
     };
     
     /**
-     * Sets the parent transform reference
-     * Requests the renderable to update the transform
+     * Sets the parent reference
+     * Requests the renderable to update the transform after setting the parent transform
      *
      * @param {number[]} transform Parent transform
+     * @param {RenderableGroup} parentRenderable Parent renderable
      * @returns {Renderable}
      * @since 1.0
      */
-    Renderable.prototype.setParentTransform = function(transform) {
-        this.parentTransform = transform;
+    Renderable.prototype.setParent = function(parentRenderable) {
+        this.parentRenderable = parentRenderable;
+        if (parentRenderable !== null) {
+            this.parentTransform = parentRenderable.transform;
+        } else {
+            this.parentTransform = null;
+        }
         this.needsUpdate = true;
         
         return this;
@@ -422,6 +446,25 @@ define([
         
         return this;
     };
+
+    /**
+     * Pushes a request for updating back to the parent renderable
+     * Used specifically for reverse traversal up the tree for
+     * the toWorldCoordinates and toLocalCoordinates methods
+     * Works in conjunction with having all child objects needing an update when a parent is updated
+     *
+     * Expects the RenderableGroup implicitly implements the onPushNeedsUpdate method
+     *
+     * @returns {Renderable}
+     * @since 1.7.1
+     */
+    Renderable.prototype.pushNeedsUpdate = function() {
+        if (this.parentRenderable) {
+            this.parentRenderable.onPushNeedsUpdate();
+        }
+
+        return this;
+    };
     
     /**
      * Updates the transform based on the position, scale, and rotation of the object
@@ -486,6 +529,7 @@ define([
      */
     Renderable.prototype.toLocalCoordinates = function(vec, shouldRound) {
         if (this.needsUpdate) {
+            this.pushNeedsUpdate();
             this.updateTransform();
         }
         
@@ -510,6 +554,7 @@ define([
      */
     Renderable.prototype.toWorldCoordinates = function(vec, shouldRound) {
         if (this.needsUpdate) {
+            this.pushNeedsUpdate();
             this.updateTransform();
         }
         

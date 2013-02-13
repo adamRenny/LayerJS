@@ -24,7 +24,7 @@
  *
  * RenderableGroup Module Definition
  * @author Adam Ranfelt
- * @version 1.7
+ * @version 1.7.1
  */
 define([
     'layer/Renderable',
@@ -80,6 +80,16 @@ define([
      * @see Renderable#setRenderMediator
      */
     RenderableGroup.prototype.Renderable_setRenderMediator = Renderable.prototype.setRenderMediator;
+
+    /**
+     * @see Renderable#setNeedsUpdate
+     */
+    RenderableGroup.prototype.Renderable_setNeedsUpdate = Renderable.prototype.setNeedsUpdate;
+
+    /**
+     * @see Renderable#destroy
+     */
+    RenderableGroup.prototype.Renderable_destroy = Renderable.prototype.destroy;
     
     /**
      * Initializes the RenderableGroup with the Renderable parameters
@@ -164,6 +174,8 @@ define([
      * @since 1.6
      */
     RenderableGroup.prototype.destroy = function() {
+        this.Renderable_destroy();
+
         var i = 0;
         var children = this.children;
         var length = children.length;
@@ -215,7 +227,7 @@ define([
             this.updateTransform();
         }
         child.setRenderMediator(this.renderMediator);
-        child.setParentTransform(this.transform);
+        child.setParent(this);
 
         return this;
     };
@@ -246,7 +258,7 @@ define([
             this.updateTransform();
         }
         child.setRenderMediator(this.renderMediator);
-        child.setParentTransform(this.transform);
+        child.setParent(this);
 
         return this;
     };
@@ -278,7 +290,7 @@ define([
         
         this.children.splice(index, 1);
         child.setRenderMediator(null);
-        child.setParentTransform(null);
+        child.setParent(null);
         
         return this;
     };
@@ -362,8 +374,7 @@ define([
     RenderableGroup.prototype.getHitTarget = function(x, y) {
         var target = this;
         var children = this.children;
-        var length = children.length;
-        var i = length - 1;
+        var i = children.length - 1;
         for (; i >= 0; i--) {
             if (children[i].isInteractive && children[i].hitTest(x, y)) {
                 target = children[i].getHitTarget();
@@ -372,6 +383,41 @@ define([
         }
         
         return target;
+    };
+
+    /**
+     * Sets the renderable to be dirty and need to update its current spatial logic
+     * Pushes a render request to the RenderMediator to inform the scene to render
+     * Pushes the setNeedsUpdate call to all children before calling its own
+     *
+     * @returns {Renderable}
+     * @since 1.7.1
+     */
+    RenderableGroup.prototype.setNeedsUpdate = function() {
+        var children = this.children;
+        var i = children.length - 1;
+        for (; i >= 0; i--) {
+            children[i].setNeedsUpdate();
+        }
+
+        return this.Renderable_setNeedsUpdate();
+    };
+
+    /**
+     * If the renderable needs an update
+     * It pushes the update request up the branches
+     * Then updates its own transform
+     *
+     * @returns {Renderable}
+     * @since 1.7.1
+     */
+    RenderableGroup.prototype.onPushNeedsUpdate = function() {
+        if (this.needsUpdate) {
+            this.pushNeedsUpdate();
+            this.updateTransform();
+        }
+
+        return this;
     };
     
     /**
@@ -386,17 +432,12 @@ define([
         var i = 0;
         var children = this.children;
         var length = children.length;
-        var transform = this.transform;
         var bottom = 0;
         var top = this.unscaledHeight;
         var left = this.unscaledWidth;
         var right = 0;
         var child;
-        for (; i < length; i++) {
-            children[i].setParentTransform(transform);
-        }
         
-        i = 0;
         for (; i < length; i++) {
             child = children[i];
             left = mathMin(child.x, left);
