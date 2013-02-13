@@ -1,7 +1,9 @@
 define([
-    'layer/Renderable'
+    'layer/Renderable',
+    'layer/RenderableGroup'
 ], function(
-    Renderable
+    Renderable,
+    RenderableGroup
 ) {
     'use strict';
 
@@ -173,6 +175,51 @@ define([
 
         it('will return nothing as a child hit target', function() {
             expect(renderable.getChildHitTarget(x, y)).to.be(null);
+        });
+
+        it('will update its transform with scale and position after updateTransform', function() {
+            renderable = new Renderable(20, 30, 100, 100);
+            renderable.scaleX = 0.9;
+            renderable.scaleY = 0.5;
+            renderable.updateTransform();
+
+            var transform = renderable.transform;
+            expect(transform[0]).to.be(0.9);
+            expect(transform[1]).to.be(0);
+            expect(transform[2]).to.be(0);
+            expect(transform[3]).to.be(0);
+            expect(transform[4]).to.be(0.5);
+            expect(transform[5]).to.be(0);
+            expect(transform[6]).to.be(20);
+            expect(transform[7]).to.be(30);
+            expect(transform[8]).to.be(1);
+        });
+
+        it('will update its child-most transform even if it doesn\'t need an update', function() {
+            var parentA = new RenderableGroup(20, 30, 100, 100);
+            parentA.updateTransform();
+
+            var parentACopy = mat3.identity();
+
+            var transformA = parentA.transform;
+
+            var parentB = new RenderableGroup(30, 20, 100, 100);
+            parentA.addChild(parentB);
+
+            var renderable = new Renderable(10, 10, 5, 5);
+            parentB.addChild(renderable);
+
+            renderable.updateTransform();
+            var transform = renderable.transform;
+            expect(transform[0]).to.be(1);
+            expect(transform[1]).to.be(0);
+            expect(transform[2]).to.be(0);
+            expect(transform[3]).to.be(0);
+            expect(transform[4]).to.be(1);
+            expect(transform[5]).to.be(0);
+            expect(transform[6]).to.be(60);
+            expect(transform[7]).to.be(60);
+            expect(transform[8]).to.be(1);
         });
     });
 });
