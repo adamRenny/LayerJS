@@ -7,6 +7,16 @@ define([
 ) {
     'use strict';
 
+    var expectToBeClose = (function() {
+        var errorFactor = 0.000001;
+
+        function expectToBeClose(input, assertion) {
+            expect(input).to.be.within(assertion - errorFactor, assertion + errorFactor);
+        }
+
+        return expectToBeClose;
+    }());
+
     describe('Renderable', function() {
 
         var renderable;
@@ -17,7 +27,7 @@ define([
 
         beforeEach(function() {
             renderable = new Renderable(x, y, width, height);
-        })
+        });
 
         it('requires all parameters to initialize', function() {
             renderable = new Renderable(1, 2);
@@ -120,10 +130,6 @@ define([
             expect(renderable.parentTransform).to.be(null);
         });
 
-        it('should not have a scene namespace', function() {
-            expect(renderable.sceneNamespace).to.be('');
-        });
-
         it('can convert world coordinates to local coordinates', function() {
             var xPosition = 20;
             var yPosition = 100;
@@ -179,20 +185,21 @@ define([
 
         it('will update its transform with scale and position after updateTransform', function() {
             renderable = new Renderable(20, 30, 100, 100);
+            renderable.setCenterPoint(0, 0);
             renderable.scaleX = 0.9;
             renderable.scaleY = 0.5;
             renderable.updateTransform();
 
             var transform = renderable.transform;
-            expect(transform[0]).to.be(0.9);
-            expect(transform[1]).to.be(0);
-            expect(transform[2]).to.be(0);
-            expect(transform[3]).to.be(0);
-            expect(transform[4]).to.be(0.5);
-            expect(transform[5]).to.be(0);
-            expect(transform[6]).to.be(20);
-            expect(transform[7]).to.be(30);
-            expect(transform[8]).to.be(1);
+            expectToBeClose(transform[0], 0.9);
+            expectToBeClose(transform[1], 0);
+            expectToBeClose(transform[2], 0);
+            expectToBeClose(transform[3], 0);
+            expectToBeClose(transform[4], 0.5);
+            expectToBeClose(transform[5], 0);
+            expectToBeClose(transform[6], 20);
+            expectToBeClose(transform[7], 30);
+            expectToBeClose(transform[8], 1);
         });
 
         it('will update its child-most transform even if it doesn\'t need an update', function() {
@@ -211,15 +218,15 @@ define([
 
             renderable.updateTransform();
             var transform = renderable.transform;
-            expect(transform[0]).to.be(1);
-            expect(transform[1]).to.be(0);
-            expect(transform[2]).to.be(0);
-            expect(transform[3]).to.be(0);
-            expect(transform[4]).to.be(1);
-            expect(transform[5]).to.be(0);
-            expect(transform[6]).to.be(60);
-            expect(transform[7]).to.be(60);
-            expect(transform[8]).to.be(1);
+            expectToBeClose(transform[0], 1);
+            expectToBeClose(transform[1], 0);
+            expectToBeClose(transform[2], 0);
+            expectToBeClose(transform[3], 0);
+            expectToBeClose(transform[4], 1);
+            expectToBeClose(transform[5], 0);
+            expectToBeClose(transform[6], 60);
+            expectToBeClose(transform[7], 60);
+            expectToBeClose(transform[8], 1);
         });
     });
 });
