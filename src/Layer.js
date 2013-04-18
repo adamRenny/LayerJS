@@ -38,9 +38,7 @@ define([
 	'layer/Scene',
 	'layer/RenderCache',
 	'layer/Renderable',
-	'layer/RenderableGroup',
-	'layer/polar/PolarRenderable',
-	'layer/polar/PolarRenderableGroup'
+	'layer/RenderableGroup'
 ], function(
 	Geometry,
 	HitEvent,
@@ -51,9 +49,7 @@ define([
 	Scene,
 	RenderCache,
 	Renderable,
-	RenderableGroup,
-	PolarRenderable,
-	PolarRenderableGroup
+	RenderableGroup
 ) {
 	'use strict';
 
@@ -69,8 +65,6 @@ define([
 	layer.RenderCache = RenderCache;
 	layer.Renderable = Renderable;
 	layer.RenderableGroup = RenderableGroup;
-	layer.PolarRenderable = PolarRenderable;
-	layer.PolarRenderableGroup = PolarRenderableGroup;
 
 	return layer;
 }, undefined, true);

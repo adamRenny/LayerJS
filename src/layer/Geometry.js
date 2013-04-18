@@ -24,7 +24,7 @@
  *
  * Geometry Module Definition
  * @author Adam Ranfelt
- * @version 1.1
+ * @version 1.2
  */
 define(function() {
     'use strict';
@@ -173,6 +173,44 @@ define(function() {
          */
         isPolarPointInPolarArea: function(r1, t1, r2, st2, et2) {
             return r1 <= r2 && t1 >= st2 && t1 <= et2;
+        },
+
+        /**
+         * Converts from a cartesian coordinate system into a polar vector
+         * Origin assumed to be 0, 0
+         *
+         * @function
+         * @name Geometry.convertCartesianToPolar
+         * @param {number} x x coordinate in cartesian coordinates
+         * @param {number} y y coordinate in cartesian coordinates
+         * @returns {number[2]} [radius, theta]
+         * @since 1.2
+         */
+        convertCartesianToPolar: function(x, y) {
+            var polarVector = [0, 0];
+
+            polarVector[0] = sqrt(x * x + y * y);
+            polarVector[1] = atan2(y, x);
+            
+            if (polarVector[1] < 0) {
+                polarVector[1] = polarVector[1] + Geometry.TWO_PI;
+            }
+            
+            return polarVector;
+        },
+
+        /**
+         * Converts from a polar coordinate system into a cartesian vector
+         *
+         * @function
+         * @name Geometry.convertCartesianToPolar
+         * @param {number} radius Radius position polar coordinates
+         * @param {number} theta Angle in radians
+         * @returns {number[2]} [x, y]
+         * @since 1.2
+         */
+        convertPolarToCartesian: function(radius, theta) {
+            return [radius * Math.cos(theta), radius * Math.sin(theta)];
         }
     };
     
