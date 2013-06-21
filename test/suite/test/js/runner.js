@@ -9,6 +9,7 @@ require([
     require([
         'unit/geometry/geometry.test',
         'unit/layer/renderable.test',
+        'unit/layer/renderablegroup.test',
         'integration/renderable.test'
     ], function() {
         mocha.run();

@@ -1,21 +1,15 @@
 define([
     'layer/Renderable',
-    'layer/RenderableGroup'
+    'layer/RenderableGroup',
+    'expectUtility'
 ], function(
     Renderable,
-    RenderableGroup
+    RenderableGroup,
+    expectUtility
 ) {
     'use strict';
 
-    var expectToBeClose = (function() {
-        var errorFactor = 0.000001;
-
-        function expectToBeClose(input, assertion) {
-            expect(input).to.be.within(assertion - errorFactor, assertion + errorFactor);
-        }
-
-        return expectToBeClose;
-    }());
+    var expectToBeClose = expectUtility.expectToBeClose;
 
     describe('Renderable', function() {
 
@@ -29,10 +23,10 @@ define([
             renderable = new Renderable(x, y, width, height);
         });
 
-        it('requires all parameters to initialize', function() {
+        it('does not require all parameters to initialize', function() {
             renderable = new Renderable(1, 2);
 
-            expect(renderable.width).to.be(undefined);
+            expect(renderable.width).to.be(0);
         });
 
         it('is a leaf node', function() {
@@ -199,33 +193,6 @@ define([
             expectToBeClose(transform[5], 0);
             expectToBeClose(transform[6], 20);
             expectToBeClose(transform[7], 30);
-            expectToBeClose(transform[8], 1);
-        });
-
-        it('will update its child-most transform even if it doesn\'t need an update', function() {
-            var parentA = new RenderableGroup(20, 30, 100, 100);
-            parentA.updateTransform();
-
-            var parentACopy = mat3.identity();
-
-            var transformA = parentA.transform;
-
-            var parentB = new RenderableGroup(30, 20, 100, 100);
-            parentA.addChild(parentB);
-
-            var renderable = new Renderable(10, 10, 5, 5);
-            parentB.addChild(renderable);
-
-            renderable.updateTransform();
-            var transform = renderable.transform;
-            expectToBeClose(transform[0], 1);
-            expectToBeClose(transform[1], 0);
-            expectToBeClose(transform[2], 0);
-            expectToBeClose(transform[3], 0);
-            expectToBeClose(transform[4], 1);
-            expectToBeClose(transform[5], 0);
-            expectToBeClose(transform[6], 60);
-            expectToBeClose(transform[7], 60);
             expectToBeClose(transform[8], 1);
         });
     });

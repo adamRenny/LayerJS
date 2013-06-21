@@ -446,10 +446,10 @@ define([
             bottom = mathMax(child.unscaledHeight + child.y, bottom);
         }
         
-        this.contentX = left;
-        this.contentY = top;
-        this.contentWidth = right - left;
-        this.contentHeight = bottom - top;
+        this.contentX = mathMin(0, left);
+        this.contentY = mathMin(0, top);
+        this.contentWidth = right - this.contentX;
+        this.contentHeight = bottom - this.contentY;
     };
     
     /**
