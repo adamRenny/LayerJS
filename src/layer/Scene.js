@@ -129,14 +129,14 @@ define([
         this.setupStage(container, width, height);
         
         /**
-         * Currently active input target
-         * Used to determine which element is currently active and hovered within the scene
+         * Currently active input targets
+         * Used to determine which elements are currently active and hovered within the scene
          *
          * @name Scene#activeTarget
-         * @type {Renderable}
+         * @type {Renderable[]}
          * @since 1.1
          */
-        this.activeTarget = null;
+        this.activeTarget = [];
         
         /**
          * Last used mouse object
@@ -473,7 +473,7 @@ define([
     };
     
     /**
-     * Updates the active target based on the passed positioning
+     * Updates the active targets based on the passed positioning
      * Active target updates include out/over logic to update which element is currently hovered
      *
      * @param {Renderable[]} hitStack Stack of hit targets
@@ -483,24 +483,29 @@ define([
      * @since 1.1
      */
     Scene.prototype.updateActiveTarget = function(hitStack, x, y) {
-        var topHitTarget = null;
-        if (hitStack.length) {
-            topHitTarget = hitStack[hitStack.length - 1 || 0];
-        }
-        
-        if (this.activeTarget !== topHitTarget) {
-            
-            if (this.activeTarget !== null) {
-                this.onOut(this.activeTarget, x, y);
+        var i = 0;
+        var length = this.activeTarget.length;
+
+        // Find items in the activeTarget array that are not present in
+        // the hitStack array and call onOut with them
+        for (; i < length; i++) {
+            if (hitStack.indexOf(this.activeTarget[i]) === -1) {
+                this.onOut(this.activeTarget[i], x, y);
             }
-            
-            if (topHitTarget !== null) {
-                this.onOver(topHitTarget, x, y);
-            }
-            
-            this.activeTarget = topHitTarget;
         }
-        
+
+        length = hitStack.length;
+
+        // Find items in the hitStack array that are not present in
+        // the activeTarget array and call onOver with them
+        for (; i < length; i++) {
+            if (this.activeTarget.indexOf(hitStack[i]) === -1) {
+                this.onOver(hitStack[i], x, y);
+            }
+        }
+
+        this.activeTarget = hitStack;
+
         return this;
     };
     
@@ -515,18 +520,21 @@ define([
     };
 
     /**
-     * Trigger onOut with active target when input is disabled
+     * Trigger onOut with active targets when input is disabled
      *
      * @param {String} type
      * @param {Mouse} mouse
      * @since 1.5
      */
     Scene.prototype.onInputDisable = function(type, mouse) {
-        if (this.activeTarget !== null) {
-            this.onOut(this.activeTarget, mouse.x, mouse.y);
+        var i = 0;
+        var length = this.activeTarget.length;
+
+        for (; i < length; i++) {
+            this.onOut(this.activeTarget[i], mouse.x, mouse.y);
         }
 
-        this.activeTarget = null;
+        this.activeTarget.length = 0;
         this.activeMouse = null;
     };
     
