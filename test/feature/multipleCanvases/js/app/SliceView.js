@@ -1,28 +1,26 @@
 define([
-    'layer/polar/PolarRenderable',
+    'layer/Renderable',
     'layer/Geometry'
 ], function(
-    PolarRenderable,
+    Renderable,
     Geometry
 ) {
     'use strict';
     
-    var SliceView = function(x, y, theta, radialWidth, maxRadius) {
-        if (x !== undefined && y !== undefined && theta !== undefined
-            && radialWidth !== undefined && maxRadius !== undefined
-        ) {
-            this.init(x, y, theta, radialWidth, maxRadius);
+    var SliceView = function(theta, radialWidth, maxRadius) {
+        if (theta !== undefined && radialWidth !== undefined && maxRadius !== undefined) {
+            this.init(theta, radialWidth, maxRadius);
         }
     };
     
-    SliceView.prototype = new PolarRenderable();
+    SliceView.prototype = new Renderable();
     SliceView.prototype.constructor = SliceView;
     
-    SliceView.prototype.PolarRenderable_init = PolarRenderable.prototype.init;
-    SliceView.prototype.PolarRenderable_render = PolarRenderable.prototype.render;
+    SliceView.prototype.Renderable_init = Renderable.prototype.init;
+    SliceView.prototype.Renderable_render = Renderable.prototype.render;
     
-    SliceView.prototype.init = function(x, y, theta, radialWidth, maxRadius) {
-        this.PolarRenderable_init(x, y, maxRadius, maxRadius);
+    SliceView.prototype.init = function(theta, radialWidth, maxRadius) {
+        this.Renderable_init(0, 0, maxRadius, maxRadius);
         
         this.startTheta = theta;
         this.radialWidth = radialWidth;
@@ -36,20 +34,22 @@ define([
     };
     
     SliceView.prototype.hitTest = function(x, y) {
-        var polarVector = this.convertWorldToPolar(x, y);
+        var vector = this.toLocalCoordinates([x, y]);
+        var polarVector = Geometry.convertCartesianToPolar(vector[0], vector[1]);
         
         return Geometry.isPolarPointInPolarArea(polarVector[0], polarVector[1], this.maxRadius, this.startTheta, this.endTheta);
     };
     
     SliceView.prototype.onMouseMove = function(mouse) {
-        var polarVector = this.convertWorldToPolar(mouse.x, mouse.y);
+        var vector = this.toLocalCoordinates([mouse.x, mouse.y]);
+        var polarVector = Geometry.convertCartesianToPolar(vector[0], vector[1]);
         
         this.currentRadius = polarVector[0];
         this.setNeedsRender();
     };
     
     SliceView.prototype.render = function(context) {
-        this.PolarRenderable_render(context);
+        this.Renderable_render(context);
         
         context.fillStyle = this.bgColor;
         context.beginPath();

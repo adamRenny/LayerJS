@@ -189,8 +189,8 @@ define(function() {
         convertCartesianToPolar: function(x, y) {
             var polarVector = [0, 0];
 
-            polarVector[0] = sqrt(x * x + y * y);
-            polarVector[1] = atan2(y, x);
+            polarVector[0] = Math.sqrt(x * x + y * y);
+            polarVector[1] = Math.atan2(y, x);
             
             if (polarVector[1] < 0) {
                 polarVector[1] = polarVector[1] + Geometry.TWO_PI;

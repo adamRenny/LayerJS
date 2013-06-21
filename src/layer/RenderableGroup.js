@@ -472,6 +472,8 @@ define([
         for (; i < length; i++) {
             children[i].render(context);
         }
+
+        this.applyTransform(context);
     };
     
     return RenderableGroup;

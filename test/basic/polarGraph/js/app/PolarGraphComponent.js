@@ -1,9 +1,9 @@
 define([
-    'layer/polar/PolarRenderableGroup',
+    'layer/RenderableGroup',
     'layer/Geometry',
     'app/SliceView'
 ], function(
-    PolarRenderableGroup,
+    RenderableGroup,
     Geometry,
     SliceView
 ) {
@@ -20,15 +20,16 @@ define([
         }
     };
     
-    PolarAreaGraph.prototype = new PolarRenderableGroup();
+    PolarAreaGraph.prototype = new RenderableGroup();
     PolarAreaGraph.prototype.constructor = PolarAreaGraph;
     
-    PolarAreaGraph.prototype.PolarRenderableGroup_init = PolarAreaGraph.prototype.init;
-    PolarAreaGraph.prototype.PolarRenderableGroup_render = PolarAreaGraph.prototype.render;
+    PolarAreaGraph.prototype.RenderableGroup_init = RenderableGroup.prototype.init;
     
     PolarAreaGraph.prototype.init = function(x, y, radius) {
-        this.PolarRenderableGroup_init(x, y, radius);
+        this.RenderableGroup_init(x, y, radius, radius);
         
+        this.radius = radius;
+
         this.createChildren();
     };
     
@@ -42,7 +43,7 @@ define([
         
         //x, y, theta, radialWidth, maxRadius, numberOfSections
         for (; i < length; i++) {
-            slice = new SliceView(0, 0, theta, radialWidth, this.radius);
+            slice = new SliceView(theta, radialWidth, this.radius);
             this.addChild(slice);
             theta = theta + radialWidth;
         }
@@ -51,6 +52,13 @@ define([
     PolarAreaGraph.prototype.layout = function() {
         return this;
     };
+
+    PolarAreaGraph.prototype.hitTest = function(x, y) {
+        var vector = this.toLocalCoordinates([x, y]);
+        var polarVector = Geometry.convertCartesianToPolar(vector[0], vector[1]);
+
+        return polarVector[0] <= this.radius;
+    }
     
     return PolarAreaGraph;
 });
