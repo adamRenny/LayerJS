@@ -279,6 +279,39 @@ define([
          * @since 1.0
          */
         this.unscaledOffsetY = this.unscaledHeight * this.centerOffsetY;
+
+        /**
+         * Renderable's alpha value used to determine calculated alpha
+         * Updates the calculatedAlpha during update
+         *
+         * @default 1
+         * @name Renderable#alpha
+         * @type {number}
+         * @since 1.8
+         */
+        this.alpha = 1;
+
+        /**
+         * Parent Renderable's alpha value used to determine calculated alpha
+         * Updates the calculatedAlpha during update
+         *
+         * @default 1
+         * @name Renderable#parentAlpha
+         * @type {number}
+         * @since 1.8
+         */
+        this.parentAlpha = 1;
+
+        /**
+         * Calculated alpha equal to the parent's calculated alpha times the renderable's alpha
+         * Currently updated during updateTransform
+         *
+         * @default 1
+         * @name Renderable#calculatedAlpha
+         * @type {number}
+         * @since 1.8
+         */
+        this.calculatedAlpha = 1;
         
         /**
          * Renderable's parent node
@@ -376,8 +409,10 @@ define([
         this.parentRenderable = parentRenderable;
         if (parentRenderable !== null) {
             this.parentTransform = parentRenderable.transform;
+            this.parentAlpha = parentRenderable.calculatedAlpha;
         } else {
             this.parentTransform = null;
+            this.parentAlpha = 1;
         }
         this.needsUpdate = true;
         
@@ -482,6 +517,10 @@ define([
         } else {
             matrix = mat3.identity(this.transform);
         }
+
+        // Update the alpha
+        // TODO: Move the calculated alpha calculation out to another method
+        this.calculatedAlpha = this.parentAlpha * this.alpha;
         
         // Only setup the translate if x or y is set
         if (this.x !== 0 || this.y !== 0) {
@@ -635,6 +674,7 @@ define([
     Renderable.prototype.applyTransform = function(context) {
         matrix = this.transform;
         context.setTransform(matrix[0], matrix[1], matrix[3], matrix[4], matrix[6], matrix[7]);
+        context.globalAlpha = this.calculatedAlpha;
     };
     
     /**

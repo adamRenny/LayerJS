@@ -440,6 +440,9 @@ define([
         
         for (; i < length; i++) {
             child = children[i];
+
+            child.parentAlpha = this.calculatedAlpha;
+
             left = mathMin(child.x, left);
             top = mathMin(child.y, top);
             right = mathMax(child.unscaledWidth + child.x, right);
